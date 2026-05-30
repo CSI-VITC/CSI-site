@@ -2,13 +2,13 @@
 
 import React, { useState } from "react";
 import DesktopWindow from "@/components/DesktopWindow";
-import { AboutUs, Departments, Events, Projects, Blog, Team, Contact, Partners, Community, CsiOfficial } from "@/components/sections";
+import { AboutUs, Departments, Events, Projects, Team, Contact, CsiOfficial } from "@/components/sections";
 import MacDock from "@/components/MacDock";
 import CursorEyes from "@/components/CursorEyes";
 import Launchpad from "@/components/Launchpad";
 import LoadingScreen from "@/components/LoadingScreen";
 
-type WindowId = "about" | "depts" | "events" | "projects" | "blog" | "team" | "contact" | "partners" | "community" | "csi";
+type WindowId = "about" | "depts" | "events" | "projects" | "team" | "contact" | "csi";
 
 export default function Desktop() {
   const [openWindows, setOpenWindows] = useState<WindowId[]>([]);
@@ -49,11 +49,8 @@ export default function Desktop() {
       case "depts": return <Departments />;
       case "events": return <Events />;
       case "projects": return <Projects />;
-      case "blog": return <Blog />;
       case "team": return <Team />;
       case "contact": return <Contact />;
-      case "partners": return <Partners />;
-      case "community": return <Community />;
       case "csi": return <CsiOfficial />;
       default: return null;
     }
@@ -62,26 +59,24 @@ export default function Desktop() {
   const getWindowTitle = (id: WindowId) => {
     switch (id) {
       case "about": return "About Us";
-      case "depts": return "Domains";
+      case "depts": return "Departments";
       case "events": return "Events";
       case "projects": return "Projects";
-      case "blog": return "Blog";
       case "team": return "Team";
       case "contact": return "Contact";
-      case "partners": return "Partners";
-      case "community": return "Community";
       case "csi": return "CSI Official Site";
       default: return "Window";
     }
   };
 
   const launchpadItems = [
+    { id: "about", label: "About Us", iconSrc: "/icons/Finder.png" },
+    { id: "depts", label: "Departments", iconSrc: "/icons/Domains.jpg" },
+    { id: "events", label: "Events", iconSrc: "/icons/Calendar.png" },
+    { id: "projects", label: "Projects", iconSrc: "/icons/Terminal.png" },
     { id: "team", label: "Team", iconSrc: "/icons/Notion.png" },
-    { id: "csi", label: "CSI Official", iconSrc: "/icons/CSI.png" },
-    { id: "blog", label: "Blogs", iconSrc: "/icons/blogs.png" },
-    { id: "partners", label: "Partners", iconSrc: "/icons/Slack.png" },
     { id: "contact", label: "Contact", iconSrc: "/icons/Mail.png" },
-    { id: "community", label: "Community", iconSrc: "/icons/community.png" },
+    { id: "csi", label: "CSI Official", iconSrc: "/icons/CSI.png" },
   ];
 
   return (

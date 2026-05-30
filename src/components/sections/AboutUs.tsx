@@ -25,8 +25,8 @@ export function AboutUs() {
           </p>
         </motion.div>
         
-        <motion.div variants={fadeUp} style={{ fontSize: "2rem", fontWeight: 400, lineHeight: 1.2, marginBottom: "40px" }}>
-          Build. Break. Innovate. Repeat.
+        <motion.div variants={fadeUp} style={{ fontSize: "1rem", fontWeight: 500, letterSpacing: "1px", textTransform: "uppercase", color: "rgba(240, 235, 225, 0.5)", marginBottom: "40px" }}>
+          150 members. One belief.
         </motion.div>
 
         <motion.p variants={fadeUp} style={{ fontSize: "1.05rem", lineHeight: 1.6, maxWidth: "700px", marginBottom: "20px", color: "rgba(240, 235, 225, 0.7)" }}>
@@ -37,16 +37,18 @@ export function AboutUs() {
           We're a 150-member strong collective of developers, designers, researchers, and dreamers. From late-night hackathons to open-source contributions, everything we do is driven by one belief: the best way to learn is to build something real.
         </motion.p>
 
-        <motion.h3 variants={fadeUp} style={{ fontSize: "1.5rem", fontWeight: 400, marginBottom: "20px", textTransform: "uppercase", letterSpacing: "1px" }}>Core Values</motion.h3>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))", gap: "20px", marginBottom: "60px" }}>
+        <div style={{ marginBottom: "80px", marginTop: "40px" }}>
           {[
-            { title: "Craft over credentials", desc: "What you build matters more than your GPA." },
-            { title: "Open by default", desc: "Knowledge shared is knowledge multiplied." },
-            { title: "Ship early, learn fast", desc: "Progress over perfection, always." }
+            { num: "01", title: "Craft over credentials", desc: "What you build matters more than your GPA." },
+            { num: "02", title: "Open by default", desc: "Knowledge shared is knowledge multiplied." },
+            { num: "03", title: "Ship early, learn fast", desc: "Progress over perfection, always." }
           ].map((val, i) => (
-            <motion.div key={i} variants={fadeUp} style={{ border: "1px solid rgba(240, 235, 225, 0.2)", padding: "30px" }}>
-              <h4 style={{ fontSize: "1.2rem", margin: "0 0 10px 0", fontWeight: 500 }}>{val.title}</h4>
-              <p style={{ fontSize: "0.95rem", lineHeight: 1.5, margin: 0, color: "rgba(240, 235, 225, 0.6)" }}>{val.desc}</p>
+            <motion.div key={i} variants={fadeUp} style={{ borderBottom: i !== 2 ? "1px solid rgba(240, 235, 225, 0.2)" : "none", padding: "30px 0", display: "flex", gap: "30px", alignItems: "flex-start" }}>
+              <span style={{ fontSize: "1.2rem", fontWeight: 500, color: "rgba(240, 235, 225, 0.4)", fontFamily: "var(--font-anton), sans-serif", marginTop: "2px" }}>{val.num}</span>
+              <div>
+                <h4 style={{ fontSize: "1.4rem", margin: "0 0 8px 0", fontWeight: 400, letterSpacing: "-0.01em" }}>{val.title}</h4>
+                <p style={{ fontSize: "1rem", lineHeight: 1.5, margin: 0, color: "rgba(240, 235, 225, 0.6)" }}>{val.desc}</p>
+              </div>
             </motion.div>
           ))}
         </div>
