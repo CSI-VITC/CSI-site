@@ -24,8 +24,8 @@ export default function LoadingScreen({ onComplete }: LoadingScreenProps) {
       await new Promise(r => setTimeout(r, 300));
 
       if (!isMounted) return;
-      // 2. Shift left (subtle 12px)
-      await pupilControls.start({ x: -12, transition: { duration: 0.2, ease: "easeInOut" } });
+      // 2. Shift left (subtle track)
+      await pupilControls.start({ x: -10, transition: { duration: 0.2, ease: "easeInOut" } });
       
       if (!isMounted) return;
       // Pause
@@ -33,7 +33,7 @@ export default function LoadingScreen({ onComplete }: LoadingScreenProps) {
 
       if (!isMounted) return;
       // 3. Shift right
-      await pupilControls.start({ x: 12, transition: { duration: 0.3, ease: "easeInOut" } });
+      await pupilControls.start({ x: 10, transition: { duration: 0.3, ease: "easeInOut" } });
 
       if (!isMounted) return;
       // Pause
@@ -73,7 +73,7 @@ export default function LoadingScreen({ onComplete }: LoadingScreenProps) {
       alignItems: "center", 
       zIndex: 99999 
     }}>
-      <motion.div initial={{ opacity: 0 }} animate={containerControls} style={{ display: "flex", gap: "24px" }}>
+      <motion.div initial={{ opacity: 0 }} animate={containerControls} style={{ display: "flex", gap: "8px", transform: "translateY(-50px)" }}>
         <Eye pupilControls={pupilControls} lidControls={lidControls} />
         <Eye pupilControls={pupilControls} lidControls={lidControls} />
       </motion.div>
@@ -84,9 +84,9 @@ export default function LoadingScreen({ onComplete }: LoadingScreenProps) {
 function Eye({ pupilControls, lidControls }: { pupilControls: any, lidControls: any }) {
   return (
     <div style={{ 
-      width: "80px", 
-      height: "40px", 
-      background: "#F0EBE1", 
+      width: "55px", 
+      height: "80px", 
+      background: "#fff", 
       borderRadius: "50%", 
       position: "relative", 
       overflow: "hidden", 
@@ -97,8 +97,10 @@ function Eye({ pupilControls, lidControls }: { pupilControls: any, lidControls: 
       {/* Pupil */}
       <motion.div 
         animate={pupilControls} 
-        style={{ width: "24px", height: "24px", background: "#0a0a0a", borderRadius: "50%" }} 
-      />
+        style={{ width: "30px", height: "35px", background: "#000", borderRadius: "50%", position: "relative" }} 
+      >
+        <div style={{ width: "8px", height: "8px", background: "#fff", borderRadius: "50%", position: "absolute", top: "4px", right: "6px" }} />
+      </motion.div>
       
       {/* Top Lid */}
       <motion.div 
