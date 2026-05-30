@@ -6,6 +6,7 @@ import { AboutUs, Departments, Events, Projects, Blog, Team, Contact, Partners, 
 import MacDock from "@/components/MacDock";
 import CursorEyes from "@/components/CursorEyes";
 import Launchpad from "@/components/Launchpad";
+import LoadingScreen from "@/components/LoadingScreen";
 
 type WindowId = "about" | "depts" | "events" | "projects" | "blog" | "team" | "contact" | "partners" | "community" | "csi";
 
@@ -13,6 +14,7 @@ export default function Desktop() {
   const [openWindows, setOpenWindows] = useState<WindowId[]>([]);
   const [activeWindow, setActiveWindow] = useState<WindowId | null>(null);
   const [isLaunchpadOpen, setIsLaunchpadOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   const toggleWindow = (id: string) => {
     if (id === "more") {
@@ -84,6 +86,8 @@ export default function Desktop() {
 
   return (
     <main style={{ position: "relative", width: "100vw", height: "100vh", overflow: "hidden", background: "#050505" }}>
+      {isLoading && <LoadingScreen onComplete={() => setIsLoading(false)} />}
+      
       {/* Background Layer: The user will place their custom image here */}
       <div id="user-bg-image" style={{ position: "absolute", inset: 0, zIndex: 0 }}>
         {/* User's custom background image will go here */}
