@@ -1,8 +1,8 @@
 "use client";
 import React from "react";
-import { motion, Variants } from "framer-motion";
+import { motion } from "framer-motion";
 
-const fadeUp: Variants = {
+const fadeUp = {
   hidden: { opacity: 0, y: 30 },
   visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } }
 };
@@ -15,26 +15,34 @@ export function Blog() {
   ];
 
   return (
-    <div style={{ padding: "40px 8%", color: "#fff", fontFamily: "Inter, sans-serif", overflowX: "hidden" }}>
-      <motion.h1 initial={{ opacity: 0 }} animate={{ opacity: 1 }} style={{ fontSize: "3rem", fontWeight: 800, marginBottom: "40px" }}>Latest <span style={{ color: "#00a4ff" }}>Articles</span></motion.h1>
+    <div style={{ padding: "40px 8%", color: "#F0EBE1", fontFamily: "var(--font-inter), sans-serif", overflowX: "hidden", background: "#0a0a0a", minHeight: "100%" }}>
+      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} style={{ marginBottom: "60px" }}>
+        <h1 style={{ fontFamily: "var(--font-anton), sans-serif", fontSize: "15vw", lineHeight: 0.8, margin: 0, textTransform: "uppercase", letterSpacing: "-0.02em" }}>
+          READ.
+        </h1>
+        <p style={{ fontSize: "1rem", letterSpacing: "2px", textTransform: "uppercase", marginTop: "20px", borderTop: "1px solid rgba(240, 235, 225, 0.2)", paddingTop: "20px" }}>
+          Latest Thoughts & Notes
+        </p>
+      </motion.div>
+
       <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
         {posts.map((p, i) => (
           <motion.div key={i} initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-50px" }} variants={fadeUp} 
-            style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.05)", borderRadius: "16px", padding: "30px", backdropFilter: "blur(10px)", transition: "transform 0.3s ease, background 0.3s ease", cursor: "pointer" }}
-            onMouseEnter={(e) => (e.currentTarget.style.background = "rgba(255,255,255,0.05)")}
-            onMouseLeave={(e) => (e.currentTarget.style.background = "rgba(255,255,255,0.02)")}
+            style={{ border: "1px solid rgba(240, 235, 225, 0.2)", padding: "30px", transition: "background 0.3s ease", cursor: "pointer" }}
+            onMouseEnter={(e) => (e.currentTarget.style.background = "rgba(240, 235, 225, 0.05)")}
+            onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}
           >
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "15px" }}>
-              <h2 style={{ fontSize: "1.4rem", fontWeight: 600, margin: 0, maxWidth: "80%", lineHeight: 1.4 }}>{p.title}</h2>
-              <span style={{ background: "rgba(0, 164, 255, 0.1)", color: "#00a4ff", padding: "6px 12px", borderRadius: "20px", fontSize: "0.8rem", fontWeight: 600 }}>{p.tag}</span>
+              <h2 style={{ fontSize: "1.4rem", fontWeight: 400, margin: 0, maxWidth: "80%", lineHeight: 1.4 }}>{p.title}</h2>
+              <span style={{ border: "1px solid rgba(240, 235, 225, 0.5)", color: "#F0EBE1", padding: "4px 12px", fontSize: "0.8rem", fontWeight: 500, textTransform: "uppercase", letterSpacing: "1px" }}>{p.tag}</span>
             </div>
-            <p style={{ color: "#aaa", fontSize: "1rem", lineHeight: 1.6, margin: "0 0 20px 0" }}>{p.desc}</p>
-            <div style={{ display: "flex", gap: "15px", alignItems: "center", fontSize: "0.85rem", color: "#666" }}>
-              <span style={{ color: "#ddd", fontWeight: 500 }}>{p.author}</span>
+            <p style={{ color: "rgba(240, 235, 225, 0.7)", fontSize: "1rem", lineHeight: 1.6, margin: "0 0 20px 0" }}>{p.desc}</p>
+            <div style={{ display: "flex", gap: "15px", alignItems: "center", fontSize: "0.85rem", color: "rgba(240, 235, 225, 0.5)", textTransform: "uppercase", letterSpacing: "1px" }}>
+              <span style={{ color: "rgba(240, 235, 225, 0.9)", fontWeight: 500 }}>{p.author}</span>
               <span>•</span>
               <span>{p.date}</span>
               <span>•</span>
-              <span>{p.read} read</span>
+              <span>{p.read}</span>
             </div>
           </motion.div>
         ))}
