@@ -8,6 +8,7 @@ import CursorEyes from "@/components/CursorEyes";
 import Launchpad from "@/components/Launchpad";
 import LoadingScreen from "@/components/LoadingScreen";
 import dynamic from "next/dynamic";
+import AlbumCover from "https://framer.com/m/Album-Cover-8dFj.js@q4nvmo72PxbPXUavvzHZ";
 
 const GridScan = dynamic(() => import("@/components/GridScan").then((m) => m.GridScan), { ssr: false });
 
@@ -104,6 +105,11 @@ export default function Desktop() {
 
       {/* Eyes Layer that follows cursor */}
       <CursorEyes />
+
+      {/* Top Right Framer Album Cover */}
+      <div style={{ position: "absolute", top: 20, right: 20, zIndex: 10 }}>
+        <AlbumCover title="Crashing worlds" type="Album" year="2025" />
+      </div>
 
       {/* Window Manager Layer */}
       <div style={{ position: "absolute", inset: 0, pointerEvents: "none" }}>

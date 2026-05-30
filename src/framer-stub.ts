@@ -1,5 +1,6 @@
 import React from "react";
 export * from "framer-motion";
+import { motion } from "framer-motion";
 
 export const addPropertyControls = () => {};
 export const useIsStaticRenderer = () => false;
@@ -53,8 +54,9 @@ export const Color = {
 };
 export const useIsInCurrentNavigationTarget = () => true;
 export const getFonts = () => [];
+export const getFontsFromSharedStyle = () => [];
 export const getPropertyControls = () => ({});
-export const fontStore = { load: () => {} };
+export const fontStore = { load: () => {}, loadFonts: () => {} };
 export const useSVGTemplate = () => null;
 export const ControlType = {
   Boolean: "boolean",
@@ -100,6 +102,22 @@ export const withCSS = (Component: any, css?: string[]) => {
   }
   return Component;
 };
+const injectText = (child: any, newText: string): any => {
+  if (React.isValidElement(child)) {
+    const childProps = child.props as any;
+    if (childProps && childProps.children) {
+      if (typeof childProps.children === "string" || typeof childProps.children === "number") {
+        return React.cloneElement(child, undefined, newText);
+      }
+      if (Array.isArray(childProps.children)) {
+        return React.cloneElement(child, undefined, React.Children.map(childProps.children, (c, i) => i === 0 ? injectText(c, newText) : null));
+      }
+      return React.cloneElement(child, undefined, injectText(childProps.children, newText));
+    }
+  }
+  return newText;
+};
+
 export const RichText = ({ 
   __fromCanvasComponent, layoutDependency, layoutId, transformTemplate, verticalAlignment, 
   withExternalLayout, requiresOverflowVisible, text, children, style, ...props 
@@ -117,14 +135,17 @@ export const RichText = ({
     ...style
   };
 
-  return React.createElement("div", { style: customStyle, ...props }, text !== undefined ? text : children);
+  const content = text !== undefined && children ? injectText(children, text) : (text !== undefined ? text : children);
+
+  return React.createElement(motion.div, { style: customStyle, transformTemplate, ...props }, content);
 };
+
 export const Image = ({ 
   __fromCanvasComponent, layoutDependency, layoutId, transformTemplate, verticalAlignment, 
-  withExternalLayout, requiresOverflowVisible, background, ...props 
+  withExternalLayout, requiresOverflowVisible, background, children, dangerouslySetInnerHTML, ...props 
 }: any) => {
   const src = background?.src || props.src;
-  return React.createElement("img", { src, ...props });
+  return React.createElement(motion.img, { src, transformTemplate, ...props });
 };
 export const Link = ({ href, ...props }: any) => React.createElement("a", { href: href === "" ? null : (href || undefined), ...props });
 export const getLoadingLazyAtYPosition = () => 0;
