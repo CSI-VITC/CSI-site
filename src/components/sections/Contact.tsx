@@ -62,7 +62,7 @@ export function Contact() {
             <div>
               <div style={{ display: "flex", gap: "8px" }}>
                 <span style={{ fontWeight: 600, color: "#F0EBE1" }}>CSI Admin</span>
-                <span style={{ color: "rgba(240, 235, 225, 0.5)" }}>&lt;csi@mku.edu.in&gt;</span>
+                <span style={{ color: "rgba(240, 235, 225, 0.5)" }}>&lt;csi.vitc@gmail.com&gt;</span>
               </div>
               <div style={{ color: "rgba(240, 235, 225, 0.4)", fontSize: "0.8rem", marginTop: "2px" }}>To: You</div>
             </div>
@@ -88,20 +88,20 @@ export function Contact() {
             
             <motion.div variants={fadeUp} style={{ border: "1px solid rgba(240, 235, 225, 0.2)", padding: "30px", display: "flex", flexDirection: "column", gap: "10px" }}>
               <h3 style={{ fontSize: "1.2rem", fontWeight: 400, margin: 0, textTransform: "uppercase", letterSpacing: "1px" }}>Email Us</h3>
-              <p style={{ color: "rgba(240, 235, 225, 0.6)", fontSize: "1rem", margin: 0 }}>csi@mku.edu.in</p>
+              <p style={{ color: "rgba(240, 235, 225, 0.6)", fontSize: "1rem", margin: 0 }}>csi.vitc@gmail.com</p>
             </motion.div>
 
             <motion.div variants={fadeUp} style={{ border: "1px solid rgba(240, 235, 225, 0.2)", padding: "30px", display: "flex", flexDirection: "column", gap: "10px" }}>
               <h3 style={{ fontSize: "1.2rem", fontWeight: 400, margin: 0, textTransform: "uppercase", letterSpacing: "1px" }}>Visit Us</h3>
-              <p style={{ color: "rgba(240, 235, 225, 0.6)", fontSize: "1rem", margin: 0, lineHeight: 1.5 }}>Room 204, CS Block,<br/>Madurai Kamaraj University</p>
+              <p style={{ color: "rgba(240, 235, 225, 0.6)", fontSize: "1rem", margin: 0, lineHeight: 1.5 }}>VIT Chennai,<br/>Vandalur-Kelambakkam Road,<br/>Chennai - 600127</p>
             </motion.div>
 
             <motion.div variants={fadeUp} style={{ border: "1px solid rgba(240, 235, 225, 0.2)", padding: "30px", display: "flex", flexDirection: "column", gap: "10px" }}>
               <h3 style={{ fontSize: "1.2rem", fontWeight: 400, margin: 0, textTransform: "uppercase", letterSpacing: "1px" }}>Socials</h3>
               <div style={{ display: "flex", gap: "15px", marginTop: "5px" }}>
-                <a href="#" style={{ color: "rgba(240, 235, 225, 0.6)", textDecoration: "none", fontSize: "0.95rem", textTransform: "uppercase", letterSpacing: "1px", borderBottom: "1px solid transparent", transition: "border-color 0.2s" }} onMouseEnter={(e) => e.currentTarget.style.borderBottomColor = "rgba(240, 235, 225, 0.6)"} onMouseLeave={(e) => e.currentTarget.style.borderBottomColor = "transparent"}>Instagram</a>
-                <a href="#" style={{ color: "rgba(240, 235, 225, 0.6)", textDecoration: "none", fontSize: "0.95rem", textTransform: "uppercase", letterSpacing: "1px", borderBottom: "1px solid transparent", transition: "border-color 0.2s" }} onMouseEnter={(e) => e.currentTarget.style.borderBottomColor = "rgba(240, 235, 225, 0.6)"} onMouseLeave={(e) => e.currentTarget.style.borderBottomColor = "transparent"}>LinkedIn</a>
-                <a href="#" style={{ color: "rgba(240, 235, 225, 0.6)", textDecoration: "none", fontSize: "0.95rem", textTransform: "uppercase", letterSpacing: "1px", borderBottom: "1px solid transparent", transition: "border-color 0.2s" }} onMouseEnter={(e) => e.currentTarget.style.borderBottomColor = "rgba(240, 235, 225, 0.6)"} onMouseLeave={(e) => e.currentTarget.style.borderBottomColor = "transparent"}>GitHub</a>
+                <a href="https://www.instagram.com/csi.vitc/" target="_blank" rel="noopener noreferrer" style={{ color: "rgba(240, 235, 225, 0.6)", textDecoration: "none", fontSize: "0.95rem", textTransform: "uppercase", letterSpacing: "1px", borderBottom: "1px solid transparent", transition: "border-color 0.2s" }} onMouseEnter={(e) => e.currentTarget.style.borderBottomColor = "rgba(240, 235, 225, 0.6)"} onMouseLeave={(e) => e.currentTarget.style.borderBottomColor = "transparent"}>Instagram</a>
+                <a href="https://www.linkedin.com/" target="_blank" rel="noopener noreferrer" style={{ color: "rgba(240, 235, 225, 0.6)", textDecoration: "none", fontSize: "0.95rem", textTransform: "uppercase", letterSpacing: "1px", borderBottom: "1px solid transparent", transition: "border-color 0.2s" }} onMouseEnter={(e) => e.currentTarget.style.borderBottomColor = "rgba(240, 235, 225, 0.6)"} onMouseLeave={(e) => e.currentTarget.style.borderBottomColor = "transparent"}>LinkedIn</a>
+                <a href="https://github.com/orgs/CSI-VITC/" target="_blank" rel="noopener noreferrer" style={{ color: "rgba(240, 235, 225, 0.6)", textDecoration: "none", fontSize: "0.95rem", textTransform: "uppercase", letterSpacing: "1px", borderBottom: "1px solid transparent", transition: "border-color 0.2s" }} onMouseEnter={(e) => e.currentTarget.style.borderBottomColor = "rgba(240, 235, 225, 0.6)"} onMouseLeave={(e) => e.currentTarget.style.borderBottomColor = "transparent"}>GitHub</a>
               </div>
             </motion.div>
             

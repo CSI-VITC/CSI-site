@@ -24,7 +24,7 @@ export function AboutUs() {
                 BUILD.
               </h1>
               <p style={{ fontSize: "1rem", letterSpacing: "2px", textTransform: "uppercase", marginTop: "20px", borderTop: "1px solid rgba(240, 235, 225, 0.2)", paddingTop: "20px" }}>
-                CSI Student Chapter • MKU
+                CSI Student Chapter • VIT Chennai
               </p>
             </motion.div>
             
@@ -33,7 +33,7 @@ export function AboutUs() {
             </motion.div>
 
             <motion.p variants={fadeUp} style={{ fontSize: "1.05rem", lineHeight: 1.6, maxWidth: "700px", marginBottom: "20px", color: "rgba(240, 235, 225, 0.7)" }}>
-              We exist to turn curious students into builders. CSI MKU bridges the gap between classroom theory and industry reality — through hands-on projects, real mentorship, and a community that pushes each other to ship.
+              We exist to turn curious students into builders. CSI - VITC bridges the gap between classroom theory and industry reality — through hands-on projects, real mentorship, and a community that pushes each other to ship.
             </motion.p>
             
             <motion.p variants={fadeUp} style={{ fontSize: "1.05rem", lineHeight: 1.6, maxWidth: "700px", marginBottom: "60px", color: "rgba(240, 235, 225, 0.7)" }}>

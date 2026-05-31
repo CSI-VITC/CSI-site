@@ -42,7 +42,7 @@ export function Projects() {
 
         {/* Terminal Prompt */}
         <div style={{ color: "#27c93f", fontSize: "1.05rem", marginBottom: "20px", fontFamily: "monospace", textShadow: "0 0 5px rgba(39, 201, 63, 0.4)" }}>
-          <span style={{ color: "#F0EBE1" }}>csi-admin@mku</span>:<span style={{ color: "#3b82f6" }}>~/projects</span>$ {typedText}
+          <span style={{ color: "#F0EBE1" }}>csi-admin@vitc</span>:<span style={{ color: "#3b82f6" }}>~/projects</span>$ {typedText}
           <motion.span animate={{ opacity: [1, 0] }} transition={{ repeat: Infinity, duration: 0.8, ease: "linear" }}>_</motion.span>
         </div>
         
