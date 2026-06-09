@@ -28,12 +28,13 @@ export default function Launchpad({ isOpen, onClose, onOpenApp, items }: Launchp
             position: "absolute",
             inset: 0,
             zIndex: 50,
-            background: "rgba(0, 0, 0, 0.6)",
-            backdropFilter: "blur(25px)",
-            WebkitBackdropFilter: "blur(25px)",
+            background: "rgba(3, 15, 12, 0.82)",
+            backdropFilter: "blur(30px)",
+            WebkitBackdropFilter: "blur(30px)",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
+            border: "1px solid rgba(16, 185, 129, 0.2)"
           }}
           onClick={onClose}
         >
@@ -72,11 +73,12 @@ export default function Launchpad({ isOpen, onClose, onOpenApp, items }: Launchp
                   height: "80px",
                   borderRadius: "20px",
                   overflow: "hidden",
-                  boxShadow: "0 10px 20px rgba(0,0,0,0.4)",
+                  boxShadow: "0 10px 25px rgba(0,0,0,0.5), 0 0 15px rgba(16, 185, 129, 0.25)",
                   background: "transparent",
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
+                  border: "1px solid rgba(16, 185, 129, 0.45)"
                 }}>
                   <img
                     src={item.iconSrc}
@@ -86,10 +88,11 @@ export default function Launchpad({ isOpen, onClose, onOpenApp, items }: Launchp
                   />
                 </div>
                 <span style={{
-                  color: "white",
+                  color: "#f0fdf4",
                   fontSize: "14px",
-                  fontWeight: 500,
-                  textShadow: "0 1px 3px rgba(0,0,0,0.8)",
+                  fontWeight: 600,
+                  textShadow: "0 2px 5px rgba(0,0,0,0.9), 0 0 10px rgba(16, 185, 129, 0.4)",
+                  letterSpacing: "0.5px"
                 }}>
                   {item.label}
                 </span>

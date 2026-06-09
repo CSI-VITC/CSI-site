@@ -14,7 +14,7 @@ export function Events() {
   ];
 
   return (
-    <div style={{ width: "100%", height: "100%", display: "flex", justifyContent: "center", alignItems: "center", background: "#0a0a0a", padding: "16px", boxSizing: "border-box" }}>
+    <div style={{ width: "100%", height: "100%", display: "flex", justifyContent: "center", alignItems: "center", background: "transparent", padding: "16px", boxSizing: "border-box" }}>
       <div style={{ 
         display: "grid", 
         gridTemplateColumns: "1.2fr 2fr 1fr 1fr", 
@@ -37,7 +37,8 @@ export function Events() {
               overflow: "hidden",
               position: "relative",
               cursor: "pointer",
-              border: "1px solid rgba(240, 235, 225, 0.1)"
+              border: "1px solid rgba(16, 185, 129, 0.35)",
+              boxShadow: "0 0 15px rgba(16, 185, 129, 0.05)"
             }}
           >
             <img 

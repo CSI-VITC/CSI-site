@@ -56,7 +56,7 @@ function DockItem({ label, iconSrc, bg, onClick, mouseX }: DockItemProps) {
           cursor: pointer;
           margin: 0 4px;
           overflow: hidden;
-          box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+          box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
           transform-origin: bottom;
           background: transparent;
         }
@@ -77,17 +77,17 @@ function DockItem({ label, iconSrc, bg, onClick, mouseX }: DockItemProps) {
         .dock-tooltip {
           position: absolute;
           top: -55px;
-          background: rgba(20, 20, 20, 0.7);
-          color: rgba(255, 255, 255, 0.95);
+          background: rgba(6, 26, 21, 0.95);
+          color: #f0fdf4;
           padding: 8px 16px;
           border-radius: 10px;
-          font-size: 14px;
-          font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-          font-weight: 500;
+          font-size: 13px;
+          font-family: var(--font-sans), sans-serif;
+          font-weight: 600;
           pointer-events: none;
           white-space: nowrap;
-          border: 1px solid rgba(255, 255, 255, 0.1);
-          box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+          border: 1px solid rgba(16, 185, 129, 0.4);
+          box-shadow: 0 10px 25px rgba(0, 0, 0, 0.6), 0 0 10px rgba(16, 185, 129, 0.2);
           z-index: 10;
           opacity: 0;
           transform: translateY(10px) scale(0.9);
@@ -124,12 +124,12 @@ export default function MacDock({ onOpen }: { onOpen: (id: string) => void }) {
         alignItems: "flex-end",
         gap: "4px",
         padding: "10px",
-        background: "rgba(30, 30, 30, 0.6)",
-        backdropFilter: "blur(20px)",
-        WebkitBackdropFilter: "blur(20px)",
+        background: "rgba(6, 26, 21, 0.85)",
+        backdropFilter: "blur(25px)",
+        WebkitBackdropFilter: "blur(25px)",
         borderRadius: "28px",
-        border: "1px solid rgba(255, 255, 255, 0.08)",
-        boxShadow: "0 20px 40px -10px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(0,0,0,0.1)",
+        border: "1px solid rgba(16, 185, 129, 0.4)",
+        boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.85), 0 0 30px rgba(16, 185, 129, 0.25)",
         zIndex: 100,
         height: "70px",
       }}

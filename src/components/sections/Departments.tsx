@@ -28,8 +28,8 @@ export function Departments() {
   ];
 
   return (
-    <div style={{ width: "100%", height: "100%", background: "#050505", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", padding: "40px 20px", overflowY: "auto" }}>
-      <h2 style={{ fontFamily: "var(--font-anton), sans-serif", fontSize: "3.5rem", letterSpacing: "2px", textTransform: "uppercase", marginBottom: "50px", color: "#F0EBE1", textAlign: "center" }}>
+    <div style={{ width: "100%", height: "100%", background: "transparent", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", padding: "40px 20px", overflowY: "auto" }}>
+      <h2 style={{ fontFamily: "var(--font-anton), sans-serif", fontSize: "3.5rem", letterSpacing: "2px", textTransform: "uppercase", marginBottom: "50px", color: "#f0fdf4", textAlign: "center", textShadow: "0 0 30px rgba(16,185,129,0.3)" }}>
         DEPARTMENTS
       </h2>
       <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", gap: "50px", maxWidth: "1100px", width: "100%", paddingBottom: "20px" }}>

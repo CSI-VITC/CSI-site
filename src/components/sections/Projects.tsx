@@ -29,30 +29,30 @@ export function Projects() {
   ];
 
   return (
-    <div style={{ padding: "40px 8%", width: "100%", height: "100%", position: "relative", overflow: "hidden", display: "flex", justifyContent: "space-between", alignItems: "center", background: "#050505" }}>
+    <div style={{ padding: "40px 8%", width: "100%", height: "100%", position: "relative", overflow: "hidden", display: "flex", justifyContent: "space-between", alignItems: "center", background: "transparent" }}>
       <div style={{ flex: 1, maxWidth: "500px", paddingRight: "40px", display: "flex", flexDirection: "column" }}>
         
         {/* Terminal Header */}
-        <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "30px", borderBottom: "1px solid rgba(255,255,255,0.1)", paddingBottom: "15px" }}>
-          <div style={{ width: "12px", height: "12px", borderRadius: "50%", background: "#ff5f56" }}></div>
-          <div style={{ width: "12px", height: "12px", borderRadius: "50%", background: "#ffbd2e" }}></div>
-          <div style={{ width: "12px", height: "12px", borderRadius: "50%", background: "#27c93f" }}></div>
-          <div style={{ marginLeft: "15px", fontSize: "0.85rem", color: "rgba(255,255,255,0.5)", fontFamily: "monospace" }}>bash - 80x24</div>
+        <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "30px", borderBottom: "1px solid rgba(16, 185, 129, 0.25)", paddingBottom: "15px" }}>
+          <div style={{ width: "12px", height: "12px", borderRadius: "50%", background: "#ff5f56", boxShadow: "0 0 8px #ff5f56" }}></div>
+          <div style={{ width: "12px", height: "12px", borderRadius: "50%", background: "#ffbd2e", boxShadow: "0 0 8px #ffbd2e" }}></div>
+          <div style={{ width: "12px", height: "12px", borderRadius: "50%", background: "#27c93f", boxShadow: "0 0 8px #27c93f" }}></div>
+          <div style={{ marginLeft: "15px", fontSize: "0.85rem", color: "rgba(16, 185, 129, 0.6)", fontFamily: "monospace" }}>bash - 80x24</div>
         </div>
 
         {/* Terminal Prompt */}
-        <div style={{ color: "#27c93f", fontSize: "1.05rem", marginBottom: "20px", fontFamily: "monospace", textShadow: "0 0 5px rgba(39, 201, 63, 0.4)" }}>
-          <span style={{ color: "#F0EBE1" }}>csi-admin@vitc</span>:<span style={{ color: "#3b82f6" }}>~/projects</span>$ {typedText}
+        <div style={{ color: "#10b981", fontSize: "1.05rem", marginBottom: "20px", fontFamily: "monospace", textShadow: "0 0 5px rgba(16, 185, 129, 0.4)" }}>
+          <span style={{ color: "#f0fdf4" }}>csi-admin@vitc</span>:<span style={{ color: "#00f2fe" }}>~/projects</span>$ {typedText}
           <motion.span animate={{ opacity: [1, 0] }} transition={{ repeat: Infinity, duration: 0.8, ease: "linear" }}>_</motion.span>
         </div>
         
         {typedText === fullCommand && (
           <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, ease: "easeOut" }}>
-            <h1 style={{ fontSize: "5rem", color: "#F0EBE1", fontWeight: "bold", margin: 0, lineHeight: 1.1, fontFamily: "var(--font-anton), sans-serif", letterSpacing: "2px", textTransform: "uppercase" }}>Our<br />Projects</h1>
-            <p style={{ color: "rgba(240, 235, 225, 0.7)", fontSize: "1.1rem", marginTop: "1.5rem", fontFamily: "var(--font-inter), sans-serif", lineHeight: 1.6 }}>
+            <h1 style={{ fontSize: "5rem", color: "#f0fdf4", fontWeight: "bold", margin: 0, lineHeight: 1.1, fontFamily: "var(--font-anton), sans-serif", letterSpacing: "2px", textTransform: "uppercase", textShadow: "0 0 30px rgba(16, 185, 129, 0.25)" }}>Our<br />Projects</h1>
+            <p style={{ color: "rgba(220, 252, 231, 0.75)", fontSize: "1.1rem", marginTop: "1.5rem", fontFamily: "var(--font-inter), sans-serif", lineHeight: 1.6 }}>
               Discover the innovative tools and platforms built by our community to elevate the technical landscape.
             </p>
-            <div style={{ marginTop: "30px", color: "rgba(255,255,255,0.4)", fontSize: "0.9rem", fontFamily: "monospace" }}>
+            <div style={{ marginTop: "30px", color: "rgba(16, 185, 129, 0.5)", fontSize: "0.9rem", fontFamily: "monospace" }}>
                &gt; Initialization complete. Fetching modules...
             </div>
           </motion.div>

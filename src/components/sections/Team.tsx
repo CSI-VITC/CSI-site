@@ -45,7 +45,7 @@ export function Team() {
   const loopedMembers = Array(20).fill(members).flat();
 
   return (
-    <div style={{ width: "100%", height: "100%", background: "#0a0a0a", display: "flex", flexDirection: "column" }}>
+    <div style={{ width: "100%", height: "100%", background: "transparent", display: "flex", flexDirection: "column" }}>
       <div style={{ flex: 1, width: "100%", position: "relative", overflow: "hidden" }}>
         <ElevatedCarousel 
           items={loopedMembers}
@@ -56,11 +56,11 @@ export function Team() {
           ctaSize={56}
           cardRadius={16}
           backgroundColor="transparent"
-          titleColor="#F0EBE1"
-          subheadlineColor="rgba(240, 235, 225, 0.6)"
-          ctaColor="#F0EBE1"
-          tagBackgroundColor="rgba(240, 235, 225, 0.1)"
-          tagTextColor="#F0EBE1"
+          titleColor="#f0fdf4"
+          subheadlineColor="rgba(220, 252, 231, 0.65)"
+          ctaColor="#fbbf24"
+          tagBackgroundColor="rgba(16, 185, 129, 0.15)"
+          tagTextColor="#dcfce7"
           style={{ width: "100%", height: "100%" }}
         />
       </div>

@@ -2,7 +2,6 @@
 
 import React, { useRef } from "react";
 import { motion } from "framer-motion";
-import { X, Minus, Maximize2 } from "lucide-react";
 
 interface DesktopWindowProps {
   id: string;
@@ -31,22 +30,36 @@ export default function DesktopWindow({
       animate={{ 
         opacity: isActive ? 1 : 0, 
         scale: isActive ? 1 : 0.98,
-        y: isActive ? 0 : 10,
-        pointerEvents: isActive ? "auto" : "none"
+        y: isActive ? [0, -8, 0] : 10
       }}
-      transition={{ type: "spring", stiffness: 300, damping: 28 }}
+      transition={{
+        opacity: { type: "spring", stiffness: 300, damping: 28 },
+        scale: { type: "spring", stiffness: 300, damping: 28 },
+        y: isActive ? {
+          repeat: Infinity,
+          repeatType: "reverse",
+          duration: 3,
+          ease: "easeInOut"
+        } : { type: "spring", stiffness: 300, damping: 28 }
+      }}
       onMouseDown={onFocus}
       style={{
         position: "fixed",
-        top: 0,
-        left: 0,
-        right: 0,
-        bottom: 0,
+        top: "6vh",
+        left: "6vw",
+        width: "88vw",
+        height: "76vh",
         zIndex: isActive ? 110 : 10,
         display: "flex",
         flexDirection: "column",
-        borderRadius: 0,
+        borderRadius: "20px",
         overflow: "hidden",
+        boxShadow: "0 30px 70px rgba(0, 0, 0, 0.8), 0 0 40px rgba(16, 185, 129, 0.15)",
+        border: "1px solid rgba(16, 185, 129, 0.4)",
+        background: "rgba(6, 26, 21, 0.85)",
+        backdropFilter: "blur(30px)",
+        WebkitBackdropFilter: "blur(30px)",
+        pointerEvents: isActive ? "auto" : "none"
       }}
       className="glass-panel"
     >
@@ -57,16 +70,16 @@ export default function DesktopWindow({
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          padding: "12px 20px",
-          background: "rgba(255, 255, 255, 0.05)",
-          borderBottom: "1px solid var(--color-border-tertiary)",
+          padding: "14px 20px",
+          background: "rgba(16, 185, 129, 0.08)",
+          borderBottom: "1px solid rgba(16, 185, 129, 0.25)",
           position: "relative",
         }}
       >
         <div
           style={{
             position: "absolute",
-            left: "16px",
+            left: "20px",
             display: "flex",
             gap: "8px",
           }}
@@ -76,23 +89,29 @@ export default function DesktopWindow({
             style={{
               width: "12px", height: "12px", borderRadius: "50%",
               background: "#ff5f56", border: "none", cursor: "pointer",
-              display: "flex", alignItems: "center", justifyContent: "center"
+              display: "flex", alignItems: "center", justifyContent: "center",
+              boxShadow: "0 0 8px rgba(255, 95, 86, 0.6)"
             }}
+            aria-label="Close"
           />
           <button
             style={{
               width: "12px", height: "12px", borderRadius: "50%",
-              background: "#ffbd2e", border: "none", cursor: "pointer"
+              background: "#ffbd2e", border: "none", cursor: "pointer",
+              boxShadow: "0 0 8px rgba(255, 189, 46, 0.6)"
             }}
+            aria-label="Minimize"
           />
           <button
             style={{
               width: "12px", height: "12px", borderRadius: "50%",
-              background: "#27c93f", border: "none", cursor: "pointer"
+              background: "#27c93f", border: "none", cursor: "pointer",
+              boxShadow: "0 0 8px rgba(39, 201, 63, 0.6)"
             }}
+            aria-label="Maximize"
           />
         </div>
-        <div style={{ fontSize: "13px", fontWeight: 600, color: "var(--color-text-primary)", letterSpacing: "0.5px" }}>
+        <div style={{ fontSize: "14px", fontWeight: 600, color: "#f0fdf4", letterSpacing: "1px", textShadow: "0 0 10px rgba(16, 185, 129, 0.4)" }}>
           {title}
         </div>
       </div>
@@ -103,7 +122,7 @@ export default function DesktopWindow({
           padding: 0,
           overflowY: "auto",
           flex: 1,
-          background: "rgba(5, 5, 5, 0.95)",
+          background: "rgba(3, 15, 12, 0.65)",
           display: "flex",
           justifyContent: "center",
         }}

@@ -4,9 +4,13 @@ import React, { useState } from "react";
 import DesktopWindow from "@/components/DesktopWindow";
 import { AboutUs, Departments, Events, Projects, Team, Contact, CsiOfficial } from "@/components/sections";
 import MacDock from "@/components/MacDock";
-import CursorEyes from "@/components/CursorEyes";
+import GolemEyes from "@/components/GolemEyes";
 import Launchpad from "@/components/Launchpad";
 import LoadingScreen from "@/components/LoadingScreen";
+import MightyEagleStrike from "@/components/MightyEagleStrike";
+import BirdFollower from "@/components/BirdFollower";
+
+import ForestBackground from "@/components/ForestBackground";
 
 type WindowId = "about" | "depts" | "events" | "projects" | "team" | "contact" | "csi";
 
@@ -15,6 +19,10 @@ export default function Desktop() {
   const [activeWindow, setActiveWindow] = useState<WindowId | null>(null);
   const [isLaunchpadOpen, setIsLaunchpadOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  
+  // Cinematic Mighty Eagle Animation States
+  const [isEagleStriking, setIsEagleStriking] = useState(false);
+  const [pendingWindowId, setPendingWindowId] = useState<WindowId | null>(null);
 
   const toggleWindow = (id: string) => {
     if (id === "more") {
@@ -22,7 +30,10 @@ export default function Desktop() {
       return;
     }
 
+    if (isEagleStriking) return;
+
     const winId = id as WindowId;
+
     if (openWindows.includes(winId)) {
       if (activeWindow === winId) {
         setOpenWindows(openWindows.filter((w) => w !== winId));
@@ -31,8 +42,20 @@ export default function Desktop() {
         setActiveWindow(winId);
       }
     } else {
-      setOpenWindows([...openWindows, winId]);
-      setActiveWindow(winId);
+      setPendingWindowId(winId);
+      setIsEagleStriking(true);
+    }
+  };
+
+  const handleEagleAnimationComplete = () => {
+    setIsEagleStriking(false);
+    if (pendingWindowId) {
+      setOpenWindows((prev) => {
+        if (prev.includes(pendingWindowId)) return prev;
+        return [...prev, pendingWindowId];
+      });
+      setActiveWindow(pendingWindowId);
+      setPendingWindowId(null);
     }
   };
 
@@ -41,6 +64,19 @@ export default function Desktop() {
     if (activeWindow === id) {
       setActiveWindow(openWindows.length > 1 ? openWindows[0] : null);
     }
+  };
+
+  const getWindowTitle = (id: WindowId) => {
+    const titles: Record<WindowId, string> = {
+      about: "About Us",
+      depts: "Departments",
+      events: "Events",
+      projects: "Projects",
+      team: "Team",
+      contact: "Contact",
+      csi: "CSI Official Website",
+    };
+    return titles[id];
   };
 
   const renderWindowContent = (id: WindowId) => {
@@ -56,22 +92,9 @@ export default function Desktop() {
     }
   };
 
-  const getWindowTitle = (id: WindowId) => {
-    switch (id) {
-      case "about": return "About Us";
-      case "depts": return "Departments";
-      case "events": return "Events";
-      case "projects": return "Projects";
-      case "team": return "Team";
-      case "contact": return "Contact";
-      case "csi": return "CSI Official Site";
-      default: return "Window";
-    }
-  };
-
-  const launchpadItems = [
+  const dockItems = [
     { id: "about", label: "About Us", iconSrc: "/icons/Finder.png" },
-    { id: "depts", label: "Departments", iconSrc: "/icons/Domains.jpg" },
+    { id: "depts", label: "Departments", iconSrc: "/icons/Safari.png" },
     { id: "events", label: "Events", iconSrc: "/icons/Calendar.png" },
     { id: "projects", label: "Projects", iconSrc: "/icons/Terminal.png" },
     { id: "team", label: "Team", iconSrc: "/icons/Notion.png" },
@@ -80,23 +103,37 @@ export default function Desktop() {
   ];
 
   return (
-    <main style={{ position: "relative", width: "100vw", height: "100vh", overflow: "hidden", background: "#050505" }}>
+    <main 
+      className="relative w-screen h-screen overflow-hidden select-none"
+    >
+      {/* Loading Sequence */}
       {isLoading && <LoadingScreen onComplete={() => setIsLoading(false)} />}
       
-      {/* Eyes Layer that follows cursor */}
-      <CursorEyes />
+      {/* Interactive Companion Creature */}
+      <BirdFollower />
 
-      {/* Window Manager Layer */}
-      <div style={{ position: "absolute", inset: 0, pointerEvents: "none" }}>
+      {/* Mighty Eagle Cinematic Overlay Layer */}
+      {isEagleStriking && (
+        <MightyEagleStrike onComplete={handleEagleAnimationComplete} />
+      )}
+
+      {/* Cinematic Overgrown Forest Background Elements with Parallax & Interactive Birds */}
+      <ForestBackground />
+      
+      {/* Ancient Forest Guardian Golem tracking the mouse */}
+      <GolemEyes />
+
+      {/* Window Management Layer */}
+      <div className="absolute inset-0 pointer-events-none z-10">
         {openWindows.map((id, index) => (
-          <div key={id} style={{ pointerEvents: "auto" }}>
+          <div key={id} className="pointer-events-auto">
             <DesktopWindow
               id={id}
               title={getWindowTitle(id)}
               isActive={activeWindow === id}
               onFocus={() => setActiveWindow(id)}
               onClose={() => closeWindow(id)}
-              defaultPosition={{ x: 100 + index * 40, y: 100 + index * 40 }}
+              defaultPosition={{ x: 120 + index * 40, y: 120 + index * 40 }}
             >
               {renderWindowContent(id)}
             </DesktopWindow>
@@ -104,15 +141,26 @@ export default function Desktop() {
         ))}
       </div>
 
-      <Launchpad 
-        isOpen={isLaunchpadOpen} 
-        onClose={() => setIsLaunchpadOpen(false)} 
-        onOpenApp={toggleWindow} 
-        items={launchpadItems} 
-      />
+      {/* Taskbar/Dock Ledge - Styled as a luminous mossy stone platform with a vivid green glow */}
+      <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-50 pointer-events-auto bg-[#02100d]/90 border border-emerald-400/40 rounded-3xl p-1.5 backdrop-blur-xl shadow-[0_25px_60px_rgba(0,0,0,0.95),0_0_30px_rgba(16,185,129,0.25)]">
+        <MacDock 
+          onOpen={toggleWindow} 
+        />
+      </div>
 
-      {/* Mac Dock Layer */}
-      <MacDock onOpen={toggleWindow} />
+      {isLaunchpadOpen && (
+        <div className="absolute inset-0 z-[100] pointer-events-auto">
+          <Launchpad 
+            isOpen={isLaunchpadOpen}
+            onClose={() => setIsLaunchpadOpen(false)} 
+            onOpenApp={(id) => {
+              toggleWindow(id);
+              setIsLaunchpadOpen(false);
+            }}
+            items={dockItems}
+          />
+        </div>
+      )}
     </main>
   );
 }
