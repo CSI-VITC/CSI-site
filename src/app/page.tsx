@@ -7,12 +7,16 @@ import MacDock from "@/components/MacDock";
 import CursorEyes from "@/components/CursorEyes";
 import Launchpad from "@/components/Launchpad";
 import LoadingScreen from "@/components/LoadingScreen";
+import LiquidBackground from "@/components/LiquidBackground";
 
 type WindowId = "about" | "depts" | "events" | "projects" | "team" | "contact" | "csi";
+
+const windowOrder: WindowId[] = ["about", "depts", "events", "projects", "team", "contact", "csi"];
 
 export default function Desktop() {
   const [openWindows, setOpenWindows] = useState<WindowId[]>([]);
   const [activeWindow, setActiveWindow] = useState<WindowId | null>(null);
+  const [minimizedWindows, setMinimizedWindows] = useState<WindowId[]>([]);
   const [isLaunchpadOpen, setIsLaunchpadOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -24,13 +28,20 @@ export default function Desktop() {
 
     const winId = id as WindowId;
     if (openWindows.includes(winId)) {
-      if (activeWindow === winId) {
-        setOpenWindows(openWindows.filter((w) => w !== winId));
-        setActiveWindow(openWindows.length > 1 ? openWindows[0] : null);
+      if (minimizedWindows.includes(winId)) {
+        // Restore minimized window
+        setMinimizedWindows(minimizedWindows.filter((w) => w !== winId));
+        setActiveWindow(winId);
+      } else if (activeWindow === winId) {
+        // Minimize active window
+        setMinimizedWindows([...minimizedWindows, winId]);
+        setActiveWindow(openWindows.find((w) => w !== winId && !minimizedWindows.includes(w)) || null);
       } else {
+        // Switch focus to the clicked window
         setActiveWindow(winId);
       }
     } else {
+      // Open new window
       setOpenWindows([...openWindows, winId]);
       setActiveWindow(winId);
     }
@@ -38,9 +49,51 @@ export default function Desktop() {
 
   const closeWindow = (id: WindowId) => {
     setOpenWindows(openWindows.filter((w) => w !== id));
+    setMinimizedWindows(minimizedWindows.filter((w) => w !== id));
     if (activeWindow === id) {
-      setActiveWindow(openWindows.length > 1 ? openWindows[0] : null);
+      const remaining = openWindows.filter((w) => w !== id && !minimizedWindows.includes(w));
+      setActiveWindow(remaining.length > 0 ? remaining[0] : null);
     }
+  };
+
+  const minimizeWindow = (id: WindowId) => {
+    if (!minimizedWindows.includes(id)) {
+      setMinimizedWindows([...minimizedWindows, id]);
+    }
+    if (activeWindow === id) {
+      const remaining = openWindows.filter((w) => w !== id && !minimizedWindows.includes(w));
+      setActiveWindow(remaining.length > 0 ? remaining[0] : null);
+    }
+  };
+
+  const goToNextPage = (currentId: WindowId) => {
+    const currentIndex = windowOrder.indexOf(currentId);
+    const nextIndex = (currentIndex + 1) % windowOrder.length;
+    const nextId = windowOrder[nextIndex];
+    
+    // Close current, open next
+    const updated = openWindows.filter((w) => w !== currentId);
+    if (!updated.includes(nextId)) {
+      updated.push(nextId);
+    }
+    setOpenWindows(updated);
+    setActiveWindow(nextId);
+    setMinimizedWindows(minimizedWindows.filter((w) => w !== nextId));
+  };
+
+  const goToPrevPage = (currentId: WindowId) => {
+    const currentIndex = windowOrder.indexOf(currentId);
+    const prevIndex = (currentIndex - 1 + windowOrder.length) % windowOrder.length;
+    const prevId = windowOrder[prevIndex];
+    
+    // Close current, open prev
+    const updated = openWindows.filter((w) => w !== currentId);
+    if (!updated.includes(prevId)) {
+      updated.push(prevId);
+    }
+    setOpenWindows(updated);
+    setActiveWindow(prevId);
+    setMinimizedWindows(minimizedWindows.filter((w) => w !== prevId));
   };
 
   const renderWindowContent = (id: WindowId) => {
@@ -83,6 +136,9 @@ export default function Desktop() {
     <main style={{ position: "relative", width: "100vw", height: "100vh", overflow: "hidden", background: "#050505" }}>
       {isLoading && <LoadingScreen onComplete={() => setIsLoading(false)} />}
       
+      {/* wallpaper background */}
+      <LiquidBackground />
+
       {/* Eyes Layer that follows cursor */}
       <CursorEyes />
 
@@ -96,7 +152,11 @@ export default function Desktop() {
               isActive={activeWindow === id}
               onFocus={() => setActiveWindow(id)}
               onClose={() => closeWindow(id)}
-              defaultPosition={{ x: 100 + index * 40, y: 100 + index * 40 }}
+              defaultPosition={{ x: 100 + index * 40, y: 80 + index * 40 }}
+              isMinimized={minimizedWindows.includes(id)}
+              onMinimize={() => minimizeWindow(id)}
+              onNextPage={() => goToNextPage(id)}
+              onPrevPage={() => goToPrevPage(id)}
             >
               {renderWindowContent(id)}
             </DesktopWindow>
@@ -112,7 +172,11 @@ export default function Desktop() {
       />
 
       {/* Mac Dock Layer */}
-      <MacDock onOpen={toggleWindow} />
+      <MacDock 
+        onOpen={toggleWindow} 
+        openWindows={openWindows}
+        minimizedWindows={minimizedWindows}
+      />
     </main>
   );
 }

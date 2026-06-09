@@ -10,9 +10,11 @@ interface DockItemProps {
   bg?: string;
   onClick: () => void;
   mouseX: any;
+  isOpen: boolean;
+  isMinimized: boolean;
 }
 
-function DockItem({ label, iconSrc, bg, onClick, mouseX }: DockItemProps) {
+function DockItem({ label, iconSrc, bg, onClick, mouseX, isOpen, isMinimized }: DockItemProps) {
   const ref = useRef<HTMLDivElement>(null);
   const [isHovered, setIsHovered] = useState(false);
 
@@ -26,7 +28,7 @@ function DockItem({ label, iconSrc, bg, onClick, mouseX }: DockItemProps) {
 
   return (
     <div 
-      style={{ position: "relative", display: "flex", alignItems: "center", justifyContent: "center" }}
+      style={{ position: "relative", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
@@ -41,6 +43,23 @@ function DockItem({ label, iconSrc, bg, onClick, mouseX }: DockItemProps) {
           <img src={iconSrc} alt={label} draggable={false} />
         </div>
       </motion.div>
+
+      {/* Active Dot Indicator */}
+      {isOpen && (
+        <div 
+          style={{
+            position: "absolute",
+            bottom: "-6px",
+            width: "4px",
+            height: "4px",
+            borderRadius: "50%",
+            background: isMinimized ? "rgba(240, 235, 225, 0.4)" : "#27c93f",
+            boxShadow: isMinimized ? "none" : "0 0 8px #27c93f",
+            transition: "all 0.3s ease",
+            zIndex: 10
+          }}
+        />
+      )}
 
       {/* Tooltip */}
       <div className={`dock-tooltip ${isHovered ? "visible" : ""}`}>
@@ -102,15 +121,38 @@ function DockItem({ label, iconSrc, bg, onClick, mouseX }: DockItemProps) {
   );
 }
 
-export default function MacDock({ onOpen }: { onOpen: (id: string) => void }) {
+interface MacDockProps {
+  onOpen: (id: string) => void;
+  openWindows?: string[];
+  minimizedWindows?: string[];
+}
+
+export default function MacDock({ onOpen, openWindows = [], minimizedWindows = [] }: MacDockProps) {
   const mouseX = useMotionValue(Infinity);
 
-  const items: Array<{ id: string; label: string; iconSrc: string; bg?: string }> = [
+  const defaultItems: Array<{ id: string; label: string; iconSrc: string; bg?: string }> = [
     { id: "about", label: "About", iconSrc: "/icons/Finder.png" },
     { id: "depts", label: "Domains", iconSrc: "/icons/Domains.jpg" },
     { id: "events", label: "Events", iconSrc: "/icons/Calendar.png" },
     { id: "projects", label: "Projects", iconSrc: "/icons/Terminal.png" },
-    { id: "more", label: "Launchpad", iconSrc: "/icons/launchpad.png" },
+  ];
+
+  // Dynamic temporary running apps inside the Dock
+  const tempItems: Array<{ id: string; label: string; iconSrc: string; bg?: string }> = openWindows
+    .filter(id => !defaultItems.some(item => item.id === id))
+    .map(id => {
+      const details: Record<string, { label: string; iconSrc: string }> = {
+        team: { label: "Team", iconSrc: "/icons/Notion.png" },
+        contact: { label: "Contact", iconSrc: "/icons/Mail.png" },
+        csi: { label: "CSI Official", iconSrc: "/icons/CSI.png" },
+      };
+      return { id, ...(details[id] || { label: id, iconSrc: "/icons/Finder.png" }) };
+    });
+
+  const items: Array<{ id: string; label: string; iconSrc: string; bg?: string }> = [
+    ...defaultItems,
+    ...tempItems,
+    { id: "more", label: "Launchpad", iconSrc: "/icons/launchpad.png" }
   ];
 
   return (
@@ -143,6 +185,8 @@ export default function MacDock({ onOpen }: { onOpen: (id: string) => void }) {
           iconSrc={item.iconSrc} 
           label={item.label} 
           bg={item.bg}
+          isOpen={openWindows.includes(item.id)}
+          isMinimized={minimizedWindows.includes(item.id)}
           onClick={() => onOpen(item.id)} 
           mouseX={mouseX} 
         />
