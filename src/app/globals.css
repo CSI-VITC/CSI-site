@@ -162,3 +162,397 @@ body {
 }
 .person-name { font-size: 14px; font-weight: 500; color: var(--color-text-primary); margin-bottom: 2px;}
 .person-role { font-size: 12px; color: var(--color-text-secondary); }
+
+/* ============================================================
+   NEW: Animation Keyframes & Utility Classes
+   ============================================================ */
+
+/* ─── Fade In Up ─── */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ─── Fade In Scale ─── */
+@keyframes fadeInScale {
+  from {
+    opacity: 0;
+    transform: scale(0.92);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* ─── Slide In From Right ─── */
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* ─── Slide In From Left ─── */
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* ─── Pulse Glow ─── */
+@keyframes pulseGlow {
+  0%, 100% {
+    box-shadow: 0 0 5px rgba(16, 185, 129, 0.3), 0 0 10px rgba(16, 185, 129, 0.1);
+  }
+  50% {
+    box-shadow: 0 0 15px rgba(16, 185, 129, 0.5), 0 0 30px rgba(16, 185, 129, 0.2);
+  }
+}
+
+/* ─── Matrix Text Glow ─── */
+@keyframes matrixTextGlow {
+  0%, 100% {
+    text-shadow: 0 0 5px rgba(52, 211, 153, 0.5);
+  }
+  50% {
+    text-shadow: 0 0 15px rgba(52, 211, 153, 0.8), 0 0 25px rgba(0, 242, 254, 0.4);
+  }
+}
+
+/* ─── Glitch Text Effect ─── */
+@keyframes glitchText {
+  0%, 100% {
+    clip-path: inset(0 0 0 0);
+    transform: translate(0);
+  }
+  10% {
+    clip-path: inset(10% 0 60% 0);
+    transform: translate(-2px, 1px);
+  }
+  20% {
+    clip-path: inset(40% 0 30% 0);
+    transform: translate(2px, -1px);
+  }
+  30% {
+    clip-path: inset(70% 0 5% 0);
+    transform: translate(-1px, 2px);
+  }
+  40% {
+    clip-path: inset(20% 0 50% 0);
+    transform: translate(1px, -2px);
+  }
+  50% {
+    clip-path: inset(0 0 80% 0);
+    transform: translate(-2px, 0);
+  }
+  60% {
+    clip-path: inset(50% 0 20% 0);
+    transform: translate(2px, 1px);
+  }
+  70% {
+    clip-path: inset(30% 0 40% 0);
+    transform: translate(0, -1px);
+  }
+  80% {
+    clip-path: inset(60% 0 10% 0);
+    transform: translate(-1px, 2px);
+  }
+  90% {
+    clip-path: inset(15% 0 55% 0);
+    transform: translate(1px, -1px);
+  }
+}
+
+/* ─── Scan Line Sweep ─── */
+@keyframes scanLineSweep {
+  0% {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(100vh);
+    opacity: 0;
+  }
+}
+
+/* ─── Border Pulse ─── */
+@keyframes borderPulse {
+  0%, 100% {
+    border-color: rgba(52, 211, 153, 0.35);
+  }
+  50% {
+    border-color: rgba(0, 242, 254, 0.6);
+  }
+}
+
+/* ─── Float / Hover Animation ─── */
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+/* ─── Rotate Slow ─── */
+@keyframes rotateSlow {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ─── Typewriter Cursor ─── */
+@keyframes typewriterCursor {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+}
+
+/* ─── Digital Noise ─── */
+@keyframes digitalNoise {
+  0%, 100% {
+    background-position: 0 0;
+  }
+  10% {
+    background-position: -10px 5px;
+  }
+  20% {
+    background-position: 5px -10px;
+  }
+  30% {
+    background-position: -5px 15px;
+  }
+  40% {
+    background-position: 15px -5px;
+  }
+  50% {
+    background-position: -15px 10px;
+  }
+  60% {
+    background-position: 10px 15px;
+  }
+  70% {
+    background-position: -10px -15px;
+  }
+  80% {
+    background-position: 15px 5px;
+  }
+  90% {
+    background-position: -5px -10px;
+  }
+}
+
+/* ─── Particle Rise ─── */
+@keyframes particleRise {
+  0% {
+    transform: translateY(0) scale(1);
+    opacity: 0.6;
+  }
+  100% {
+    transform: translateY(-100px) scale(0);
+    opacity: 0;
+  }
+}
+
+/* ─── Circuit Draw ─── */
+@keyframes circuitDraw {
+  from {
+    stroke-dashoffset: 1000;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+/* ─── Shake ─── */
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  10% { transform: translateX(-5px) translateY(2px); }
+  20% { transform: translateX(5px) translateY(-2px); }
+  30% { transform: translateX(-4px) translateY(1px); }
+  40% { transform: translateX(4px) translateY(-1px); }
+  50% { transform: translateX(-3px); }
+  60% { transform: translateX(3px); }
+  70% { transform: translateX(-2px); }
+  80% { transform: translateX(2px); }
+  90% { transform: translateX(-1px); }
+}
+
+/* ─── CRT Flicker ─── */
+@keyframes crtFlicker {
+  0% { opacity: 0.97; }
+  5% { opacity: 0.99; }
+  10% { opacity: 0.96; }
+  15% { opacity: 1; }
+  20% { opacity: 0.98; }
+  25% { opacity: 0.95; }
+  30% { opacity: 1; }
+  50% { opacity: 0.98; }
+  70% { opacity: 0.96; }
+  80% { opacity: 0.99; }
+  90% { opacity: 0.97; }
+  100% { opacity: 1; }
+}
+
+/* ─── Utility Classes ─── */
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.6s ease-out forwards;
+}
+
+.animate-fade-in-scale {
+  animation: fadeInScale 0.5s ease-out forwards;
+}
+
+.animate-slide-in-right {
+  animation: slideInRight 0.5s ease-out forwards;
+}
+
+.animate-slide-in-left {
+  animation: slideInLeft 0.5s ease-out forwards;
+}
+
+.animate-pulse-glow {
+  animation: pulseGlow 2s ease-in-out infinite;
+}
+
+.animate-matrix-text {
+  animation: matrixTextGlow 2s ease-in-out infinite;
+}
+
+.animate-glitch {
+  animation: glitchText 0.5s ease-in-out;
+}
+
+.animate-scan-line {
+  animation: scanLineSweep 3s linear infinite;
+}
+
+.animate-border-pulse {
+  animation: borderPulse 2s ease-in-out infinite;
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+.animate-rotate-slow {
+  animation: rotateSlow 20s linear infinite;
+}
+
+.animate-typewriter-cursor::after {
+  content: "_";
+  animation: typewriterCursor 1s step-end infinite;
+}
+
+.animate-shake {
+  animation: shake 0.5s ease-in-out;
+}
+
+.animate-crt-flicker {
+  animation: crtFlicker 0.15s infinite;
+}
+
+/* ─── Stagger Delay Utilities ─── */
+.delay-100 { animation-delay: 100ms; }
+.delay-200 { animation-delay: 200ms; }
+.delay-300 { animation-delay: 300ms; }
+.delay-400 { animation-delay: 400ms; }
+.delay-500 { animation-delay: 500ms; }
+.delay-600 { animation-delay: 600ms; }
+.delay-700 { animation-delay: 700ms; }
+.delay-800 { animation-delay: 800ms; }
+
+/* ─── Glassmorphism Variants ─── */
+.glass-strong {
+  background: rgba(6, 26, 21, 0.92);
+  backdrop-filter: blur(40px);
+  -webkit-backdrop-filter: blur(40px);
+  border: 1px solid rgba(52, 211, 153, 0.4);
+}
+
+.glass-subtle {
+  background: rgba(6, 26, 21, 0.6);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(52, 211, 153, 0.15);
+}
+
+/* ─── Tech Text Utilities ─── */
+.text-glow-green {
+  text-shadow: 0 0 10px rgba(16, 185, 129, 0.5), 0 0 20px rgba(16, 185, 129, 0.3);
+}
+
+.text-glow-cyan {
+  text-shadow: 0 0 10px rgba(0, 242, 254, 0.5), 0 0 20px rgba(0, 242, 254, 0.3);
+}
+
+.text-glow-amber {
+  text-shadow: 0 0 10px rgba(251, 191, 36, 0.5), 0 0 20px rgba(251, 191, 36, 0.3);
+}
+
+/* ─── Scan Line Overlay ─── */
+.scan-line-overlay {
+  position: relative;
+}
+.scan-line-overlay::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0, 242, 254, 0.02) 2px,
+    rgba(0, 242, 254, 0.02) 4px
+  );
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* ─── Responsive Cursor ─── */
+@media (max-width: 768px) {
+  .robot-follower {
+    display: none !important;
+  }
+}
+
+/* ─── Reduce Motion ─── */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

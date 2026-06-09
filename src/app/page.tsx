@@ -8,9 +8,10 @@ import GolemEyes from "@/components/GolemEyes";
 import Launchpad from "@/components/Launchpad";
 import LoadingScreen from "@/components/LoadingScreen";
 import MightyEagleStrike from "@/components/MightyEagleStrike";
-import BirdFollower from "@/components/BirdFollower";
-
+import RobotFollower from "@/components/RobotFollower";
 import ForestBackground from "@/components/ForestBackground";
+import MatrixRain from "@/components/MatrixRain";
+import TechBackground from "@/components/TechBackground";
 
 type WindowId = "about" | "depts" | "events" | "projects" | "team" | "contact" | "csi";
 
@@ -109,21 +110,27 @@ export default function Desktop() {
       {/* Loading Sequence */}
       {isLoading && <LoadingScreen onComplete={() => setIsLoading(false)} />}
       
-      {/* Interactive Companion Creature */}
-      <BirdFollower />
+      {/* Layer 1: Tech Background - Grid, particles, hex nodes */}
+      <TechBackground />
 
-      {/* Mighty Eagle Cinematic Overlay Layer */}
+      {/* Layer 2: Matrix Rain - Falling characters with ASCII figure */}
+      <MatrixRain opacity={0.12} />
+
+      {/* Layer 3: Interactive Robot Companion (replaces Bird) */}
+      <RobotFollower size={44} />
+
+      {/* Layer 4: Mighty Eagle Cinematic Overlay */}
       {isEagleStriking && (
         <MightyEagleStrike onComplete={handleEagleAnimationComplete} />
       )}
 
-      {/* Cinematic Overgrown Forest Background Elements with Parallax & Interactive Birds */}
+      {/* Layer 5: Forest Background with parallax & birds */}
       <ForestBackground />
       
-      {/* Ancient Forest Guardian Golem tracking the mouse */}
+      {/* Layer 6: Ancient Forest Guardian Golem */}
       <GolemEyes />
 
-      {/* Window Management Layer */}
+      {/* Layer 7: Window Management */}
       <div className="absolute inset-0 pointer-events-none z-10">
         {openWindows.map((id, index) => (
           <div key={id} className="pointer-events-auto">
@@ -141,13 +148,14 @@ export default function Desktop() {
         ))}
       </div>
 
-      {/* Taskbar/Dock Ledge - Styled as a luminous mossy stone platform with a vivid green glow */}
+      {/* Layer 8: Dock */}
       <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-50 pointer-events-auto bg-[#02100d]/90 border border-emerald-400/40 rounded-3xl p-1.5 backdrop-blur-xl shadow-[0_25px_60px_rgba(0,0,0,0.95),0_0_30px_rgba(16,185,129,0.25)]">
         <MacDock 
           onOpen={toggleWindow} 
         />
       </div>
 
+      {/* Layer 9: Launchpad */}
       {isLaunchpadOpen && (
         <div className="absolute inset-0 z-[100] pointer-events-auto">
           <Launchpad 
