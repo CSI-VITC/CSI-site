@@ -76,7 +76,7 @@
   </table>
 </div>
 
-> **📁 Note:** Replace the `assets/` paths above with your actual screenshot files once uploaded to the repository.
+
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
