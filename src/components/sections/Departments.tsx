@@ -8,23 +8,23 @@ export function Departments() {
     {
       leads: "Sudeep & Suyash",
       name: "Management",
-      image: "/images/managemeent.jpg"
+      image: "/images/managemeent.jpg",
     },
     {
       leads: "Yeswanth & Syed",
       name: "Technical",
-      image: "/images/technical.png"
+      image: "/images/technical.png",
     },
     {
       leads: "Janet",
       name: "Design",
-      image: "/images/design.jpg"
+      image: "/images/design.jpg",
     },
     {
       leads: "Nityasri",
       name: "Social & Content",
-      image: "/images/social.jpg"
-    }
+      image: "/images/social.jpg",
+    },
   ];
 
   return (
@@ -36,11 +36,7 @@ export function Departments() {
         {depts.map((d, i) => (
           <div key={i} style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
             <div style={{ width: "200px", height: "305px", position: "relative" }}>
-              <Book 
-                image={d.image}
-                title={d.name}
-                author={d.leads}
-              />
+              <Book image={d.image} title={d.name} author={d.leads} />
             </div>
           </div>
         ))}

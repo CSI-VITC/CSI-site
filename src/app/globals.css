@@ -58,6 +58,20 @@ body {
   box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(0,0,0,0.2);
 }
 
+.window-traffic-lights {
+  position: absolute;
+  left: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 10;
+  display: flex;
+  pointer-events: auto;
+}
+
+.window-header--active .window-traffic-lights button {
+  opacity: 1 !important;
+}
+
 /* Scrollbar styling */
 ::-webkit-scrollbar {
   width: 6px;

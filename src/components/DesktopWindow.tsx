@@ -1,58 +1,174 @@
 "use client";
 
-import React, { useRef } from "react";
-import { motion } from "framer-motion";
-import { X, Minus, Maximize2 } from "lucide-react";
+import React, { useState, useEffect, useRef } from "react";
+import { motion, useMotionValue, useDragControls } from "framer-motion";
+import TrafficLights from "@/components/TrafficLights";
+import { STRIP_LEFT, getMinimizedSlotY } from "@/components/MinimizedWindowStrip";
+
+export const WINDOW_WIDTH = 920;
+export const WINDOW_HEIGHT = 620;
+export const MENU_BAR_INSET = 28;
 
 interface DesktopWindowProps {
   id: string;
   title: string;
   children: React.ReactNode;
   onClose: () => void;
+  onMinimize: () => void;
   isActive: boolean;
+  isMinimized: boolean;
   onFocus: () => void;
-  defaultPosition?: { x: number; y: number };
+  onPositionChange: (position: { x: number; y: number }) => void;
+  stackIndex: number;
+  position: { x: number; y: number };
+  minimizedSlotIndex?: number;
+}
+
+function clampY(value: number) {
+  return Math.max(8, value);
 }
 
 export default function DesktopWindow({
-  id,
   title,
   children,
   onClose,
+  onMinimize,
   isActive,
+  isMinimized,
   onFocus,
-  defaultPosition = { x: 50, y: 50 },
+  onPositionChange,
+  stackIndex,
+  position,
+  minimizedSlotIndex = 0,
 }: DesktopWindowProps) {
-  const constraintsRef = useRef(null);
+  const [isImmersive, setIsImmersive] = useState(false);
+  const [isDragging, setIsDragging] = useState(false);
+  const dragControls = useDragControls();
+  const savedPosition = useRef({ x: position.x, y: clampY(position.y) });
+
+  const x = useMotionValue(position.x);
+  const y = useMotionValue(clampY(position.y));
+
+  useEffect(() => {
+    if (!isActive) setIsImmersive(false);
+  }, [isActive]);
+
+  useEffect(() => {
+    if (!isDragging && !isImmersive) {
+      const safeY = clampY(position.y);
+      x.set(position.x);
+      y.set(safeY);
+      savedPosition.current = { x: position.x, y: safeY };
+    }
+  }, [position.x, position.y, isDragging, isImmersive, x, y, position]);
+
+  const minimizedY = getMinimizedSlotY(minimizedSlotIndex) - MENU_BAR_INSET;
+
+  const restoreWindowPosition = () => {
+    const target = savedPosition.current;
+    const safeY = clampY(target.y);
+    x.set(target.x);
+    y.set(safeY);
+    savedPosition.current = { x: target.x, y: safeY };
+  };
+
+  const handleExpand = () => {
+    onFocus();
+    if (!isImmersive) {
+      savedPosition.current = { x: x.get(), y: clampY(y.get()) };
+      setIsImmersive(true);
+      return;
+    }
+    restoreWindowPosition();
+    setIsImmersive(false);
+  };
+
+  const handleMinimize = () => {
+    setIsImmersive(false);
+    onMinimize();
+  };
+
+  const handleClose = () => {
+    setIsImmersive(false);
+    onClose();
+  };
+
+  const handleDragEnd = () => {
+    setIsDragging(false);
+    const nextX = x.get();
+    const nextY = clampY(y.get());
+    x.set(nextX);
+    y.set(nextY);
+    const next = { x: nextX, y: nextY };
+    savedPosition.current = next;
+    onPositionChange(next);
+  };
+
+  const immersive = isImmersive && isActive && !isMinimized;
+  const draggable = !immersive && !isMinimized;
 
   return (
     <motion.div
-      initial={{ opacity: 0, scale: 0.95, y: 10 }}
-      animate={{ 
-        opacity: isActive ? 1 : 0, 
-        scale: isActive ? 1 : 0.98,
-        y: isActive ? 0 : 10,
-        pointerEvents: isActive ? "auto" : "none"
-      }}
-      transition={{ type: "spring", stiffness: 300, damping: 28 }}
-      onMouseDown={onFocus}
+      layout={false}
+      initial={{ opacity: 0, scale: 0.96 }}
+      animate={
+        isMinimized
+          ? {
+              opacity: 0,
+              scale: 0.08,
+              x: STRIP_LEFT,
+              y: minimizedY,
+            }
+          : {
+              opacity: isActive ? 1 : 0.92,
+              scale: 1,
+            }
+      }
+      exit={{ opacity: 0, scale: 0.85 }}
+      transition={
+        isMinimized
+          ? { duration: 0.5, ease: [0.32, 0.72, 0, 1] }
+          : isDragging
+            ? { duration: 0 }
+            : { type: "spring", stiffness: 340, damping: 32 }
+      }
+      drag={draggable}
+      dragControls={dragControls}
+      dragListener={false}
+      dragMomentum={false}
+      dragElastic={0}
+      dragConstraints={false}
+      onDragStart={() => setIsDragging(true)}
+      onDragEnd={handleDragEnd}
       style={{
-        position: "fixed",
+        position: "absolute",
         top: 0,
         left: 0,
-        right: 0,
-        bottom: 0,
-        zIndex: isActive ? 110 : 10,
+        x: immersive ? 0 : x,
+        y: immersive ? 0 : y,
+        width: isMinimized ? WINDOW_WIDTH : immersive ? "100%" : WINDOW_WIDTH,
+        height: isMinimized ? WINDOW_HEIGHT : immersive ? "100%" : WINDOW_HEIGHT,
+        borderRadius: isMinimized ? 12 : immersive ? 0 : 14,
+        zIndex: isActive && !isMinimized ? 110 + stackIndex : 100 + stackIndex,
         display: "flex",
         flexDirection: "column",
-        borderRadius: 0,
         overflow: "hidden",
+        pointerEvents: isMinimized ? "none" : "auto",
+        transformOrigin: "top left",
+        boxShadow: isActive
+          ? "0 28px 70px rgba(0,0,0,0.55), 0 0 0 1px rgba(255,255,255,0.08)"
+          : "0 16px 40px rgba(0,0,0,0.42), 0 0 0 1px rgba(255,255,255,0.05)",
       }}
       className="glass-panel"
     >
-      {/* Title Bar */}
       <div
-        className="window-header"
+        className={`window-header${isActive ? " window-header--active" : ""}`}
+        onPointerDown={(e) => {
+          if ((e.target as HTMLElement).closest("button")) return;
+          if (immersive) return;
+          onFocus();
+          dragControls.start(e);
+        }}
         style={{
           display: "flex",
           alignItems: "center",
@@ -61,44 +177,42 @@ export default function DesktopWindow({
           background: "rgba(255, 255, 255, 0.05)",
           borderBottom: "1px solid var(--color-border-tertiary)",
           position: "relative",
+          flexShrink: 0,
+          cursor: immersive ? "default" : isDragging ? "grabbing" : "grab",
+          userSelect: "none",
+          touchAction: "none",
+          zIndex: 5,
         }}
       >
-        <div
-          style={{
-            position: "absolute",
-            left: "16px",
-            display: "flex",
-            gap: "8px",
-          }}
-        >
-          <button
-            onClick={(e) => { e.stopPropagation(); onClose(); }}
-            style={{
-              width: "12px", height: "12px", borderRadius: "50%",
-              background: "#ff5f56", border: "none", cursor: "pointer",
-              display: "flex", alignItems: "center", justifyContent: "center"
-            }}
-          />
-          <button
-            style={{
-              width: "12px", height: "12px", borderRadius: "50%",
-              background: "#ffbd2e", border: "none", cursor: "pointer"
-            }}
-          />
-          <button
-            style={{
-              width: "12px", height: "12px", borderRadius: "50%",
-              background: "#27c93f", border: "none", cursor: "pointer"
-            }}
+        <div className="window-traffic-lights">
+          <TrafficLights
+            onClose={handleClose}
+            onMinimize={handleMinimize}
+            onMaximize={handleExpand}
+            isExpanded={immersive}
           />
         </div>
-        <div style={{ fontSize: "13px", fontWeight: 600, color: "var(--color-text-primary)", letterSpacing: "0.5px" }}>
+        <div
+          style={{
+            fontSize: "13px",
+            fontWeight: 600,
+            color: "var(--color-text-primary)",
+            letterSpacing: "0.5px",
+            pointerEvents: "none",
+            maxWidth: "calc(100% - 120px)",
+            overflow: "hidden",
+            textOverflow: "ellipsis",
+            whiteSpace: "nowrap",
+          }}
+        >
           {title}
         </div>
       </div>
 
-      {/* Content Area */}
       <div
+        onMouseDown={() => {
+          if (!isMinimized) onFocus();
+        }}
         style={{
           padding: 0,
           overflowY: "auto",
@@ -109,9 +223,7 @@ export default function DesktopWindow({
         }}
         className="window-content"
       >
-        <div style={{ width: "100%", height: "100%" }}>
-          {children}
-        </div>
+        <div style={{ width: "100%", height: "100%" }}>{children}</div>
       </div>
     </motion.div>
   );

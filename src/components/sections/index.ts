@@ -1,7 +1,13 @@
 export { AboutUs } from "./AboutUs";
 export { Departments } from "./Departments";
 export { Events } from "./Events";
+export { Gallery } from "./Gallery";
+export { UserEvents } from "./UserEvents";
 export { Projects } from "./Projects";
 export { Team } from "./Team";
 export { Contact } from "./Contact";
 export { CsiOfficial } from "./CsiOfficial";
+export { ResourceHub } from "./ResourceHub";
+export { AdminEventManagement } from "./AdminEventManagement";
+export { Dashboard } from "./Dashboard";
+export { ProfilePanel } from "./ProfilePanel";

@@ -8,14 +8,19 @@
   position: absolute;
   top: 50%;
   left: 50%;
-  border-radius: 15px; /* match the video component's border radius */
+  border-radius: 15px;
   border: none;
   background: transparent;
-
+  cursor: pointer;
   transform-style: preserve-3d;
   will-change: transform;
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
+  transition: filter 0.3s ease;
+}
+
+.card:hover {
+  filter: brightness(1.05);
 }
 
 @media (max-width: 768px) {

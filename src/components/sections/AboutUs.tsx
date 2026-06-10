@@ -1,6 +1,8 @@
 "use client";
 import React, { useState } from "react";
 import { motion, Variants } from "framer-motion";
+import StatCounter from "@/components/interactions/StatCounter";
+import { CSI_STATS } from "@/data/interactionContent";
 
 const fadeUp: Variants = {
   hidden: { opacity: 0, y: 30 },
@@ -73,16 +75,13 @@ export function AboutUs() {
               <p style={{ color: "rgba(240, 235, 225, 0.5)", fontSize: "1rem", marginTop: "10px" }}>A snapshot of our community impact.</p>
             </motion.div>
             <motion.div variants={fadeUp} style={{ display: "flex", justifyItems: "center", flexWrap: "wrap", gap: "40px", paddingTop: "20px" }}>
-              {[
-                { num: "150+", lbl: "Members" },
-                { num: "40+", lbl: "Events" },
-                { num: "25+", lbl: "Projects" },
-                { num: "6", lbl: "Years Strong" }
-              ].map((stat, i) => (
-                <div key={i} style={{ flex: "1 1 150px" }}>
-                  <div style={{ fontFamily: "var(--font-anton), sans-serif", fontSize: "5rem", lineHeight: 1 }}>{stat.num}</div>
-                  <div style={{ fontSize: "0.9rem", textTransform: "uppercase", letterSpacing: "2px", marginTop: "15px", color: "rgba(240, 235, 225, 0.5)" }}>{stat.lbl}</div>
-                </div>
+              {CSI_STATS.map((stat) => (
+                <StatCounter
+                  key={stat.label}
+                  value={stat.value}
+                  suffix={stat.suffix}
+                  label={stat.label}
+                />
               ))}
             </motion.div>
           </motion.div>

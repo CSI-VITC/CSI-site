@@ -1,0 +1,942 @@
+.aem-root {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  background: #050505;
+  color: #f0ebe1;
+  font-family: var(--font-inter), -apple-system, BlinkMacSystemFont, sans-serif;
+  overflow: hidden;
+  position: relative;
+  font-size: calc(1rem * var(--aem-text-scale, 100) / 100);
+}
+
+.aem-header {
+  flex-shrink: 0;
+  padding: 18px 22px 14px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  background: rgba(255, 255, 255, 0.02);
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.aem-title {
+  font-family: var(--font-anton), sans-serif;
+  font-size: 1.3rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin: 0;
+}
+
+.aem-subtitle {
+  font-size: 0.78rem;
+  color: rgba(240, 235, 225, 0.4);
+  margin: 4px 0 0;
+}
+
+.aem-header-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.aem-view-tabs {
+  display: flex;
+  gap: 4px;
+  padding: 3px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.aem-view-tab {
+  padding: 7px 14px;
+  border-radius: 8px;
+  border: none;
+  background: transparent;
+  color: rgba(240, 235, 225, 0.5);
+  font-size: 0.78rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.aem-view-tab:hover {
+  color: rgba(240, 235, 225, 0.85);
+}
+
+.aem-view-tab--active {
+  background: rgba(255, 255, 255, 0.08);
+  color: #f0ebe1;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.aem-btn {
+  padding: 9px 16px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.04);
+  color: #f0ebe1;
+  font-size: 0.8rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), background 0.2s, box-shadow 0.2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.aem-btn:hover {
+  background: rgba(255, 255, 255, 0.08);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+}
+
+.aem-btn--primary {
+  background: rgba(100, 180, 255, 0.12);
+  border-color: rgba(100, 180, 255, 0.25);
+  color: rgba(180, 220, 255, 1);
+}
+
+.aem-btn--primary:hover {
+  background: rgba(100, 180, 255, 0.22);
+}
+
+.aem-body {
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+  position: relative;
+}
+
+.aem-kanban {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  height: 100%;
+  padding: 16px 18px;
+  overflow-x: auto;
+}
+
+.aem-column {
+  display: flex;
+  flex-direction: column;
+  min-width: 200px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  transition: border-color 0.25s, background 0.25s, transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.aem-column--drag-over {
+  border-color: rgba(100, 180, 255, 0.35);
+  background: rgba(100, 180, 255, 0.04);
+  transform: scale(1.01);
+}
+
+.aem-column-header {
+  padding: 12px 14px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.aem-column-title {
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.aem-column-count {
+  font-size: 0.7rem;
+  color: rgba(240, 235, 225, 0.35);
+  padding: 2px 8px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.aem-column-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.aem-event-card {
+  position: relative;
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  overflow: hidden;
+  cursor: grab;
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.aem-event-card:active {
+  cursor: grabbing;
+}
+
+.aem-event-card--dragging {
+  opacity: 0.85;
+  transform: scale(1.03) rotate(1deg);
+  box-shadow: 0 24px 48px rgba(0, 0, 0, 0.55);
+  z-index: 50;
+}
+
+.aem-card-shine {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s;
+  background: radial-gradient(
+    600px circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
+    rgba(255, 255, 255, 0.06),
+    transparent 40%
+  );
+}
+
+.aem-event-card:hover .aem-card-shine {
+  opacity: 1;
+}
+
+.aem-event-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.45);
+  border-color: rgba(255, 255, 255, 0.14);
+}
+
+.aem-card-poster {
+  width: 100%;
+  height: 72px;
+  object-fit: cover;
+  display: block;
+  opacity: 0.85;
+}
+
+.aem-card-body {
+  padding: 12px 14px 14px;
+}
+
+.aem-card-title {
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin: 0 0 4px;
+  line-height: 1.3;
+}
+
+.aem-card-meta {
+  font-size: 0.68rem;
+  color: rgba(240, 235, 225, 0.45);
+}
+
+.aem-card-stats {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.aem-stat-pill {
+  font-size: 0.65rem;
+  padding: 2px 7px;
+  border-radius: 5px;
+  background: rgba(255, 255, 255, 0.05);
+  color: rgba(240, 235, 225, 0.55);
+}
+
+.aem-drop-ripple {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(100, 180, 255, 0.15);
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+}
+
+.aem-timeline-wrap {
+  height: 100%;
+  overflow-y: auto;
+  padding: 24px 32px 48px;
+}
+
+.aem-timeline {
+  position: relative;
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+.aem-timeline-line {
+  position: absolute;
+  left: 19px;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: rgba(255, 255, 255, 0.06);
+  overflow: hidden;
+}
+
+.aem-timeline-line-fill {
+  width: 100%;
+  background: linear-gradient(180deg, rgba(100, 180, 255, 0.6), rgba(100, 180, 255, 0.2));
+  transition: height 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.aem-timeline-item {
+  position: relative;
+  padding-left: 52px;
+  margin-bottom: 28px;
+  opacity: 0.4;
+  transform: translateX(-8px);
+  transition: opacity 0.5s, transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.aem-timeline-item--active {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.aem-timeline-item--past {
+  opacity: 0.55;
+}
+
+.aem-timeline-item--upcoming {
+  animation: aem-pulse 3s ease-in-out infinite;
+}
+
+@keyframes aem-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.75; }
+}
+
+.aem-timeline-node {
+  position: absolute;
+  left: 10px;
+  top: 4px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 2px solid rgba(100, 180, 255, 0.4);
+  background: #0a0a0a;
+  transition: all 0.4s;
+}
+
+.aem-timeline-item--active .aem-timeline-node {
+  border-color: rgba(100, 180, 255, 0.9);
+  box-shadow: 0 0 16px rgba(100, 180, 255, 0.35);
+  background: rgba(100, 180, 255, 0.15);
+}
+
+.aem-analytics-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 14px;
+  padding: 20px 22px;
+}
+
+.aem-analytic-card {
+  padding: 18px;
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(12px);
+}
+
+.aem-analytic-value {
+  font-size: 1.75rem;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  color: #f0ebe1;
+  line-height: 1;
+}
+
+.aem-analytic-label {
+  font-size: 0.72rem;
+  color: rgba(240, 235, 225, 0.45);
+  margin-top: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.aem-progress-track {
+  height: 4px;
+  border-radius: 2px;
+  background: rgba(255, 255, 255, 0.06);
+  margin-top: 12px;
+  overflow: hidden;
+}
+
+.aem-progress-fill {
+  height: 100%;
+  border-radius: 2px;
+  background: linear-gradient(90deg, rgba(100, 180, 255, 0.5), rgba(100, 180, 255, 0.95));
+  transition: width 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.aem-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  z-index: 40;
+}
+
+.aem-panel {
+  position: absolute;
+  z-index: 50;
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(12, 12, 12, 0.95);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  box-shadow: 0 32px 64px rgba(0, 0, 0, 0.6);
+  overflow: hidden;
+}
+
+.aem-form {
+  padding: 24px;
+  max-height: 85vh;
+  overflow-y: auto;
+}
+
+.aem-form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+.aem-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.aem-field--full {
+  grid-column: 1 / -1;
+}
+
+.aem-label {
+  font-size: 0.72rem;
+  font-weight: 500;
+  color: rgba(240, 235, 225, 0.5);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.aem-input,
+.aem-textarea,
+.aem-select {
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.04);
+  color: #f0ebe1;
+  font-size: 0.85rem;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.aem-input:focus,
+.aem-textarea:focus,
+.aem-select:focus {
+  border-color: rgba(100, 180, 255, 0.35);
+}
+
+.aem-textarea {
+  min-height: 80px;
+  resize: vertical;
+}
+
+.aem-poster-preview {
+  width: 100%;
+  max-height: 120px;
+  object-fit: cover;
+  border-radius: 10px;
+  margin-top: 8px;
+}
+
+.aem-detail {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  max-height: 90vh;
+}
+
+.aem-detail-hero {
+  position: relative;
+  height: 140px;
+  background: #111;
+}
+
+.aem-detail-hero img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.7;
+}
+
+.aem-detail-content {
+  padding: 22px 24px;
+  overflow-y: auto;
+  flex: 1;
+}
+
+.aem-detail-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 14px 24px;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.aem-reg-list {
+  margin-top: 16px;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  padding-top: 14px;
+}
+
+.aem-reg-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+  font-size: 0.8rem;
+}
+
+.aem-nova-insights {
+  position: absolute;
+  top: 72px;
+  right: 16px;
+  z-index: 30;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-width: 280px;
+  pointer-events: none;
+}
+
+.aem-nova-chip {
+  padding: 10px 14px;
+  border-radius: 12px;
+  background: rgba(12, 12, 12, 0.88);
+  border: 1px solid rgba(100, 180, 255, 0.15);
+  backdrop-filter: blur(16px);
+  font-size: 0.75rem;
+  color: rgba(240, 235, 225, 0.85);
+  line-height: 1.45;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+}
+
+.aem-skeleton {
+  border-radius: 14px;
+  height: 120px;
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.03) 25%,
+    rgba(255, 255, 255, 0.07) 50%,
+    rgba(255, 255, 255, 0.03) 75%
+  );
+  background-size: 200% 100%;
+  animation: aem-shimmer 1.4s infinite;
+}
+
+@keyframes aem-shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+.aem-graph-bars {
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+  height: 80px;
+  margin-top: 16px;
+  padding: 0 22px 20px;
+}
+
+.aem-graph-bar-wrap {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.aem-graph-bar {
+  width: 100%;
+  border-radius: 4px 4px 0 0;
+  background: linear-gradient(180deg, rgba(100, 180, 255, 0.8), rgba(100, 180, 255, 0.25));
+  transform-origin: bottom;
+}
+
+.aem-graph-label {
+  font-size: 0.6rem;
+  color: rgba(240, 235, 225, 0.35);
+}
+
+.aem-section-title {
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(240, 235, 225, 0.4);
+  margin: 0 0 14px;
+}
+
+@keyframes aem-card-in {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.aem-archive-toggle {
+  font-size: 0.75rem;
+  color: rgba(240, 235, 225, 0.4);
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-decoration: underline;
+  padding: 0;
+}
+
+.aem-archive-toggle:hover {
+  color: rgba(240, 235, 225, 0.7);
+}
+
+/* ── Accessibility ── */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.aem-skip-link {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  z-index: 100;
+  padding: 8px 14px;
+  border-radius: 8px;
+  background: rgba(240, 235, 225, 0.95);
+  color: #111;
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-decoration: none;
+  transform: translateY(-120%);
+  transition: transform 0.15s ease;
+}
+
+.aem-skip-link:focus {
+  transform: translateY(0);
+  outline: 2px solid rgba(100, 180, 255, 0.85);
+  outline-offset: 2px;
+}
+
+.aem-btn:focus-visible,
+.aem-view-tab:focus-visible,
+.aem-sidebar-item:focus-visible,
+.aem-input:focus-visible,
+.aem-textarea:focus-visible,
+.aem-select:focus-visible,
+.aem-event-card:focus-visible,
+.aem-archive-toggle:focus-visible,
+.aem-a11y-btn:focus-visible,
+.aem-cmd-item:focus-visible {
+  outline: 2px solid rgba(100, 180, 255, 0.85);
+  outline-offset: 2px;
+}
+
+.aem--high-contrast .aem-root,
+.aem--high-contrast.aem-root {
+  --aem-bg: #000;
+  --aem-fg: #fff;
+  --aem-border: rgba(255, 255, 255, 0.35);
+}
+
+.aem--high-contrast .aem-event-card,
+.aem--high-contrast .aem-column,
+.aem--high-contrast .aem-analytic-card,
+.aem--high-contrast .aem-panel {
+  border-color: rgba(255, 255, 255, 0.35) !important;
+  background: #0a0a0a !important;
+}
+
+.aem--high-contrast .aem-card-desc,
+.aem--high-contrast .aem-subtitle {
+  color: rgba(255, 255, 255, 0.85) !important;
+}
+
+.aem--reduced-motion *,
+.aem--reduced-motion *::before,
+.aem--reduced-motion *::after {
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.01ms !important;
+}
+
+.aem-a11y-toolbar {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.aem-a11y-btn {
+  padding: 5px 10px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.04);
+  color: rgba(240, 235, 225, 0.65);
+  font-size: 0.68rem;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.aem-a11y-btn--active {
+  background: rgba(100, 180, 255, 0.15);
+  border-color: rgba(100, 180, 255, 0.3);
+  color: #f0ebe1;
+}
+
+.aem-a11y-scale select {
+  padding: 5px 8px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.04);
+  color: rgba(240, 235, 225, 0.75);
+  font-size: 0.68rem;
+}
+
+.aem-tooltip-wrap {
+  position: relative;
+  display: inline-flex;
+}
+
+.aem-tooltip {
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 8px 12px;
+  border-radius: 8px;
+  background: rgba(10, 10, 10, 0.95);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  font-size: 0.72rem;
+  white-space: nowrap;
+  z-index: 60;
+  pointer-events: none;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
+}
+
+.aem-tooltip-desc {
+  display: block;
+  font-size: 0.65rem;
+  opacity: 0.55;
+  margin-top: 2px;
+}
+
+.aem-toast {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 18px;
+  border-radius: 12px;
+  background: rgba(12, 12, 12, 0.95);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  font-size: 0.82rem;
+  z-index: 200;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.5);
+  max-width: min(480px, 92vw);
+}
+
+.aem-toast--success { border-color: rgba(120, 200, 140, 0.3); }
+.aem-toast--error { border-color: rgba(255, 120, 120, 0.35); }
+.aem-toast--info { border-color: rgba(100, 180, 255, 0.3); }
+
+.aem-toast-action {
+  background: none;
+  border: none;
+  color: rgba(100, 180, 255, 0.95);
+  cursor: pointer;
+  font-size: 0.78rem;
+  font-weight: 600;
+  text-decoration: underline;
+}
+
+.aem-toast-dismiss {
+  background: none;
+  border: none;
+  color: rgba(240, 235, 225, 0.5);
+  cursor: pointer;
+  font-size: 1.1rem;
+  line-height: 1;
+  padding: 0 4px;
+}
+
+.aem-empty-state {
+  text-align: center;
+  padding: 48px 24px;
+  color: rgba(240, 235, 225, 0.5);
+}
+
+.aem-empty-state h3 {
+  margin: 0 0 8px;
+  font-size: 1rem;
+  color: rgba(240, 235, 225, 0.75);
+}
+
+.aem-empty-state p {
+  margin: 0 0 16px;
+  font-size: 0.85rem;
+  line-height: 1.5;
+}
+
+.aem-field-error {
+  font-size: 0.72rem;
+  color: rgba(255, 140, 140, 0.95);
+  margin-top: 4px;
+}
+
+.aem-input--error {
+  border-color: rgba(255, 120, 120, 0.45) !important;
+}
+
+.aem-cmd-list {
+  list-style: none;
+  margin: 0;
+  padding: 8px;
+  max-height: 280px;
+  overflow-y: auto;
+}
+
+.aem-cmd-item {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 12px;
+  border: none;
+  border-radius: 8px;
+  background: transparent;
+  color: #f0ebe1;
+  font-size: 0.85rem;
+  cursor: pointer;
+  text-align: left;
+}
+
+.aem-cmd-item:hover,
+.aem-cmd-item:focus-visible {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.aem-cmd-empty {
+  padding: 16px;
+  font-size: 0.82rem;
+  color: rgba(240, 235, 225, 0.4);
+  text-align: center;
+}
+
+.aem-kbd {
+  font-size: 0.65rem;
+  padding: 2px 6px;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  font-family: inherit;
+}
+
+.aem-analytics-table {
+  width: calc(100% - 44px);
+  margin: 0 22px 24px;
+  border-collapse: collapse;
+  font-size: 0.8rem;
+}
+
+.aem-analytics-table th,
+.aem-analytics-table td {
+  padding: 10px 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  text-align: left;
+}
+
+.aem-analytics-table th {
+  color: rgba(240, 235, 225, 0.45);
+  font-weight: 600;
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.aem-graph-summary {
+  padding: 0 22px 8px;
+  font-size: 0.78rem;
+  color: rgba(240, 235, 225, 0.55);
+  line-height: 1.5;
+}
+
+.aem-nova-guide {
+  margin-top: 12px;
+  padding: 12px 14px;
+  border-radius: 10px;
+  background: rgba(100, 180, 255, 0.06);
+  border: 1px solid rgba(100, 180, 255, 0.12);
+  font-size: 0.78rem;
+  color: rgba(240, 235, 225, 0.75);
+  line-height: 1.5;
+}
+
+.aem-nova-guide summary {
+  cursor: pointer;
+  font-weight: 600;
+  color: rgba(100, 180, 255, 0.9);
+}
+
+.aem-loading-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 48px;
+  color: rgba(240, 235, 225, 0.45);
+  font-size: 0.85rem;
+}
+
+.aem-loading-spinner {
+  width: 28px;
+  height: 28px;
+  border: 2px solid rgba(255, 255, 255, 0.08);
+  border-top-color: rgba(100, 180, 255, 0.8);
+  border-radius: 50%;
+  animation: aem-spin 0.8s linear infinite;
+}
+
+@keyframes aem-spin {
+  to { transform: rotate(360deg); }
+}
+
+.aem--reduced-motion .aem-loading-spinner {
+  animation: none;
+  border-top-color: rgba(100, 180, 255, 0.5);
+}

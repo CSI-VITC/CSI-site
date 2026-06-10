@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
+  <rect width="64" height="64" rx="14" fill="#1C1C1E"/>
+  <!-- Back polaroid -->
+  <rect x="18" y="14" width="30" height="36" rx="4" fill="#F5F5F7" transform="rotate(-8 33 32)"/>
+  <!-- Front polaroid -->
+  <rect x="16" y="12" width="32" height="40" rx="4" fill="#FFFFFF"/>
+  <rect x="20" y="16" width="24" height="24" rx="2" fill="#007AFF"/>
+  <circle cx="27" cy="23" r="3.5" fill="#FFD60A"/>
+  <path d="M20 36 L28 28 L34 32 L44 22 V40 H20 Z" fill="#34C759"/>
+  <rect x="24" y="44" width="16" height="3" rx="1.5" fill="#D1D1D6"/>
+</svg>

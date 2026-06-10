@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
+import { motion, useMotionValue, useSpring, useTransform, type MotionValue } from "framer-motion";
 import { useRef, useState } from "react";
 
 interface DockItemProps {
@@ -9,10 +9,10 @@ interface DockItemProps {
   iconSrc: string;
   bg?: string;
   onClick: () => void;
-  mouseX: any;
+  mouseX: MotionValue<number>;
 }
 
-function DockItem({ label, iconSrc, bg, onClick, mouseX }: DockItemProps) {
+function DockItem({ id, label, iconSrc, bg, onClick, mouseX, isRunning, isActive }: DockItemProps & { isRunning?: boolean; isActive?: boolean }) {
   const ref = useRef<HTMLDivElement>(null);
   const [isHovered, setIsHovered] = useState(false);
 
@@ -40,6 +40,9 @@ function DockItem({ label, iconSrc, bg, onClick, mouseX }: DockItemProps) {
         <div className="icon-inner" style={{ background: bg || "transparent" }}>
           <img src={iconSrc} alt={label} draggable={false} />
         </div>
+        {isRunning && (
+          <span className={`dock-running-dot${isActive ? " dock-running-dot--active" : ""}`} />
+        )}
       </motion.div>
 
       {/* Tooltip */}
@@ -55,10 +58,24 @@ function DockItem({ label, iconSrc, bg, onClick, mouseX }: DockItemProps) {
           justify-content: center;
           cursor: pointer;
           margin: 0 4px;
-          overflow: hidden;
+          overflow: visible;
           box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
           transform-origin: bottom;
           background: transparent;
+          position: relative;
+        }
+        .dock-running-dot {
+          position: absolute;
+          bottom: -6px;
+          left: 50%;
+          transform: translateX(-50%);
+          width: 4px;
+          height: 4px;
+          border-radius: 50%;
+          background: rgba(255, 255, 255, 0.45);
+        }
+        .dock-running-dot--active {
+          background: rgba(255, 255, 255, 0.85);
         }
         .icon-inner {
           width: 100%;
@@ -67,6 +84,7 @@ function DockItem({ label, iconSrc, bg, onClick, mouseX }: DockItemProps) {
           align-items: center;
           justify-content: center;
           border-radius: 14px;
+          overflow: hidden;
         }
         .icon-inner img {
           width: 100%;
@@ -102,14 +120,25 @@ function DockItem({ label, iconSrc, bg, onClick, mouseX }: DockItemProps) {
   );
 }
 
-export default function MacDock({ onOpen }: { onOpen: (id: string) => void }) {
+export default function MacDock({
+  onOpen,
+  openApps = [],
+  activeApp = null,
+  items,
+}: {
+  onOpen: (id: string) => void;
+  openApps?: string[];
+  activeApp?: string | null;
+  items?: Array<{ id: string; label: string; iconSrc: string; bg?: string }>;
+}) {
   const mouseX = useMotionValue(Infinity);
 
-  const items: Array<{ id: string; label: string; iconSrc: string; bg?: string }> = [
+  const dockItems: Array<{ id: string; label: string; iconSrc: string; bg?: string }> = items ?? [
     { id: "about", label: "About", iconSrc: "/icons/Finder.png" },
     { id: "depts", label: "Domains", iconSrc: "/icons/Domains.jpg" },
     { id: "events", label: "Events", iconSrc: "/icons/Calendar.png" },
     { id: "projects", label: "Projects", iconSrc: "/icons/Terminal.png" },
+    { id: "resources", label: "Resources", iconSrc: "/icons/Notion.png" },
     { id: "more", label: "Launchpad", iconSrc: "/icons/launchpad.png" },
   ];
 
@@ -136,15 +165,17 @@ export default function MacDock({ onOpen }: { onOpen: (id: string) => void }) {
       onMouseMove={(e) => mouseX.set(e.pageX)}
       onMouseLeave={() => mouseX.set(Infinity)}
     >
-      {items.map((item) => (
-        <DockItem 
-          key={item.id} 
+      {dockItems.map((item) => (
+        <DockItem
+          key={item.id}
           id={item.id}
-          iconSrc={item.iconSrc} 
-          label={item.label} 
+          iconSrc={item.iconSrc}
+          label={item.label}
           bg={item.bg}
-          onClick={() => onOpen(item.id)} 
-          mouseX={mouseX} 
+          onClick={() => onOpen(item.id)}
+          mouseX={mouseX}
+          isRunning={item.id !== "more" && openApps.includes(item.id)}
+          isActive={activeApp === item.id}
         />
       ))}
     </div>
