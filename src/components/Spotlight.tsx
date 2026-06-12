@@ -17,13 +17,13 @@ interface SpotlightProps {
 }
 
 const items: SpotlightItem[] = [
-  { id: "about",    label: "About Us",        subtitle: "Who we are and what we believe",         icon: "🖥️" },
-  { id: "depts",    label: "Departments",     subtitle: "Our technical domains and divisions",     icon: "📂" },
-  { id: "events",   label: "Events",          subtitle: "Hackathons, workshops and more",          icon: "📅" },
-  { id: "projects", label: "Projects",        subtitle: "What our members have built",             icon: "⚡" },
-  { id: "team",     label: "Team",            subtitle: "The people behind CSI VITC",             icon: "👥" },
-  { id: "contact",  label: "Contact",         subtitle: "Get in touch with us",                   icon: "✉️" },
-  { id: "csi",      label: "CSI Official",    subtitle: "Visit the official CSI India website",   icon: "🌐" },
+  { id: "about",    label: "About Us",        subtitle: "Who we are and what we believe",         icon: "/icons/Finder.png" },
+  { id: "depts",    label: "Departments",     subtitle: "Our technical domains and divisions",     icon: "/icons/Domains.jpg" },
+  { id: "events",   label: "Events",          subtitle: "Hackathons, workshops and more",          icon: "/icons/Calendar.png" },
+  { id: "projects", label: "Projects",        subtitle: "What our members have built",             icon: "/icons/Terminal.png" },
+  { id: "team",     label: "Team",            subtitle: "The people behind CSI VITC",             icon: "/icons/Notion.png" },
+  { id: "contact",  label: "Contact",         subtitle: "Get in touch with us",                   icon: "/icons/Mail.png" },
+  { id: "csi",      label: "CSI Official",    subtitle: "Visit the official CSI India website",   icon: "/icons/CSI.png" },
 ];
 
 export default function Spotlight({ isOpen, onClose, onOpen }: SpotlightProps) {
@@ -207,7 +207,7 @@ export default function Spotlight({ isOpen, onClose, onOpen }: SpotlightProps) {
                         flexShrink: 0,
                         border: "1px solid rgba(255,255,255,0.07)",
                       }}>
-                        {item.icon}
+                        <img src={item.icon} alt={item.label} style={{ width: "22px", height: "22px", objectFit: "contain" }} />
                       </div>
                       <div style={{ flex: 1, minWidth: 0 }}>
                         <div style={{
