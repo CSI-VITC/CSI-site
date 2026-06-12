@@ -1,22 +1,39 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import DesktopWindow from "@/components/DesktopWindow";
-import { AboutUs, Departments, Events, Projects, Team, Contact, CsiOfficial } from "@/components/sections";
+import { AboutUs, Departments, Events, Projects, Team, Contact, CsiOfficial, Notes } from "@/components/sections";
 import MacDock from "@/components/MacDock";
 import CursorEyes from "@/components/CursorEyes";
 import Launchpad from "@/components/Launchpad";
 import LoadingScreen from "@/components/LoadingScreen";
+import Spotlight from "@/components/Spotlight";
+import DockHint from "@/components/DockHint";
 
-type WindowId = "about" | "depts" | "events" | "projects" | "team" | "contact" | "csi";
+type WindowId = "about" | "depts" | "events" | "projects" | "team" | "contact" | "csi" | "notes";
 
 export default function Desktop() {
   const [openWindows, setOpenWindows] = useState<WindowId[]>([]);
   const [activeWindow, setActiveWindow] = useState<WindowId | null>(null);
   const [isLaunchpadOpen, setIsLaunchpadOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [showHint, setShowHint] = useState(false);
+  const [isSpotlightOpen, setIsSpotlightOpen] = useState(false);
+
+  // Ctrl+K or Cmd+K opens Spotlight
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.ctrlKey || e.metaKey) && e.key === "k") {
+        e.preventDefault();
+        setIsSpotlightOpen(prev => !prev);
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, []);
 
   const toggleWindow = (id: string) => {
+    setShowHint(false);
     if (id === "more") {
       setIsLaunchpadOpen(!isLaunchpadOpen);
       return;
@@ -52,6 +69,7 @@ export default function Desktop() {
       case "team": return <Team />;
       case "contact": return <Contact />;
       case "csi": return <CsiOfficial />;
+      case "notes": return <Notes />;
       default: return null;
     }
   };
@@ -65,6 +83,7 @@ export default function Desktop() {
       case "team": return "Team";
       case "contact": return "Contact";
       case "csi": return "CSI Official Site";
+      case "notes": return "Notes";
       default: return "Window";
     }
   };
@@ -77,11 +96,12 @@ export default function Desktop() {
     { id: "team", label: "Team", iconSrc: "/icons/Notion.png" },
     { id: "contact", label: "Contact", iconSrc: "/icons/Mail.png" },
     { id: "csi", label: "CSI Official", iconSrc: "/icons/CSI.png" },
+    { id: "notes", label: "Notes", iconSrc: "/icons/Notion.png" },
   ];
 
   return (
     <main style={{ position: "relative", width: "100vw", height: "100vh", overflow: "hidden", background: "#050505" }}>
-      {isLoading && <LoadingScreen onComplete={() => setIsLoading(false)} />}
+      {isLoading && <LoadingScreen onComplete={() => setIsLoading(false); setShowHint(true)} />}
       
       {/* Eyes Layer that follows cursor */}
       <CursorEyes />
@@ -110,6 +130,12 @@ export default function Desktop() {
         onOpenApp={toggleWindow} 
         items={launchpadItems} 
       />
+
+      {/* Dock Hint Overlay */}
+      {showHint && <DockHint onDismiss={() => setShowHint(false)} />}
+
+      {/* Spotlight */}
+      <Spotlight isOpen={isSpotlightOpen} onClose={() => setIsSpotlightOpen(false)} onOpen={toggleWindow} />
 
       {/* Mac Dock Layer */}
       <MacDock onOpen={toggleWindow} />
