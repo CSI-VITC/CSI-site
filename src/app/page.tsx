@@ -79,7 +79,7 @@ export default function Desktop() {
       case "team": return "Team";
       case "contact": return "Contact";
       case "csi": return "CSI Official Site";
-      case "notes": return "Notes";
+      
       default: return "Window";
     }
   };
