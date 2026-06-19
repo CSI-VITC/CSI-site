@@ -35,6 +35,96 @@ export default function DesktopWidgets() {
 
   if (!mounted) return null;
 
+  // Get current date details dynamically
+  const today = new Date();
+  const currentYear = today.getFullYear();
+  const currentMonth = today.getMonth(); // 0-indexed (0 = Jan, 11 = Dec)
+  const currentDate = today.getDate();
+
+  // Month names
+  const monthNames = [
+    "January", "February", "March", "April", "May", "June",
+    "July", "August", "September", "October", "November", "December"
+  ];
+  const monthLabel = `${monthNames[currentMonth]} ${currentYear}`;
+
+  // Get total days in month
+  const totalDays = new Date(currentYear, currentMonth + 1, 0).getDate();
+
+  // First day of the month starts on what weekday (0 = Sunday, 1 = Monday, ..., 6 = Saturday)
+  const firstDay = new Date(currentYear, currentMonth, 1);
+  const firstDayOfWeek = firstDay.getDay(); 
+  // Map to our Monday-start index: Monday (1)->0, ..., Saturday (6)->5, Sunday (0)->6
+  const startOffset = firstDayOfWeek === 0 ? 6 : firstDayOfWeek - 1;
+
+  // Calendar cells
+  const calendarCells: (number | null)[] = [];
+  for (let i = 0; i < startOffset; i++) {
+    calendarCells.push(null);
+  }
+  for (let d = 1; d <= totalDays; d++) {
+    calendarCells.push(d);
+  }
+
+  // Events list
+  const calendarEvents = [
+    {
+      id: "devspace",
+      title: "DevSpace Hackathon 2026",
+      date: new Date(2026, 5, 14), // June 14, 2026
+      endDate: new Date(2026, 5, 15),
+      dateStr: "June 14 - 15, 2026",
+      days: [14, 15],
+      month: 5 // June
+    },
+    {
+      id: "cybershield",
+      title: "CyberShield CTF & Workshop",
+      date: new Date(2026, 5, 28), // June 28, 2026
+      endDate: new Date(2026, 5, 28),
+      dateStr: "June 28, 2026",
+      days: [28],
+      month: 5 // June
+    },
+    {
+      id: "ainexus",
+      title: "AI Nexus Panel & Exhibition",
+      date: new Date(2026, 6, 12), // July 12, 2026
+      endDate: new Date(2026, 6, 12),
+      dateStr: "July 12, 2026",
+      days: [12],
+      month: 6 // July
+    }
+  ];
+
+  // Determine the next upcoming event
+  const todayMidnight = new Date(currentYear, currentMonth, currentDate);
+  const upcomingEvent = calendarEvents.find(event => {
+    return event.endDate >= todayMidnight;
+  });
+
+  let nextEventTitle = "No upcoming events";
+  let nextEventDateStr = "";
+  let nextEventRemaining = "";
+
+  if (upcomingEvent) {
+    nextEventTitle = upcomingEvent.title;
+    nextEventDateStr = upcomingEvent.dateStr;
+    
+    const diffTime = upcomingEvent.date.getTime() - todayMidnight.getTime();
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    
+    if (diffDays === 0) {
+      nextEventRemaining = "Today";
+    } else if (diffDays === 1) {
+      nextEventRemaining = "1 day remaining";
+    } else if (diffDays < 0) {
+      nextEventRemaining = "In progress";
+    } else {
+      nextEventRemaining = `${diffDays} days remaining`;
+    }
+  }
+
   return (
     <div 
       style={{
@@ -123,19 +213,21 @@ export default function DesktopWidgets() {
       >
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", borderBottom: "1px solid rgba(255, 255, 255, 0.06)", paddingBottom: "10px" }}>
           <span style={{ fontSize: "0.85rem", fontWeight: 700, textTransform: "uppercase", letterSpacing: "1px", color: "#3b82f6" }}>CSI Scheduler</span>
-          <span style={{ fontSize: "0.75rem", color: "rgba(255, 255, 255, 0.4)" }}>June 2026</span>
+          <span style={{ fontSize: "0.75rem", color: "rgba(255, 255, 255, 0.4)" }}>{monthLabel}</span>
         </div>
 
-        {/* Calendar Grid representation (June 2026 starting on Mon) */}
+        {/* Calendar Grid representation (starts dynamically based on weekday) */}
         <div style={{ display: "grid", gridTemplateColumns: "repeat(7, 1fr)", gap: "6px", textAlign: "center", fontSize: "0.7rem", color: "rgba(255, 255, 255, 0.4)" }}>
           {["M", "T", "W", "T", "F", "S", "S"].map((d, i) => <div key={i} style={{ fontWeight: 700 }}>{d}</div>)}
-          {Array.from({ length: 30 }).map((_, i) => {
-            const dayNum = i + 1;
-            const isToday = dayNum === 12; // Let's mark June 12 as current date
-            const isEvent = dayNum === 14; // Event on June 14
+          {calendarCells.map((dayNum, i) => {
+            if (dayNum === null) {
+              return <div key={`empty-${i}`} />;
+            }
+            const isToday = dayNum === currentDate && today.getMonth() === currentMonth && today.getFullYear() === currentYear;
+            const isEvent = calendarEvents.some(event => event.month === currentMonth && event.days.includes(dayNum));
             return (
               <div 
-                key={i} 
+                key={`day-${dayNum}`} 
                 style={{ 
                   padding: "4px 0",
                   borderRadius: "50%",
@@ -153,8 +245,10 @@ export default function DesktopWidgets() {
 
         <div style={{ display: "flex", flexDirection: "column", gap: "4px", background: "rgba(255, 255, 255, 0.03)", padding: "10px", borderRadius: "12px", border: "1px solid rgba(255, 255, 255, 0.04)" }}>
           <div style={{ fontSize: "0.75rem", color: "rgba(255,255,255,0.4)" }}>Next Event:</div>
-          <div style={{ fontSize: "0.85rem", fontWeight: 600, color: "#3b82f6" }}>DevSpace Hackathon</div>
-          <div style={{ fontSize: "0.75rem", color: "rgba(255,255,255,0.5)" }}>June 14 • 2 days remaining</div>
+          <div style={{ fontSize: "0.85rem", fontWeight: 600, color: "#3b82f6" }}>{nextEventTitle}</div>
+          <div style={{ fontSize: "0.75rem", color: "rgba(255,255,255,0.5)" }}>
+            {nextEventDateStr} {nextEventRemaining && `• ${nextEventRemaining}`}
+          </div>
         </div>
       </motion.div>
     </div>

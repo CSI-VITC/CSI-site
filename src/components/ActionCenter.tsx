@@ -166,7 +166,8 @@ export default function ActionCenter({
                   { id: "neural", label: "Neural Web" },
                   { id: "cyber", label: "Cyber Grid" },
                   { id: "aurora", label: "Aurora Flow" },
-                  { id: "charcoal", label: "Charcoal" }
+                  { id: "charcoal", label: "Charcoal" },
+                  { id: "hologram", label: "3D VITC Campus" }
                 ] as { id: WallpaperType; label: string }[]).map((wp) => {
                   const isActive = currentWallpaper === wp.id;
                   return (
@@ -185,6 +186,7 @@ export default function ActionCenter({
                         fontWeight: 600,
                         cursor: "pointer",
                         outline: "none",
+                        gridColumn: wp.id === "hologram" ? "span 2" : "auto",
                         transition: "all 0.2s ease"
                       }}
                     >

@@ -3,8 +3,9 @@
 import React from "react";
 import { motion } from "framer-motion";
 import NeuralNetwork from "./NeuralNetwork";
+import CsiVitc3D from "./CsiVitc3D";
 
-export type WallpaperType = "neural" | "cyber" | "aurora" | "charcoal";
+export type WallpaperType = "neural" | "cyber" | "aurora" | "charcoal" | "hologram";
 
 interface WallpaperProps {
   type: WallpaperType;
@@ -14,6 +15,9 @@ export default function Wallpaper({ type }: WallpaperProps) {
   switch (type) {
     case "neural":
       return <NeuralNetwork />;
+
+    case "hologram":
+      return <CsiVitc3D />;
 
     case "cyber":
       return (

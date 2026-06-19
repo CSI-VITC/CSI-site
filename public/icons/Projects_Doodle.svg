@@ -1,0 +1,49 @@
+<svg viewBox="0 0 100 100" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <radialGradient id="glow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#6366f1" stop-opacity="0.45"/>
+      <stop offset="100%" stop-color="#6366f1" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="glass" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.12"/>
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0.02"/>
+    </linearGradient>
+    <linearGradient id="border" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.6"/>
+      <stop offset="30%" stop-color="#6366f1" stop-opacity="0.8"/>
+      <stop offset="100%" stop-color="#6366f1" stop-opacity="0.15"/>
+    </linearGradient>
+    <filter id="neonGlow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="2.5" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- Background Glow -->
+  <circle cx="50" cy="50" r="35" fill="url(#glow)"/>
+
+  <!-- Glass Plate -->
+  <rect x="12" y="12" width="76" height="76" rx="20" fill="url(#glass)"/>
+  
+  <!-- Neon Border -->
+  <rect x="12" y="12" width="76" height="76" rx="20" fill="none" stroke="url(#border)" stroke-width="1.8"/>
+
+  <!-- Space Rocket Glyph -->
+  <g filter="url(#neonGlow)" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none">
+    <!-- Rocket Main Frame -->
+    <path d="M 50 22 C 55 30, 58 40, 58 54 H 42 C 42 40, 45 30, 50 22 Z" />
+    
+    <!-- Rocket Wings -->
+    <path d="M 42 50 C 37 50, 31 54, 31 62 C 38 62, 42 58, 42 54" stroke="#6366f1" stroke-width="2" />
+    <path d="M 58 50 C 63 50, 69 54, 69 62 C 62 62, 58 58, 58 54" stroke="#6366f1" stroke-width="2" />
+    
+    <!-- Circular Cabin Window -->
+    <circle cx="50" cy="36" r="3.5" fill="#6366f1" stroke="#ffffff" stroke-width="1.8" />
+    
+    <!-- Rocket Booster Jet Flame -->
+    <path d="M 45 57 L 50 71 L 55 57 C 52 60, 48 60, 45 57 Z" stroke="#6366f1" stroke-width="2" fill="#ffffff" />
+  </g>
+</svg>

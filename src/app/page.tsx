@@ -212,27 +212,27 @@ export default function Desktop() {
   };
 
   const desktopIcons = [
-    { id: "csi", label: "CSI Official", icon: "/icons/CSI.png" },
-    { id: "about", label: "Read Me", icon: "/icons/Readme_New.png" },
-    { id: "neural", label: "Neural Hub", icon: "/icons/Neural_New.png" },
-    { id: "terminal", label: "Terminal", icon: "/icons/Terminal_New.png" },
-    { id: "editor", label: "Challenge.js", icon: "/icons/Editor_New.png" },
-    ...(isChallengeUnlocked ? [{ id: "ticket", label: "VIP Ticket", icon: "/icons/Ticket_New.png" }] : [])
+    { id: "csi", label: "CSI Official", icon: "/icons/CSI_Doodle.svg" },
+    { id: "about", label: "Read Me", icon: "/icons/Readme_Doodle.svg" },
+    { id: "neural", label: "Neural Hub", icon: "/icons/Neural_Doodle.svg" },
+    { id: "terminal", label: "Terminal", icon: "/icons/Terminal_Doodle.svg" },
+    { id: "editor", label: "Challenge.js", icon: "/icons/Editor_Doodle.svg" },
+    ...(isChallengeUnlocked ? [{ id: "ticket", label: "VIP Ticket", icon: "/icons/Ticket_Doodle.svg" }] : [])
   ];
 
   const launchpadItems = [
-    { id: "about", label: "About Us", iconSrc: "/icons/Readme_New.png" },
-    { id: "depts", label: "Departments", iconSrc: "/icons/Domains_New.png" },
-    { id: "events", label: "Events", iconSrc: "/icons/Events_New.png" },
-    { id: "projects", label: "Projects", iconSrc: "/icons/Projects_New.png" },
-    { id: "team", label: "Team", iconSrc: "/icons/Team_New.png" },
-    { id: "contact", label: "Contact", iconSrc: "/icons/Mail_New.png" },
-    { id: "csi", label: "CSI Official", iconSrc: "/icons/CSI.png" },
-    { id: "neural", label: "Neural Hub", iconSrc: "/icons/Neural_New.png" },
-    { id: "terminal", label: "Terminal", iconSrc: "/icons/Terminal_New.png" },
-    { id: "arcade", label: "Arcade Game", iconSrc: "/icons/Arcade_New.png" },
-    { id: "editor", label: "Code Editor", iconSrc: "/icons/Editor_New.png" },
-    ...(isChallengeUnlocked ? [{ id: "ticket", label: "VIP Ticket", iconSrc: "/icons/Ticket_New.png" }] : [])
+    { id: "about", label: "About Us", iconSrc: "/icons/Readme_Doodle.svg" },
+    { id: "depts", label: "Departments", iconSrc: "/icons/Domains_Doodle.svg" },
+    { id: "events", label: "Events", iconSrc: "/icons/Events_Doodle.svg" },
+    { id: "projects", label: "Projects", iconSrc: "/icons/Projects_Doodle.svg" },
+    { id: "team", label: "Team", iconSrc: "/icons/Team_Doodle.svg" },
+    { id: "contact", label: "Contact", iconSrc: "/icons/Mail_Doodle.svg" },
+    { id: "csi", label: "CSI Official", iconSrc: "/icons/CSI_Doodle.svg" },
+    { id: "neural", label: "Neural Hub", iconSrc: "/icons/Neural_Doodle.svg" },
+    { id: "terminal", label: "Terminal", iconSrc: "/icons/Terminal_Doodle.svg" },
+    { id: "arcade", label: "Arcade Game", iconSrc: "/icons/Arcade_Doodle.svg" },
+    { id: "editor", label: "Code Editor", iconSrc: "/icons/Editor_Doodle.svg" },
+    ...(isChallengeUnlocked ? [{ id: "ticket", label: "VIP Ticket", iconSrc: "/icons/Ticket_Doodle.svg" }] : [])
   ];
 
   return (

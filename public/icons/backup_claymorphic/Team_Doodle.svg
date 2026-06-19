@@ -1,0 +1,41 @@
+<svg viewBox="0 0 100 100" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="clayGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fff1f2" />
+      <stop offset="100%" stop-color="#f43f5e" />
+    </linearGradient>
+    <filter id="dropShadow" x="-15%" y="-15%" width="130%" height="130%">
+      <feDropShadow dx="2" dy="5" stdDeviation="4" flood-color="#000000" flood-opacity="0.4" />
+    </filter>
+  </defs>
+
+  <!-- Base Clay Plate -->
+  <rect x="5" y="5" width="90" height="90" rx="22" fill="url(#clayGrad)" filter="url(#dropShadow)" />
+  <!-- Inset Highlight -->
+  <rect x="6" y="6" width="88" height="88" rx="21" fill="none" stroke="#ffffff" stroke-width="3" opacity="0.45" />
+  <!-- Outer Bevel Shadow -->
+  <rect x="5" y="5" width="90" height="90" rx="22" fill="none" stroke="#000000" stroke-width="3.5" opacity="0.15" />
+
+  <!-- Drawing content -->
+  <circle cx="30" cy="48" r="10" fill="#e11d48" opacity="0.25" transform="translate(1, 1)" />
+  <circle cx="70" cy="48" r="10" fill="#e11d48" opacity="0.25" transform="translate(1, 1)" />
+  <circle cx="50" cy="38" r="13" fill="#e11d48" opacity="0.3" transform="translate(1, 1)" />
+  
+  <circle cx="30" cy="48" r="10" fill="none" stroke="#0f172a" stroke-width="4.5" stroke-linecap="round" />
+  <circle cx="27" cy="46" r="1.2" fill="#0f172a" />
+  <circle cx="33" cy="46" r="1.2" fill="#0f172a" />
+  <path d="M 27 51 Q 30 55, 33 51" fill="none" stroke="#0f172a" stroke-width="2.5" stroke-linecap="round" />
+  <path d="M 18 72 C 18 64, 42 64, 42 72" fill="none" stroke="#0f172a" stroke-width="4.5" stroke-linecap="round" />
+
+  <circle cx="70" cy="48" r="10" fill="none" stroke="#0f172a" stroke-width="4.5" stroke-linecap="round" />
+  <circle cx="67" cy="46" r="1.2" fill="#0f172a" />
+  <circle cx="73" cy="46" r="1.2" fill="#0f172a" />
+  <path d="M 67 51 Q 70 55, 73 51" fill="none" stroke="#0f172a" stroke-width="2.5" stroke-linecap="round" />
+  <path d="M 58 72 C 58 64, 82 64, 82 72" fill="none" stroke="#0f172a" stroke-width="4.5" stroke-linecap="round" />
+
+  <circle cx="50" cy="38" r="13" fill="none" stroke="#0f172a" stroke-width="5" stroke-linecap="round" />
+  <circle cx="46" cy="35" r="1.8" fill="#0f172a" />
+  <circle cx="54" cy="35" r="1.8" fill="#0f172a" />
+  <path d="M 45 42 Q 50 48, 55 42" fill="none" stroke="#0f172a" stroke-width="3.5" stroke-linecap="round" />
+  <path d="M 33 66 C 33 55, 67 55, 67 66" fill="none" stroke="#0f172a" stroke-width="5" stroke-linecap="round" />
+</svg>

@@ -83,10 +83,27 @@ export default function DesktopWindow({
   // Smooth, premium spring for minimizing (looks like macOS slide & shrink)
   const minimizeSpring = {
     type: "spring" as const,
-    stiffness: 150,
-    damping: 24,
-    mass: 1,
+    stiffness: 140,
+    damping: 25,
+    mass: 1.1,
   };
+
+  const genieParams = (() => {
+    if (typeof window === "undefined") return { targetX: 0, targetY: 800, skew: 0 };
+    const screenCenter = window.innerWidth / 2;
+    const windowCenter = pos.x + size.width / 2;
+    const deltaX = windowCenter - screenCenter;
+    
+    // Bottom-center of the window should land at dock center
+    const targetX = screenCenter - (pos.x + size.width / 2);
+    const targetY = window.innerHeight - 35 - (pos.y + size.height);
+    
+    // Skew is proportional to how far left/right the window is from the dock center
+    const maxSkew = 24; 
+    const skew = -Math.min(Math.max((deltaX / (window.innerWidth / 2)) * maxSkew, -maxSkew), maxSkew);
+    
+    return { targetX, targetY, skew };
+  })();
 
   return (
     <motion.div
@@ -94,15 +111,12 @@ export default function DesktopWindow({
       initial={{ opacity: 0, scale: 0.96 }}
       animate={{ 
         opacity: isMinimized ? 0 : 1, 
-        // Animate relative offset from pos.x/pos.y
-        x: isMinimized 
-          ? (typeof window !== "undefined" ? window.innerWidth / 2 - 30 - pos.x : 0) 
-          : (isMaximized ? -pos.x : 0),
-        y: isMinimized 
-          ? (typeof window !== "undefined" ? window.innerHeight - 60 - pos.y : 800) 
-          : (isMaximized ? -pos.y : 0),
-        scale: isMinimized ? 0.05 : 1,
-        rotate: isMinimized ? -8 : 0,
+        x: isMinimized ? genieParams.targetX : (isMaximized ? -pos.x : 0),
+        y: isMinimized ? genieParams.targetY : (isMaximized ? -pos.y : 0),
+        scaleX: isMinimized ? 0.05 : 1,
+        scaleY: isMinimized ? 0.01 : 1,
+        skewX: isMinimized ? genieParams.skew : 0,
+        rotate: isMinimized ? genieParams.skew * 0.45 : 0,
         zIndex: isMinimized ? 8 : (isActive ? 110 : 10),
       }}
       transition={isMinimized ? minimizeSpring : snappySpring}

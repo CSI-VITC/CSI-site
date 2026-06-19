@@ -107,14 +107,18 @@ export default function SpotlightSearch({ isOpen, onClose, onSelect }: Spotlight
   return (
     <AnimatePresence>
       {isOpen && (
-        <div 
+        <motion.div 
           onClick={onClose}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.22 }}
           style={{
             position: "fixed",
             inset: 0,
-            background: "rgba(0, 0, 0, 0.4)",
-            backdropFilter: "blur(4px)",
-            WebkitBackdropFilter: "blur(4px)",
+            background: "rgba(0, 0, 0, 0.45)",
+            backdropFilter: "blur(12px)",
+            WebkitBackdropFilter: "blur(12px)",
             zIndex: 1999,
             display: "flex",
             justifyContent: "center",
@@ -123,10 +127,10 @@ export default function SpotlightSearch({ isOpen, onClose, onSelect }: Spotlight
         >
           {/* Main search box */}
           <motion.div
-            initial={{ scale: 0.95, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            exit={{ scale: 0.95, opacity: 0 }}
-            transition={{ type: "spring", stiffness: 400, damping: 30 }}
+            initial={{ scale: 0.95, y: 15, opacity: 0 }}
+            animate={{ scale: 1, y: 0, opacity: 1 }}
+            exit={{ scale: 0.95, y: 15, opacity: 0 }}
+            transition={{ type: "spring", stiffness: 380, damping: 28 }}
             onClick={(e) => e.stopPropagation()}
             style={{
               width: "600px",
@@ -181,8 +185,9 @@ export default function SpotlightSearch({ isOpen, onClose, onSelect }: Spotlight
                 filtered.map((item, index) => {
                   const isSelected = index === selectedIndex;
                   return (
-                    <div
-                      key={index}
+                    <motion.div
+                      layout
+                      key={item.name + "-" + item.id}
                       onClick={() => {
                         onSelect(item.id);
                         onClose();
@@ -195,7 +200,7 @@ export default function SpotlightSearch({ isOpen, onClose, onSelect }: Spotlight
                         gap: "16px",
                         background: isSelected ? "rgba(255, 255, 255, 0.1)" : "transparent",
                         cursor: "pointer",
-                        transition: "background 0.1s"
+                        transition: "background 0.15s ease-out"
                       }}
                     >
                       <div style={{ 
@@ -214,7 +219,7 @@ export default function SpotlightSearch({ isOpen, onClose, onSelect }: Spotlight
                         <div style={{ fontSize: "0.8rem", color: isSelected ? "rgba(255,255,255,0.7)" : "rgba(240, 235, 225, 0.4)", marginTop: "2px" }}>{item.description}</div>
                       </div>
                       <span style={{ fontSize: "0.75rem", color: "rgba(255,255,255,0.35)", fontWeight: 500 }}>{item.category}</span>
-                    </div>
+                    </motion.div>
                   );
                 })
               ) : (
@@ -224,7 +229,7 @@ export default function SpotlightSearch({ isOpen, onClose, onSelect }: Spotlight
               )}
             </div>
           </motion.div>
-        </div>
+        </motion.div>
       )}
     </AnimatePresence>
   );

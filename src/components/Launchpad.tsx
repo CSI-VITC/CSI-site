@@ -23,7 +23,7 @@ export default function Launchpad({ isOpen, onClose, onOpenApp, items }: Launchp
           initial={{ opacity: 0, scale: 1.1 }}
           animate={{ opacity: 1, scale: 1 }}
           exit={{ opacity: 0, scale: 1.1 }}
-          transition={{ duration: 0.3, ease: "easeInOut" }}
+          transition={{ type: "spring", stiffness: 240, damping: 25 }}
           style={{
             position: "absolute",
             inset: 0,
@@ -50,9 +50,14 @@ export default function Launchpad({ isOpen, onClose, onOpenApp, items }: Launchp
             {items.map((item, index) => (
               <motion.div
                 key={item.id}
-                initial={{ opacity: 0, y: 20 }}
+                initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.05 + 0.1, duration: 0.3 }}
+                transition={{ 
+                  type: "spring",
+                  stiffness: 280,
+                  damping: 18,
+                  delay: index * 0.035 + 0.1 
+                }}
                 style={{
                   display: "flex",
                   flexDirection: "column",

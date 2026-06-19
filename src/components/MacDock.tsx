@@ -1,7 +1,7 @@
 "use client";
 
 import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 
 interface DockItemProps {
   id: string;
@@ -13,17 +13,40 @@ interface DockItemProps {
   mouseX: any;
 }
 
-function DockItem({ label, iconSrc, bg, isOpen, onClick, mouseX }: DockItemProps) {
+function DockItem({ id, label, iconSrc, bg, isOpen, onClick, mouseX }: DockItemProps) {
   const ref = useRef<HTMLDivElement>(null);
   const [isHovered, setIsHovered] = useState(false);
+  const [isBouncing, setIsBouncing] = useState(false);
+  const prevIsOpen = useRef(isOpen);
 
-  const distance = useTransform(mouseX, (val: number) => {
+  useEffect(() => {
+    if (isOpen && !prevIsOpen.current) {
+      setIsBouncing(true);
+      const timer = setTimeout(() => setIsBouncing(false), 1500);
+      return () => clearTimeout(timer);
+    }
+    prevIsOpen.current = isOpen;
+  }, [isOpen]);
+
+  const widthSync = useTransform(mouseX, (val: number) => {
     const bounds = ref.current?.getBoundingClientRect() ?? { x: 0, width: 0 };
-    return val - bounds.x - bounds.width / 2;
+    const dist = val - bounds.x - bounds.width / 2;
+    
+    const baseSize = 50;
+    const maxGrowth = 30; // Max icon size is 80px
+    const range = 160;   // Magnification bubble radius in pixels
+    
+    if (Math.abs(dist) < range) {
+      const progress = Math.abs(dist) / range;
+      // Raised cosine (Hanning) window function for smooth slope transition at peak & edges
+      const factor = 0.5 * (1 + Math.cos(progress * Math.PI));
+      return baseSize + maxGrowth * factor;
+    }
+    
+    return baseSize;
   });
 
-  const widthSync = useTransform(distance, [-150, 0, 150], [50, 80, 50]);
-  const width = useSpring(widthSync, { mass: 0.1, stiffness: 200, damping: 15 });
+  const width = useSpring(widthSync, { mass: 0.1, stiffness: 220, damping: 16 });
 
   return (
     <div 
@@ -36,6 +59,20 @@ function DockItem({ label, iconSrc, bg, isOpen, onClick, mouseX }: DockItemProps
         style={{ width, height: width }}
         onClick={onClick}
         whileTap={{ scale: 0.9 }}
+        animate={isBouncing ? {
+          y: [0, -18, 0, -10, 0, -4, 0],
+        } : {
+          y: 0
+        }}
+        transition={isBouncing ? {
+          duration: 1.5,
+          times: [0, 0.22, 0.4, 0.6, 0.78, 0.9, 1],
+          ease: "easeInOut",
+        } : {
+          type: "spring",
+          stiffness: 300,
+          damping: 20
+        }}
         className="dock-item"
       >
         <div className="icon-inner" style={{ background: bg || "transparent" }}>
@@ -120,28 +157,28 @@ export default function MacDock({
   const mouseX = useMotionValue(Infinity);
 
   const pinnedItems: Array<{ id: string; label: string; iconSrc: string; bg?: string }> = [
-    { id: "about", label: "About Us", iconSrc: "/icons/Readme_New.png" },
-    { id: "projects", label: "Projects", iconSrc: "/icons/Projects_New.png" },
-    { id: "terminal", label: "Terminal", iconSrc: "/icons/Terminal_New.png" },
-    { id: "contact", label: "Contact", iconSrc: "/icons/Mail_New.png" },
-  ];
-
-  const dynamicItems: Array<{ id: string; label: string; iconSrc: string; bg?: string }> = [
-    { id: "depts", label: "Domains", iconSrc: "/icons/Domains_New.png" },
-    { id: "events", label: "Events", iconSrc: "/icons/Events_New.png" },
-    { id: "arcade", label: "Arcade Game", iconSrc: "/icons/Arcade_New.png" },
-    { id: "editor", label: "Code Editor", iconSrc: "/icons/Editor_New.png" },
-    { id: "team", label: "Team", iconSrc: "/icons/Team_New.png" },
-    { id: "neural", label: "Neural Hub", iconSrc: "/icons/Neural_New.png" },
-    { id: "csi", label: "CSI Official", iconSrc: "/icons/CSI.png" },
-    ...(isChallengeUnlocked ? [{ id: "ticket", label: "VIP Ticket", iconSrc: "/icons/Ticket_New.png" }] : []),
-  ];
-
-  const items = [
-    ...pinnedItems,
-    ...dynamicItems.filter(item => openApps.includes(item.id)),
-    { id: "more", label: "Launchpad", iconSrc: "/icons/launchpad.png" },
-  ];
+    { id: "about", label: "About Us", iconSrc: "/icons/Readme_Doodle.svg" },
+    { id: "projects", label: "Projects", iconSrc: "/icons/Projects_Doodle.svg" },
+    { id: "terminal", label: "Terminal", iconSrc: "/icons/Terminal_Doodle.svg" },
+    { id: "contact", label: "Contact", iconSrc: "/icons/Mail_Doodle.svg" },
+   ];
+ 
+   const dynamicItems: Array<{ id: string; label: string; iconSrc: string; bg?: string }> = [
+    { id: "depts", label: "Domains", iconSrc: "/icons/Domains_Doodle.svg" },
+    { id: "events", label: "Events", iconSrc: "/icons/Events_Doodle.svg" },
+    { id: "arcade", label: "Arcade Game", iconSrc: "/icons/Arcade_Doodle.svg" },
+    { id: "editor", label: "Code Editor", iconSrc: "/icons/Editor_Doodle.svg" },
+    { id: "team", label: "Team", iconSrc: "/icons/Team_Doodle.svg" },
+    { id: "neural", label: "Neural Hub", iconSrc: "/icons/Neural_Doodle.svg" },
+    { id: "csi", label: "CSI Official", iconSrc: "/icons/CSI_Doodle.svg" },
+    ...(isChallengeUnlocked ? [{ id: "ticket", label: "VIP Ticket", iconSrc: "/icons/Ticket_Doodle.svg" }] : []),
+   ];
+ 
+   const items = [
+     ...pinnedItems,
+     ...dynamicItems.filter(item => openApps.includes(item.id)),
+    { id: "more", label: "Launchpad", iconSrc: "/icons/Launchpad_Doodle.svg" },
+   ];
 
   return (
     <div
