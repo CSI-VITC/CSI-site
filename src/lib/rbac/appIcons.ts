@@ -5,7 +5,7 @@ export const APP_ICONS = {
   events: "/icons/Calendar.png",
   resources: "/icons/Notion.png",
   gallery: "/icons/Gallery.svg",
-  team: "/icons/Domains.jpg",
+  team: "/icons/Team.svg",
   profile: "/icons/Profile.svg",
   projects: "/icons/Terminal.png",
   contact: "/icons/Mail.png",
