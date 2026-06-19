@@ -1,0 +1,446 @@
+/* Platform layer — spacious, scannable, low visual noise */
+
+.csi-platform {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 280px);
+  grid-template-rows: auto auto auto;
+  grid-template-areas:
+    "intro event"
+    "meta event"
+    "secondary secondary";
+  gap: 32px 48px;
+  align-content: start;
+  padding: 32px 40px 176px;
+  transition: opacity 0.45s ease, filter 0.45s ease;
+}
+
+.csi-platform--dimmed {
+  opacity: 0;
+  filter: blur(4px);
+  pointer-events: none;
+}
+
+.csi-platform-intro {
+  grid-area: intro;
+  pointer-events: auto;
+  max-width: 340px;
+  padding: 0;
+  background: none;
+  border: none;
+  backdrop-filter: none;
+}
+
+.csi-platform-intro h2 {
+  margin: 0 0 12px;
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: rgba(240, 235, 225, 0.92);
+  letter-spacing: -0.02em;
+  line-height: 1.25;
+}
+
+.csi-platform-intro p {
+  margin: 0;
+  font-size: 0.76rem;
+  line-height: 1.7;
+  color: rgba(240, 235, 225, 0.45);
+  max-width: 34ch;
+}
+
+.csi-platform-meta {
+  grid-area: meta;
+  pointer-events: auto;
+  max-width: 340px;
+  padding-top: 8px;
+}
+
+.csi-platform-domains-line {
+  margin: 0 0 24px;
+  font-size: 0.64rem;
+  line-height: 1.55;
+  color: rgba(240, 235, 225, 0.28);
+  letter-spacing: 0.02em;
+}
+
+.csi-platform-event-slot {
+  grid-area: event;
+  pointer-events: none;
+  align-self: start;
+  max-width: 280px;
+  justify-self: end;
+}
+
+.csi-platform-stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px 28px;
+}
+
+.csi-platform-stat {
+  flex: 0 0 auto;
+  min-width: 0;
+  text-align: left;
+  padding: 0;
+  border: none;
+  background: none;
+}
+
+.csi-platform-stat strong {
+  display: block;
+  font-family: var(--font-anton), sans-serif;
+  font-size: 1.05rem;
+  color: rgba(240, 235, 225, 0.78);
+  line-height: 1;
+  font-weight: 400;
+}
+
+.csi-platform-stat span {
+  display: block;
+  margin-top: 7px;
+  font-size: 0.58rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: rgba(240, 235, 225, 0.3);
+}
+
+.csi-platform-card {
+  pointer-events: auto;
+  padding: 16px 18px;
+  border-radius: 12px;
+  background: rgba(12, 12, 12, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.04);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.csi-platform-card--primary {
+  padding: 20px 22px;
+  background: rgba(14, 14, 14, 0.62);
+  border-color: rgba(255, 255, 255, 0.07);
+}
+
+.csi-platform-card--quiet {
+  padding: 14px 16px;
+  background: rgba(10, 10, 10, 0.38);
+  border-color: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.csi-platform-card--quiet .csi-platform-card-label {
+  color: rgba(240, 235, 225, 0.3);
+  margin-bottom: 8px;
+}
+
+.csi-platform-card--quiet h3 {
+  font-size: 0.84rem;
+}
+
+.csi-platform-card--quiet p {
+  font-size: 0.72rem;
+  color: rgba(240, 235, 225, 0.42);
+}
+
+.csi-platform-card-label {
+  font-size: 0.58rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(240, 235, 225, 0.35);
+  margin-bottom: 12px;
+}
+
+.csi-platform-card h3 {
+  margin: 0 0 10px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: rgba(240, 235, 225, 0.92);
+  line-height: 1.35;
+}
+
+.csi-platform-card p {
+  margin: 0;
+  font-size: 0.74rem;
+  line-height: 1.65;
+  color: rgba(240, 235, 225, 0.48);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.csi-platform-card-meta {
+  margin-top: 14px;
+  font-size: 0.64rem;
+  color: rgba(240, 235, 225, 0.34);
+  line-height: 1.5;
+}
+
+.csi-platform-btn {
+  margin-top: 16px;
+  padding: 7px 12px;
+  border-radius: 7px;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  background: rgba(255, 255, 255, 0.03);
+  color: rgba(240, 235, 225, 0.82);
+  font-size: 0.68rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.csi-platform-btn:hover {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.csi-platform-bottom {
+  grid-area: secondary;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 32px;
+  pointer-events: none;
+  margin-top: 8px;
+}
+
+.csi-platform-announcements ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.csi-platform-announcements li {
+  padding: 10px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+}
+
+.csi-platform-announcements li:first-child {
+  padding-top: 0;
+}
+
+.csi-platform-announcements li:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.csi-platform-announcements li strong {
+  display: block;
+  font-size: 0.76rem;
+  font-weight: 600;
+  color: rgba(240, 235, 225, 0.78);
+  margin-bottom: 4px;
+}
+
+.csi-platform-announcements li span {
+  font-size: 0.68rem;
+  color: rgba(240, 235, 225, 0.38);
+  line-height: 1.55;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.csi-platform-project-stack {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 12px;
+}
+
+.csi-platform-project-stack span {
+  font-size: 0.58rem;
+  padding: 3px 7px;
+  border-radius: 5px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.04);
+  color: rgba(240, 235, 225, 0.42);
+}
+
+.csi-site-footer {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 108px;
+  z-index: 90;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 8px 24px;
+  margin: 0 32px;
+  border-radius: 8px;
+  background: rgba(10, 10, 10, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  font-size: 0.66rem;
+  color: rgba(240, 235, 225, 0.32);
+}
+
+.csi-site-footer-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 20px;
+}
+
+.csi-site-footer-nav button {
+  background: none;
+  border: none;
+  padding: 0;
+  color: rgba(240, 235, 225, 0.38);
+  font-size: 0.66rem;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.csi-site-footer-nav button:hover,
+.csi-site-footer-nav button[aria-current="page"] {
+  color: rgba(240, 235, 225, 0.72);
+}
+
+.csi-platform-empty {
+  font-size: 0.72rem;
+  color: rgba(240, 235, 225, 0.36);
+  line-height: 1.65;
+}
+
+.csi-platform-skeleton {
+  height: 8px;
+  border-radius: 5px;
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.csi-empty-state {
+  text-align: center;
+  padding: 40px 32px;
+  border-radius: 12px;
+  border: 1px dashed rgba(255, 255, 255, 0.05);
+  background: rgba(255, 255, 255, 0.01);
+}
+
+.csi-empty-state h3 {
+  margin: 0 0 10px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: rgba(240, 235, 225, 0.88);
+}
+
+.csi-empty-state p {
+  margin: 0 0 20px;
+  font-size: 0.78rem;
+  color: rgba(240, 235, 225, 0.42);
+  line-height: 1.65;
+  max-width: 36ch;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.rbac-menu-bar-active {
+  margin-left: 14px;
+  padding: 3px 10px;
+  border-radius: 6px;
+  font-size: 0.68rem;
+  color: rgba(240, 235, 225, 0.45);
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.dock-item--active .icon-inner {
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.22);
+}
+
+/* Dashboard snapshot spacing */
+.csi-dash-snapshot {
+  margin-bottom: 40px;
+  padding-bottom: 36px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.csi-dash-snapshot-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 24px;
+  margin-top: 24px;
+}
+
+.csi-section-eyebrow {
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(240, 235, 225, 0.32);
+  margin: 0 0 18px;
+}
+
+@media (max-width: 900px) {
+  .csi-platform {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "intro"
+      "event"
+      "meta"
+      "secondary";
+    gap: 28px;
+    padding: 24px 24px 184px;
+  }
+
+  .csi-platform-intro,
+  .csi-platform-meta {
+    max-width: none;
+  }
+
+  .csi-platform-intro p {
+    max-width: none;
+  }
+
+  .csi-platform-event-slot {
+    max-width: none;
+    justify-self: stretch;
+  }
+
+  .csi-platform-bottom {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+
+  .csi-site-footer {
+    bottom: 96px;
+    margin: 0 16px;
+    padding: 8px 14px;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .csi-activity-feed {
+    display: none;
+  }
+}
+
+@media (max-width: 600px) {
+  .csi-platform {
+    padding: 20px 18px 190px;
+    gap: 24px;
+  }
+
+  .csi-platform-stats {
+    gap: 18px 22px;
+  }
+
+  .csi-platform-stat strong {
+    font-size: 0.98rem;
+  }
+
+  .csi-mac-dock {
+    bottom: 22px !important;
+    height: 56px !important;
+    padding: 7px !important;
+    max-width: calc(100vw - 16px);
+    overflow-x: auto;
+  }
+}

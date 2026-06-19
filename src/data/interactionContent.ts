@@ -106,24 +106,49 @@ export const CSI_STATS = [
 
 export const ACHIEVEMENTS = {
   first_explore: {
-    title: "First Steps",
+    title: "First Visit",
     description: "Opened your first CSI app.",
+    icon: "👋",
   },
   desktop_master: {
-    title: "Desktop Master",
+    title: "Explorer",
     description: "Explored every section on the CSI desktop.",
+    icon: "🗺️",
   },
   power_explorer: {
-    title: "Power Explorer",
+    title: "Power User",
     description: "Discovered a hidden system shortcut.",
+    icon: "⚡",
   },
   nova_connected: {
-    title: "Nova Connected",
+    title: "Nova Friend",
     description: "Started a conversation with CSI Nova.",
+    icon: "🤖",
   },
   builder_mindset: {
     title: "Builder Mindset",
     description: "You speak our language — ship early, learn fast.",
+    icon: "🛠️",
+  },
+  resource_hunter: {
+    title: "Resource Hunter",
+    description: "Bookmarked your first learning resource.",
+    icon: "📚",
+  },
+  event_enthusiast: {
+    title: "Event Enthusiast",
+    description: "Registered for a CSI event.",
+    icon: "📅",
+  },
+  command_master: {
+    title: "Command Master",
+    description: "Used the global command palette.",
+    icon: "⌘",
+  },
+  roadmap_starter: {
+    title: "Pathfinder",
+    description: "Started a learning roadmap.",
+    icon: "🧭",
   },
 } as const;
 

@@ -5,7 +5,8 @@ import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import VideoComponent from "https://framer.com/m/Video-Component-0Gti.js@rgRu2j7Rdo4wHbNub7OE";
 import CardSwap, { Card } from "../CardSwap";
-import { X } from "lucide-react";
+import { X, GitBranch, ExternalLink } from "lucide-react";
+import "@/components/desktop/DesktopOS.css";
 
 const PROJECTS = [
   {
@@ -13,26 +14,67 @@ const PROJECTS = [
     tag: "Platform",
     description: "A unified campus platform for navigation, services, and student utilities.",
     video: "https://framerusercontent.com/assets/MLWPbW1dUQawJLhhun3dBwpgJak.mp4",
+    stack: ["Next.js", "TypeScript", "Firebase", "Tailwind"],
+    github: "https://github.com",
+    demo: "https://example.com",
   },
   {
     name: "SentinelX",
     tag: "Security",
     description: "Monitoring and security tooling built for real-world campus infrastructure.",
     video: "https://framerusercontent.com/assets/271QwsjeO0NMQpKWyYKrJkeWU.mp4",
+    stack: ["Python", "Docker", "Grafana", "Redis"],
+    github: "https://github.com",
   },
   {
     name: "LectureLens",
     tag: "AI / EdTech",
     description: "Smart lecture capture and summarization to help students learn faster.",
     video: "https://framerusercontent.com/assets/MLWPbW1dUQawJLhhun3dBwpgJak.mp4",
+    stack: ["PyTorch", "Whisper", "React", "FastAPI"],
+    github: "https://github.com",
+    demo: "https://example.com",
   },
   {
     name: "Aaroha",
     tag: "Community",
     description: "Mentorship and growth platform connecting CSI members with opportunities.",
     video: "https://framerusercontent.com/assets/271QwsjeO0NMQpKWyYKrJkeWU.mp4",
+    stack: ["React Native", "Node.js", "PostgreSQL"],
+    github: "https://github.com",
   },
 ];
+
+function TiltCard({
+  children,
+  onClick,
+}: {
+  children: React.ReactNode;
+  onClick: () => void;
+}) {
+  const [tilt, setTilt] = useState({ x: 0, y: 0 });
+
+  const onMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const px = (e.clientX - rect.left) / rect.width - 0.5;
+    const py = (e.clientY - rect.top) / rect.height - 0.5;
+    setTilt({ x: py * -8, y: px * 10 });
+  };
+
+  return (
+    <motion.div
+      className="project-tilt-wrap"
+      onMouseMove={onMove}
+      onMouseLeave={() => setTilt({ x: 0, y: 0 })}
+      onClick={onClick}
+      animate={{ rotateX: tilt.x, rotateY: tilt.y }}
+      transition={{ type: "spring", stiffness: 300, damping: 22 }}
+      style={{ width: "100%", height: "100%", cursor: "pointer" }}
+    >
+      {children}
+    </motion.div>
+  );
+}
 
 export function Projects() {
   const [typedText, setTypedText] = useState("");
@@ -204,12 +246,14 @@ export function Projects() {
                 key={p.name}
                 style={{ padding: 0, overflow: "hidden", border: "none", background: "transparent" }}
               >
-                <VideoComponent
-                  name1={p.name}
-                  uRL={p.video}
-                  source="URL"
-                  style={{ width: "100%", height: "100%" }}
-                />
+                <TiltCard onClick={() => setExpandedIndex(i)}>
+                  <VideoComponent
+                    name1={p.name}
+                    uRL={p.video}
+                    source="URL"
+                    style={{ width: "100%", height: "100%" }}
+                  />
+                </TiltCard>
               </Card>
             ))}
           </CardSwap>
@@ -331,11 +375,67 @@ export function Projects() {
                         color: "rgba(240,235,225,0.7)",
                         fontSize: "0.95rem",
                         lineHeight: 1.6,
-                        margin: 0,
+                        margin: "0 0 16px",
                       }}
                     >
                       {expanded.description}
                     </p>
+                    <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginBottom: 16 }}>
+                      {expanded.stack.map((tech) => (
+                        <motion.span
+                          key={tech}
+                          initial={{ opacity: 0, y: 6 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ delay: 0.1 }}
+                          style={{
+                            fontSize: "0.72rem",
+                            padding: "4px 10px",
+                            borderRadius: 8,
+                            background: "rgba(255,255,255,0.06)",
+                            border: "1px solid rgba(255,255,255,0.1)",
+                            color: "rgba(240,235,225,0.75)",
+                          }}
+                        >
+                          {tech}
+                        </motion.span>
+                      ))}
+                    </div>
+                    <div style={{ display: "flex", gap: 10 }}>
+                      {expanded.github && (
+                        <a
+                          href={expanded.github}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          style={{
+                            display: "inline-flex",
+                            alignItems: "center",
+                            gap: 6,
+                            fontSize: "0.82rem",
+                            color: "rgba(240,235,225,0.7)",
+                            textDecoration: "none",
+                          }}
+                        >
+                          <GitBranch size={14} /> GitHub
+                        </a>
+                      )}
+                      {expanded.demo && (
+                        <a
+                          href={expanded.demo}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          style={{
+                            display: "inline-flex",
+                            alignItems: "center",
+                            gap: 6,
+                            fontSize: "0.82rem",
+                            color: "rgba(100,180,255,0.9)",
+                            textDecoration: "none",
+                          }}
+                        >
+                          <ExternalLink size={14} /> Live demo
+                        </a>
+                      )}
+                    </div>
                   </div>
                 </motion.div>
               </motion.div>

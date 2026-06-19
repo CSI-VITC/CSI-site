@@ -1,11 +1,15 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { useAdminEvents } from "@/hooks/useAdminEvents";
 import { useAuth } from "@/context/AuthContext";
+import { useInteraction } from "@/context/InteractionContext";
 import { formatEventDate } from "@/data/adminEventsData";
 import { MemberFeaturePrompt } from "@/components/auth/MemberUnlockDialog";
+import { EmptyState } from "@/components/platform/EmptyState";
 import "../auth/Rbac.css";
+import "../platform/Platform.css";
 
 const SAVED_KEY = "csi-saved-events";
 
@@ -22,14 +26,47 @@ function saveSaved(ids: string[]) {
   localStorage.setItem(SAVED_KEY, JSON.stringify(ids));
 }
 
+function useCountdown(targetDate: string) {
+  const [label, setLabel] = useState("");
+
+  useEffect(() => {
+    const tick = () => {
+      const diff = new Date(targetDate).getTime() - Date.now();
+      if (diff <= 0) {
+        setLabel("Starting soon");
+        return;
+      }
+      const days = Math.floor(diff / 86400000);
+      const hours = Math.floor((diff % 86400000) / 3600000);
+      const mins = Math.floor((diff % 3600000) / 60000);
+      if (days > 0) setLabel(`${days}d ${hours}h until start`);
+      else if (hours > 0) setLabel(`${hours}h ${mins}m until start`);
+      else setLabel(`${mins}m until start`);
+    };
+    tick();
+    const id = setInterval(tick, 30000);
+    return () => clearInterval(id);
+  }, [targetDate]);
+
+  return label;
+}
+
+function EventCountdown({ date }: { date: string }) {
+  const label = useCountdown(date);
+  if (!label) return null;
+  return <div className="event-countdown">{label}</div>;
+}
+
 export function UserEvents() {
   const { events, ready, addRegistration } = useAdminEvents();
   const { profile, isGuest, openAuth } = useAuth();
+  const { recordEventRegistration } = useInteraction();
   const [saved, setSaved] = useState<string[]>(loadSaved);
   const [regName, setRegName] = useState("");
   const [regEmail, setRegEmail] = useState("");
   const [activeReg, setActiveReg] = useState<string | null>(null);
   const [msg, setMsg] = useState<string | null>(null);
+  const [successId, setSuccessId] = useState<string | null>(null);
 
   const publicEvents = useMemo(
     () => events.filter((e) => e.status === "published" || e.status === "live"),
@@ -71,9 +108,12 @@ export function UserEvents() {
     const result = addRegistration(eventId, { name, email });
     if (result.ok) {
       setMsg("Registration successful!");
+      setSuccessId(eventId);
+      recordEventRegistration();
       setActiveReg(null);
       setRegName("");
       setRegEmail("");
+      setTimeout(() => setSuccessId(null), 2400);
     } else {
       setMsg(result.error ?? "Could not register.");
     }
@@ -81,8 +121,9 @@ export function UserEvents() {
 
   if (!ready) {
     return (
-      <div className="rbac-user-events" role="status">
-        Loading events…
+      <div className="rbac-user-events" role="status" aria-busy="true">
+        <div className="csi-platform-skeleton" style={{ width: "40%", marginBottom: 12 }} />
+        <div className="csi-platform-skeleton" style={{ height: 80, borderRadius: 12 }} />
       </div>
     );
   }
@@ -101,30 +142,54 @@ export function UserEvents() {
         />
       )}
 
-      {msg && (
-        <p className="rbac-perm-note" role="status" style={{ marginBottom: 16, marginTop: 12 }}>
-          {msg}
-        </p>
-      )}
+      <AnimatePresence>
+        {msg && (
+          <motion.p
+            key={msg}
+            className={`rbac-perm-note reg-success-pop${successId ? " reg-success-pop" : ""}`}
+            role="status"
+            initial={{ opacity: 0, y: 6 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0 }}
+            style={{ marginBottom: 16, marginTop: 12 }}
+          >
+            {msg}
+          </motion.p>
+        )}
+      </AnimatePresence>
 
       {publicEvents.length === 0 ? (
-        <div className="rbac-dash-card" style={{ cursor: "default" }}>
-          <h3>No published events yet</h3>
-          <p>Check back soon for workshops, hackathons, and chapter events.</p>
-        </div>
+        <EmptyState
+          title="No upcoming events"
+          description="Published workshops and hackathons will appear here. Check back soon or ask CSI Nova for updates."
+        />
       ) : (
         publicEvents.map((event) => {
           const isSaved = saved.includes(event.id);
           const seatsLeft = event.capacity - event.registrations.length;
+          const fillPct = Math.min(100, Math.round((event.registrations.length / event.capacity) * 100));
           const isRegistered = profile?.email
             ? event.registrations.some((r) => r.email === profile.email)
             : false;
+          const justRegistered = successId === event.id;
 
           return (
             <article key={event.id} className="rbac-event-card">
+              <EventCountdown date={event.date} />
               <h3>{event.title}</h3>
               <p className="rbac-event-meta">
-                {formatEventDate(event.date)} · {event.venue} · {seatsLeft} seats left
+                {formatEventDate(event.date)} · {event.venue}
+              </p>
+              <div className="event-seats-bar" aria-hidden>
+                <motion.div
+                  className="event-seats-fill"
+                  initial={{ width: 0 }}
+                  animate={{ width: `${fillPct}%` }}
+                  transition={{ duration: 0.6, ease: "easeOut" }}
+                />
+              </div>
+              <p style={{ fontSize: "0.75rem", color: "rgba(240,235,225,0.45)", margin: "0 0 8px" }}>
+                {seatsLeft > 0 ? `${seatsLeft} of ${event.capacity} seats available` : "Event at capacity"}
               </p>
               {event.description && (
                 <p style={{ fontSize: "0.82rem", color: "rgba(240,235,225,0.55)", marginBottom: 10 }}>
@@ -140,10 +205,15 @@ export function UserEvents() {
                 >
                   {isSaved ? "Saved" : "Save Event"}
                 </button>
-                {isRegistered ? (
-                  <span style={{ fontSize: "0.8rem", color: "rgba(140,220,160,0.9)", alignSelf: "center" }}>
-                    Registered
-                  </span>
+                {isRegistered || justRegistered ? (
+                  <motion.span
+                    className="reg-success-pop"
+                    initial={justRegistered ? { scale: 0.9, opacity: 0 } : false}
+                    animate={{ scale: 1, opacity: 1 }}
+                    style={{ fontSize: "0.8rem", color: "rgba(140,220,160,0.9)", alignSelf: "center" }}
+                  >
+                    Registered ✓
+                  </motion.span>
                 ) : (
                   <button
                     type="button"

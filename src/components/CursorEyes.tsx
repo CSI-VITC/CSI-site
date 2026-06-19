@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { motion } from "framer-motion";
+import { motion, useSpring } from "framer-motion";
+import "./CursorEyes.css";
 
 interface CursorEyesProps {
   onHeroInteract?: () => void;
@@ -11,6 +12,8 @@ export default function CursorEyes({ onHeroInteract }: CursorEyesProps) {
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
   const [mounted, setMounted] = useState(false);
   const [isNear, setIsNear] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
+  const [isBlinking, setIsBlinking] = useState(false);
 
   useEffect(() => {
     setMounted(true);
@@ -24,32 +27,53 @@ export default function CursorEyes({ onHeroInteract }: CursorEyesProps) {
     return () => window.removeEventListener("mousemove", handleMouseMove);
   }, []);
 
-  const calculatePupilPos = (eyeX: number, eyeY: number) => {
-    if (!mounted) return { x: 0, y: 0 };
-    const dx = mousePos.x - eyeX;
-    const dy = mousePos.y - eyeY;
-    const angle = Math.atan2(dy, dx);
-    const distance = Math.min(isNear ? 14 : 12, Math.hypot(dx, dy) / 8);
-    return {
-      x: Math.cos(angle) * distance,
-      y: Math.sin(angle) * distance,
+  useEffect(() => {
+    let cancelled = false;
+    let timeoutId: ReturnType<typeof setTimeout>;
+
+    const scheduleBlink = () => {
+      const delay = 3200 + Math.random() * 4500;
+      timeoutId = setTimeout(() => {
+        if (cancelled) return;
+        setIsBlinking(true);
+        setTimeout(() => {
+          if (!cancelled) setIsBlinking(false);
+        }, 160);
+        scheduleBlink();
+      }, delay);
     };
+
+    scheduleBlink();
+    return () => {
+      cancelled = true;
+      clearTimeout(timeoutId);
+    };
+  }, []);
+
+  const handleClick = () => {
+    onHeroInteract?.();
   };
 
   const centerX = mounted ? window.innerWidth / 2 : 500;
   const centerY = mounted ? window.innerHeight / 2 : 500;
-
   const leftEyeCenter = { x: centerX - 35, y: centerY - 50 };
   const rightEyeCenter = { x: centerX + 35, y: centerY - 50 };
 
-  const leftPupil = calculatePupilPos(leftEyeCenter.x, leftEyeCenter.y);
-  const rightPupil = calculatePupilPos(rightEyeCenter.x, rightEyeCenter.y);
+  const calcPupil = (eyeX: number, eyeY: number) => {
+    if (!mounted) return { x: 0, y: 0 };
+    const dx = mousePos.x - eyeX;
+    const dy = mousePos.y - eyeY;
+    const angle = Math.atan2(dy, dx);
+    const maxDist = isNear || isHovered ? 14 : 11;
+    const dist = Math.min(maxDist, Math.hypot(dx, dy) / 9);
+    return { x: Math.cos(angle) * dist, y: Math.sin(angle) * dist };
+  };
+
+  const leftPupil = calcPupil(leftEyeCenter.x, leftEyeCenter.y);
+  const rightPupil = calcPupil(rightEyeCenter.x, rightEyeCenter.y);
 
   return (
-    <motion.div
-      onClick={onHeroInteract}
-      animate={{ scale: isNear ? 1.02 : 1 }}
-      transition={{ duration: 0.35, ease: "easeOut" }}
+    <div
       style={{
         position: "absolute",
         inset: 0,
@@ -59,62 +83,72 @@ export default function CursorEyes({ onHeroInteract }: CursorEyesProps) {
         alignItems: "center",
         justifyContent: "center",
         transform: "translateY(-50px)",
+        opacity: 0.88,
       }}
     >
       <div
-        style={{
-          display: "flex",
-          gap: "8px",
-          pointerEvents: "auto",
-          cursor: "default",
+        className="csi-eyes-wrap"
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+        onClick={handleClick}
+        role="button"
+        tabIndex={0}
+        aria-label="CSI easter egg"
+        onKeyDown={(e) => {
+          if (e.key === "Enter" || e.key === " ") handleClick();
         }}
       >
-        <Eye pupil={leftPupil} />
-        <Eye pupil={rightPupil} />
+        <Eye pupil={leftPupil} blink={isBlinking} />
+        <Eye pupil={rightPupil} blink={isBlinking} />
       </div>
-    </motion.div>
+    </div>
   );
 }
 
-function Eye({ pupil }: { pupil: { x: number; y: number } }) {
+function Eye({ pupil, blink }: { pupil: { x: number; y: number }; blink: boolean }) {
+  const springX = useSpring(pupil.x, { stiffness: 420, damping: 28, mass: 0.35 });
+  const springY = useSpring(pupil.y, { stiffness: 420, damping: 28, mass: 0.35 });
+
+  useEffect(() => {
+    springX.set(pupil.x);
+    springY.set(pupil.y);
+  }, [pupil.x, pupil.y, springX, springY]);
+
   return (
-    <div
-      style={{
-        width: "55px",
-        height: "80px",
-        background: "#fff",
-        borderRadius: "50%",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        position: "relative",
-        overflow: "hidden",
-        boxShadow: "0 4px 24px rgba(0,0,0,0.25)",
-      }}
-    >
-      <div
+    <div className="csi-eye-shell">
+      <motion.div
         style={{
-          width: "30px",
-          height: "35px",
+          width: 30,
+          height: 35,
           background: "#000",
           borderRadius: "50%",
           position: "absolute",
-          transform: `translate(${pupil.x}px, ${pupil.y}px)`,
-          transition: "transform 0.08s linear",
+          x: springX,
+          y: springY,
         }}
       >
         <div
           style={{
-            width: "8px",
-            height: "8px",
+            width: 8,
+            height: 8,
             background: "#fff",
             borderRadius: "50%",
             position: "absolute",
-            top: "4px",
-            right: "6px",
+            top: 4,
+            right: 6,
           }}
         />
-      </div>
+      </motion.div>
+      <motion.div
+        className="csi-eye-lid csi-eye-lid--top"
+        animate={{ scaleY: blink ? 1 : 0 }}
+        transition={{ duration: 0.1, ease: "easeIn" }}
+      />
+      <motion.div
+        className="csi-eye-lid csi-eye-lid--bottom"
+        animate={{ scaleY: blink ? 1 : 0 }}
+        transition={{ duration: 0.1, ease: "easeIn" }}
+      />
     </div>
   );
 }

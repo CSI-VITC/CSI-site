@@ -40,6 +40,7 @@ import {
 } from "@/data/resourceHubData";
 import { useResourceBookmarks } from "@/hooks/useResourceBookmarks";
 import { useRoadmapProgress } from "@/hooks/useRoadmapProgress";
+import { useInteraction } from "@/context/InteractionContext";
 import "./ResourceHub.css";
 
 type ViewId = ResourceCategoryId | "saved" | "featured";
@@ -117,8 +118,15 @@ function ResourceCard({
 
 function RoadmapView({ roadmap }: { roadmap: Roadmap }) {
   const { toggleStep, isStepComplete, getProgressPercent } = useRoadmapProgress();
+  const { recordRoadmapProgress } = useInteraction();
   const [expanded, setExpanded] = useState<string | null>(roadmap.steps[0]?.id ?? null);
   const progress = getProgressPercent(roadmap.id, roadmap.steps.length);
+
+  const handleToggleStep = (stepId: string) => {
+    const wasDone = isStepComplete(roadmap.id, stepId);
+    toggleStep(roadmap.id, stepId);
+    if (!wasDone) recordRoadmapProgress();
+  };
 
   return (
     <div>
@@ -126,21 +134,38 @@ function RoadmapView({ roadmap }: { roadmap: Roadmap }) {
         <h2 className="rh-roadmap-title">{roadmap.title}</h2>
         <p className="rh-roadmap-desc">{roadmap.description}</p>
         <div className="rh-progress-bar">
-          <div className="rh-progress-fill" style={{ width: `${progress}%` }} />
+          <motion.div
+            className="rh-progress-fill"
+            initial={{ width: 0 }}
+            animate={{ width: `${progress}%` }}
+            transition={{ duration: 0.6, ease: [0.25, 0.1, 0.25, 1] }}
+          />
         </div>
         <p className="rh-progress-label">{progress}% complete · {roadmap.steps.length} milestones</p>
       </div>
-      <div className="rh-roadmap-steps">
+      <div className="rh-roadmap-steps rh-roadmap-steps--tree">
+        <motion.div
+          className="rh-skill-tree-line"
+          initial={{ scaleY: 0 }}
+          animate={{ scaleY: 1 }}
+          transition={{ duration: 0.8, ease: [0.25, 0.1, 0.25, 1] }}
+        />
         {roadmap.steps.map((step, i) => {
           const done = isStepComplete(roadmap.id, step.id);
           const isOpen = expanded === step.id;
           return (
-            <div key={step.id} className={`rh-roadmap-step${done ? " rh-roadmap-step--complete" : ""}`}>
+            <motion.div
+              key={step.id}
+              className={`rh-roadmap-step${done ? " rh-roadmap-step--complete" : ""}`}
+              initial={{ opacity: 0, x: -8 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: i * 0.06, duration: 0.35 }}
+            >
               <div className="rh-roadmap-step-header">
                 <button
                   type="button"
                   className={`rh-step-check${done ? " rh-step-check--done" : ""}`}
-                  onClick={() => toggleStep(roadmap.id, step.id)}
+                  onClick={() => handleToggleStep(step.id)}
                   aria-label={done ? "Mark incomplete" : "Mark complete"}
                 >
                   {done && <Check size={13} />}
@@ -165,18 +190,24 @@ function RoadmapView({ roadmap }: { roadmap: Roadmap }) {
                     initial={{ height: 0, opacity: 0 }}
                     animate={{ height: "auto", opacity: 1 }}
                     exit={{ height: 0, opacity: 0 }}
-                    transition={{ duration: 0.25 }}
+                    transition={{ duration: 0.28, ease: [0.25, 0.1, 0.25, 1] }}
                   >
-                    {step.substeps.map((sub) => (
-                      <div key={sub.title} className="rh-substep">
+                    {step.substeps.map((sub, si) => (
+                      <motion.div
+                        key={sub.title}
+                        className="rh-substep"
+                        initial={{ opacity: 0, y: 6 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: si * 0.05 }}
+                      >
                         <p className="rh-substep-title">{sub.title}</p>
                         <p className="rh-substep-desc">{sub.description}</p>
-                      </div>
+                      </motion.div>
                     ))}
                   </motion.div>
                 )}
               </AnimatePresence>
-            </div>
+            </motion.div>
           );
         })}
       </div>
@@ -239,6 +270,7 @@ export default function ResourceHub() {
   const [toast, setToast] = useState<string | null>(null);
 
   const { bookmarks, toggleBookmark, isBookmarked, ready } = useResourceBookmarks();
+  const { recordBookmark } = useInteraction();
 
   useEffect(() => {
     const t = setTimeout(() => setLoading(false), 450);
@@ -255,9 +287,10 @@ export default function ResourceHub() {
       e.stopPropagation();
       const wasSaved = isBookmarked(id);
       toggleBookmark(id);
+      if (!wasSaved) recordBookmark();
       showToast(wasSaved ? "Removed from saved resources" : "Saved to your collection");
     },
-    [isBookmarked, toggleBookmark, showToast]
+    [isBookmarked, toggleBookmark, showToast, recordBookmark]
   );
 
   const filteredResources = useMemo(() => {

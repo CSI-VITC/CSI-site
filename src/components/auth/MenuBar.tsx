@@ -1,15 +1,40 @@
 "use client";
 
+import { Search } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
 import { AdminBadge } from "./AdminBadge";
 import "./Rbac.css";
 
-export function MenuBar() {
+interface MenuBarProps {
+  activeLabel?: string | null;
+  onOpenSpotlight?: () => void;
+}
+
+export function MenuBar({ activeLabel, onOpenSpotlight }: MenuBarProps) {
   const { profile, isAdmin, isGuest, signOut, openAuth } = useAuth();
 
   return (
     <div className="rbac-menu-bar" role="banner">
-      <span>CSI VITC</span>
+      <div style={{ display: "flex", alignItems: "center" }}>
+        <span>CSI VITC</span>
+        {onOpenSpotlight && (
+          <button
+            type="button"
+            className="csi-spotlight-trigger"
+            onClick={onOpenSpotlight}
+            aria-label="Open Spotlight Search (Command K)"
+          >
+            <Search size={13} aria-hidden />
+            <span>Search</span>
+            <kbd>⌘K</kbd>
+          </button>
+        )}
+        {activeLabel && (
+          <span className="rbac-menu-bar-active" aria-live="polite">
+            {activeLabel}
+          </span>
+        )}
+      </div>
       <div className="rbac-menu-bar-user">
         {isGuest ? (
           <>

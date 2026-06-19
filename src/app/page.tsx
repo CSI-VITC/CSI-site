@@ -24,6 +24,15 @@ import LoadingScreen from "@/components/LoadingScreen";
 import { CsiNovaAssistant } from "@/components/nova";
 import MinimizedWindowStrip from "@/components/MinimizedWindowStrip";
 import AchievementToast from "@/components/interactions/AchievementToast";
+import { DesktopCommandPalette } from "@/components/desktop/SpotlightSearch";
+import "@/components/desktop/SpotlightSearch.css";
+import { LiveActivityFeed } from "@/components/desktop/LiveActivityFeed";
+import { AmbientCursor } from "@/components/desktop/AmbientCursor";
+import { useActivityFeed } from "@/hooks/useActivityFeed";
+import { useAdminEvents } from "@/hooks/useAdminEvents";
+import { useAnnouncements } from "@/hooks/useAnnouncements";
+import { NovaControllerProvider } from "@/context/NovaControllerContext";
+import "@/components/desktop/DesktopOS.css";
 import { InteractionProvider, useInteraction } from "@/context/InteractionContext";
 import { AuthProvider, useAuth } from "@/context/AuthContext";
 import { AuthModal } from "@/components/auth/AuthModal";
@@ -45,8 +54,8 @@ function getWindowPosition(index: number) {
   const vh = typeof window !== "undefined" ? window.innerHeight : 800;
   const workspaceH = vh - MENU_BAR_INSET;
   return {
-    x: Math.max(40, (vw - WINDOW_WIDTH) / 2 + index * 34),
-    y: Math.max(8, (workspaceH - WINDOW_HEIGHT) / 2 - 48 + index * 34),
+    x: Math.max(40, (vw - WINDOW_WIDTH) / 2 + index * 72),
+    y: Math.max(8, (workspaceH - WINDOW_HEIGHT) / 2 - 56 + index * 56),
   };
 }
 
@@ -59,13 +68,27 @@ function DesktopContent() {
   const [windowPositions, setWindowPositions] = useState<Partial<Record<WindowId, { x: number; y: number }>>>({});
   const [isLaunchpadOpen, setIsLaunchpadOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [cmdPaletteOpen, setCmdPaletteOpen] = useState(false);
+  const [launchOrigins, setLaunchOrigins] = useState<Partial<Record<WindowId, { x: number; y: number }>>>({});
+  const [restoringWindows, setRestoringWindows] = useState<Set<WindowId>>(new Set());
   const {
     syncOpenWindows,
+    visitedApps,
     recordAppVisit,
+    recordCommandPalette,
     activeAchievement,
     dismissAchievement,
     registerHeroClick,
   } = useInteraction();
+  const { items: activityItems } = useActivityFeed();
+  const { events, ready: eventsReady } = useAdminEvents();
+  const { announcements } = useAnnouncements();
+  const isHomeDesktop = openWindows.length === 0;
+
+  const openSpotlight = useCallback(() => {
+    setCmdPaletteOpen(true);
+    recordCommandPalette();
+  }, [recordCommandPalette]);
 
   const dockItems = useMemo(() => getDockItems(isAuthenticated, role), [isAuthenticated, role]);
   const launchpadItems = useMemo(
@@ -83,7 +106,7 @@ function DesktopContent() {
   }, [openWindows, syncOpenWindows]);
 
   const openWindow = useCallback(
-    (id: WindowId) => {
+    (id: WindowId, origin?: { x: number; y: number }) => {
       setOpenWindows((prev) => {
         if (prev.includes(id)) return prev;
         const next = [...prev, id];
@@ -93,12 +116,23 @@ function DesktopContent() {
         }));
         return next;
       });
+      if (origin) {
+        setLaunchOrigins((prev) => ({ ...prev, [id]: origin }));
+      }
       setMinimizedWindows((prev) => prev.filter((w) => w !== id));
       setActiveWindow(id);
       recordAppVisit(id);
     },
     [recordAppVisit]
   );
+
+  const clearLaunchOrigin = useCallback((id: WindowId) => {
+    setLaunchOrigins((prev) => {
+      const next = { ...prev };
+      delete next[id];
+      return next;
+    });
+  }, []);
 
   const goHome = useCallback(() => {
     openWindow(isAuthenticated ? "dashboard" : "about");
@@ -129,6 +163,14 @@ function DesktopContent() {
   };
 
   const restoreWindow = (id: WindowId) => {
+    setRestoringWindows((prev) => new Set(prev).add(id));
+    setTimeout(() => {
+      setRestoringWindows((prev) => {
+        const next = new Set(prev);
+        next.delete(id);
+        return next;
+      });
+    }, 420);
     setMinimizedWindows((prev) => prev.filter((w) => w !== id));
     setActiveWindow(id);
   };
@@ -241,9 +283,14 @@ function DesktopContent() {
   };
 
   const getWindowTitle = (id: WindowId) => WINDOW_TITLES[id] ?? "Window";
+  const activeLabel = activeWindow
+    ? getWindowTitle(activeWindow)
+    : isHomeDesktop
+      ? "Desktop"
+      : null;
 
   const guardedNavigate = useCallback(
-    (id: string) => {
+    (id: string, origin?: { x: number; y: number }) => {
       if (id === "more") {
         toggleWindow(id);
         return;
@@ -251,20 +298,61 @@ function DesktopContent() {
       const winId = id as WindowId;
       const gate = getWindowGate(winId);
       if (gate !== "allowed" && !openWindows.includes(winId)) {
-        openWindow(winId);
+        openWindow(winId, origin);
         return;
       }
-      toggleWindow(id);
+      if (!openWindows.includes(winId)) {
+        openWindow(winId, origin);
+        return;
+      }
+      if (minimizedWindows.includes(winId)) {
+        restoreWindow(winId);
+        return;
+      }
+      if (activeWindow === winId) {
+        minimizeWindow(winId);
+      } else {
+        setActiveWindow(winId);
+      }
     },
-    [getWindowGate, openWindows, openWindow, toggleWindow]
+    [getWindowGate, openWindows, minimizedWindows, activeWindow, openWindow, toggleWindow]
   );
+
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (!(e.metaKey || e.ctrlKey) || e.key.toLowerCase() !== "k") return;
+      const target = e.target as HTMLElement;
+      if (target.tagName === "INPUT" || target.tagName === "TEXTAREA" || target.isContentEditable) return;
+      if (activeWindow === "event-admin") return;
+      e.preventDefault();
+      openSpotlight();
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [activeWindow, openSpotlight]);
 
   return (
     <main style={{ position: "relative", width: "100vw", height: "100vh", overflow: "hidden", background: "#050505" }}>
       {isLoading && <LoadingScreen onComplete={() => setIsLoading(false)} />}
 
-      <MenuBar />
+      <MenuBar activeLabel={activeLabel} onOpenSpotlight={openSpotlight} />
       <AuthModal onAuthenticated={handleAuthenticated} />
+      <AmbientCursor hidden={isHomeDesktop} />
+      {!isHomeDesktop && <LiveActivityFeed items={activityItems} />}
+      <DesktopCommandPalette
+        open={cmdPaletteOpen}
+        onClose={() => setCmdPaletteOpen(false)}
+        events={events}
+        announcements={announcements}
+        launchpadItems={launchpadItems}
+        visitedApps={visitedApps}
+        isAuthenticated={isAuthenticated}
+        role={role}
+        eventsReady={eventsReady}
+        onOpenWindow={openWindow}
+        onOpenLaunchpad={() => setIsLaunchpadOpen(true)}
+        onGoHome={goHome}
+      />
       <CursorEyes onHeroInteract={registerHeroClick} />
 
       <div
@@ -277,6 +365,18 @@ function DesktopContent() {
           overflow: "hidden",
         }}
       >
+        {!isHomeDesktop && activeWindow && (
+          <div
+            aria-hidden
+            style={{
+              position: "absolute",
+              inset: 0,
+              background: "rgba(0, 0, 0, 0.28)",
+              pointerEvents: "none",
+              zIndex: 25,
+            }}
+          />
+        )}
         <AnimatePresence>
           {openWindows.map((id, index) => (
             <DesktopWindow
@@ -285,6 +385,7 @@ function DesktopContent() {
               title={getWindowTitle(id)}
               isActive={activeWindow === id}
               isMinimized={minimizedWindows.includes(id)}
+              isBackground={activeWindow !== null && activeWindow !== id && !minimizedWindows.includes(id)}
               onFocus={() => {
                 if (minimizedWindows.includes(id)) {
                   restoreWindow(id);
@@ -298,6 +399,9 @@ function DesktopContent() {
               stackIndex={index}
               minimizedSlotIndex={minimizedWindows.includes(id) ? minimizedWindows.indexOf(id) : 0}
               position={windowPositions[id] ?? getWindowPosition(index)}
+              launchOrigin={launchOrigins[id] ?? null}
+              onLaunchComplete={() => clearLaunchOrigin(id)}
+              isRestoring={restoringWindows.has(id)}
             >
               {renderWindowContent(id)}
             </DesktopWindow>
@@ -314,7 +418,13 @@ function DesktopContent() {
         items={launchpadItems}
       />
 
-      <MacDock onOpen={guardedNavigate} openApps={openWindows} activeApp={activeWindow} items={dockItems} />
+      <MacDock
+        onOpen={guardedNavigate}
+        openApps={openWindows}
+        activeApp={activeWindow}
+        items={dockItems}
+        onOpenSpotlight={openSpotlight}
+      />
       <CsiNovaAssistant onNavigate={guardedNavigate} />
       <AchievementToast activeId={activeAchievement} onDismiss={dismissAchievement} />
     </main>
@@ -325,7 +435,9 @@ export default function Desktop() {
   return (
     <AuthProvider>
       <InteractionProvider>
-        <DesktopContent />
+        <NovaControllerProvider>
+          <DesktopContent />
+        </NovaControllerProvider>
       </InteractionProvider>
     </AuthProvider>
   );

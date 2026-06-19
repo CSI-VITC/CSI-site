@@ -9,6 +9,8 @@ export interface NovaSessionContext {
   isGuest?: boolean;
   isAuthenticated?: boolean;
   isAdmin?: boolean;
+  upcomingEventCount?: number;
+  resourceCategory?: string;
 }
 
 export function getTimeGreeting(hour: number): string {
@@ -31,6 +33,12 @@ export function buildWelcomeMessage(context?: NovaSessionContext): string {
     if (context.visitedApps.length >= 3) {
       lines.push("\nYou're getting the lay of the land — ask me anything about CSI!");
     }
+    if (context.upcomingEventCount && context.upcomingEventCount > 0) {
+      const n = context.upcomingEventCount;
+      lines.push(
+        `\n${n === 1 ? "One event" : `${n} events`} ${n === 1 ? "is" : "are"} coming up — browse Events anytime.`
+      );
+    }
     return lines.join("\n");
   }
 
@@ -49,6 +57,17 @@ export function buildWelcomeMessage(context?: NovaSessionContext): string {
     } else if (context.openWindows.length > 0) {
       lines.push("\nI can see you're browsing the desktop. How can I help?");
     }
+  }
+
+  if (context?.upcomingEventCount && context.upcomingEventCount > 0) {
+    const n = context.upcomingEventCount;
+    lines.push(
+      `\n${n === 1 ? "One event" : `${n} events`} ${n === 1 ? "is" : "are"} happening soon — open Events to register.`
+    );
+  }
+
+  if (context?.openWindows.includes("resources")) {
+    lines.push("\nLooks like you're exploring learning resources — bookmark anything useful or follow a roadmap!");
   }
 
   return lines.join("\n");
@@ -145,12 +164,18 @@ function getContextualPrefix(context?: NovaSessionContext): string | null {
   const label = WINDOW_LABELS[focused];
   const hints: Partial<Record<WindowId, string>> = {
     dashboard: "Your home base — quick links to events, resources, and admin tools if you're an administrator.",
-    events: "Browse and register for published CSI events here.",
+    events:
+      context.upcomingEventCount && context.upcomingEventCount >= 2
+        ? `${context.upcomingEventCount} workshops and events are on the calendar this week — register before seats fill up.`
+        : "Browse and register for published CSI events here.",
     gallery: "Since Gallery is open — ask about hackathons or workshop highlights anytime.",
     depts: "Exploring domains? Ask me about any team and their focus areas.",
     about: "You're in About Us — check Statistics for live counters.",
     projects: "Browsing projects? CampusOS and SentinelX are member favorites.",
-    resources: "You're in the Resource Hub — bookmark anything useful or follow a roadmap!",
+    resources:
+      context.resourceCategory === "ai-ml"
+        ? "Looks like you're exploring AI/ML resources — I can point you to roadmaps and curated picks."
+        : "You're in the Resource Hub — bookmark anything useful or follow a learning roadmap!",
     "event-admin": "Managing events? Nova insights appear in the top-right — drag cards between columns to update status.",
     "admin-console": "Administrative console open — elevated permissions active.",
   };

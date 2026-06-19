@@ -2,8 +2,16 @@
 
 import { useAuth } from "@/context/AuthContext";
 import { AdminBadge } from "@/components/auth/AdminBadge";
+import { useAdminEvents } from "@/hooks/useAdminEvents";
+import { useAnnouncements } from "@/hooks/useAnnouncements";
+import { useFeaturedEvent } from "@/hooks/useFeaturedEvent";
 import type { WindowId } from "@/components/nova/types";
+import { PlatformStatsBar } from "@/components/platform/PlatformStatsBar";
+import { FeaturedEventCard } from "@/components/platform/FeaturedEventCard";
+import { AnnouncementsPanel } from "@/components/platform/AnnouncementsPanel";
+import { ProjectSpotlight } from "@/components/platform/ProjectSpotlight";
 import "../auth/Rbac.css";
+import "../platform/Platform.css";
 
 interface DashboardProps {
   onNavigate: (id: WindowId) => void;
@@ -11,6 +19,9 @@ interface DashboardProps {
 
 export function Dashboard({ onNavigate }: DashboardProps) {
   const { profile, isAdmin } = useAuth();
+  const { events, ready: eventsReady } = useAdminEvents();
+  const { announcements, ready: annReady } = useAnnouncements();
+  const featured = useFeaturedEvent(events, eventsReady);
   const name = profile?.displayName?.split(" ")[0] ?? "Member";
 
   const userCards: { id: WindowId; title: string; desc: string }[] = [
@@ -42,8 +53,20 @@ export function Dashboard({ onNavigate }: DashboardProps) {
         </p>
       </header>
 
-      <section aria-label="Quick access">
-        <h2 style={{ fontSize: "0.78rem", color: "rgba(240,235,225,0.4)", marginBottom: 12, textTransform: "uppercase", letterSpacing: "0.06em" }}>
+      <section aria-label="Chapter snapshot" className="csi-dash-snapshot">
+        <h2 className="csi-section-eyebrow">Chapter Snapshot</h2>
+        <PlatformStatsBar />
+        <div className="csi-dash-snapshot-grid">
+          <FeaturedEventCard event={featured} loading={!eventsReady} onOpenEvents={onNavigate} />
+          <AnnouncementsPanel items={announcements} loading={!annReady} limit={2} />
+        </div>
+        <div style={{ marginTop: 20 }}>
+          <ProjectSpotlight onNavigate={onNavigate} />
+        </div>
+      </section>
+
+      <section aria-label="Quick access" style={{ marginTop: 8 }}>
+        <h2 className="csi-section-eyebrow">
           {isAdmin ? "Member & Admin" : "Member Features"}
         </h2>
         <div className="rbac-dash-grid">
@@ -63,8 +86,8 @@ export function Dashboard({ onNavigate }: DashboardProps) {
       </section>
 
       {isAdmin && (
-        <section aria-label="Administrative shortcuts" style={{ marginTop: 28 }}>
-          <h2 style={{ fontSize: "0.78rem", color: "rgba(255,200,100,0.6)", marginBottom: 12, textTransform: "uppercase", letterSpacing: "0.06em" }}>
+        <section aria-label="Administrative shortcuts" style={{ marginTop: 40 }}>
+          <h2 className="csi-section-eyebrow" style={{ color: "rgba(255,200,100,0.5)" }}>
             Administrative
           </h2>
           <div className="rbac-dash-grid">

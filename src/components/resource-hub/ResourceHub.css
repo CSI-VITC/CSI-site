@@ -13,9 +13,9 @@
 
 .rh-topbar {
   flex-shrink: 0;
-  padding: 16px 20px 12px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-  background: rgba(255, 255, 255, 0.02);
+  padding: 20px 28px 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  background: rgba(255, 255, 255, 0.015);
 }
 
 .rh-topbar-header {
@@ -158,13 +158,13 @@
 .rh-main {
   flex: 1;
   overflow-y: auto;
-  padding: 20px 24px 32px;
+  padding: 28px 32px 40px;
 }
 
 .rh-tabs {
   display: flex;
-  gap: 6px;
-  margin-bottom: 20px;
+  gap: 8px;
+  margin-bottom: 28px;
 }
 
 .rh-tab {
@@ -202,23 +202,23 @@
 .rh-featured-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 14px;
-  margin-bottom: 28px;
+  gap: 18px;
+  margin-bottom: 32px;
 }
 
 .rh-featured-block {
-  margin-bottom: 28px;
+  margin-bottom: 36px;
 }
 
 .rh-cards-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 14px;
+  gap: 18px;
 }
 
 .rh-card {
   position: relative;
-  padding: 18px;
+  padding: 20px;
   border-radius: 14px;
   border: 1px solid rgba(255, 255, 255, 0.08);
   background: rgba(255, 255, 255, 0.03);

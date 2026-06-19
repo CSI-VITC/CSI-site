@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import NovaOrb from "./NovaOrb";
 import NovaChatPanel from "./NovaChatPanel";
@@ -12,7 +12,9 @@ import {
 } from "./novaKnowledge";
 import type { CsiNovaAssistantProps, NovaMessage, QuickActionId } from "./types";
 import { useInteraction } from "@/context/InteractionContext";
+import { useNovaController } from "@/context/NovaControllerContext";
 import { useAuth } from "@/context/AuthContext";
+import { useAdminEvents } from "@/hooks/useAdminEvents";
 import type { AchievementId } from "@/data/interactionContent";
 import "./NovaAssistant.css";
 
@@ -24,7 +26,13 @@ const TYPING_DELAY_MS = 900;
 
 export default function CsiNovaAssistant({ onNavigate }: CsiNovaAssistantProps) {
   const { getNovaContext, recordNovaOpen, unlockAchievement } = useInteraction();
+  const { registerNovaController } = useNovaController();
   const { isGuest, isAuthenticated, isAdmin } = useAuth();
+  const { events } = useAdminEvents();
+  const upcomingEventCount = useMemo(
+    () => events.filter((e) => e.status === "published" || e.status === "live").length,
+    [events]
+  );
   const [isOpen, setIsOpen] = useState(false);
   const [isMinimized, setIsMinimized] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
@@ -33,14 +41,22 @@ export default function CsiNovaAssistant({ onNavigate }: CsiNovaAssistantProps) 
   const [inputValue, setInputValue] = useState("");
   const [hasWelcomed, setHasWelcomed] = useState(false);
 
+  const enrichContext = useCallback(() => {
+    const base = getNovaContext();
+    const open = base.openWindows;
+    return {
+      ...base,
+      isGuest,
+      isAuthenticated,
+      isAdmin,
+      upcomingEventCount,
+      resourceCategory: open.includes("resources") ? "ai-ml" : undefined,
+    };
+  }, [getNovaContext, isGuest, isAuthenticated, isAdmin, upcomingEventCount]);
+
   const respond = useCallback(
     (userContent: string, actionId?: QuickActionId) => {
-      const context = {
-        ...getNovaContext(),
-        isGuest,
-        isAuthenticated,
-        isAdmin,
-      };
+      const context = enrichContext();
       const userMsg = createMessage("user", userContent);
       setMessages((prev) => [...prev, userMsg]);
       setIsTyping(true);
@@ -61,24 +77,43 @@ export default function CsiNovaAssistant({ onNavigate }: CsiNovaAssistantProps) 
         }
       }, TYPING_DELAY_MS);
     },
-    [getNovaContext, onNavigate, unlockAchievement, isGuest, isAuthenticated, isAdmin]
+    [enrichContext, onNavigate, unlockAchievement]
   );
 
-  const openNova = () => {
+  const openNova = useCallback(() => {
     setIsOpen(true);
     setIsMinimized(false);
     recordNovaOpen();
 
     if (!hasWelcomed) {
       setHasWelcomed(true);
-      setMessages([createMessage("assistant", buildWelcomeMessage({
-        ...getNovaContext(),
-        isGuest,
-        isAuthenticated,
-        isAdmin,
-      }))]);
+      setMessages([createMessage("assistant", buildWelcomeMessage(enrichContext()))]);
     }
-  };
+  }, [enrichContext, hasWelcomed, recordNovaOpen]);
+
+  const openWithQuery = useCallback(
+    (query: string) => {
+      const trimmed = query.trim();
+      if (!trimmed) {
+        openNova();
+        return;
+      }
+      setIsOpen(true);
+      setIsMinimized(false);
+      recordNovaOpen();
+      if (!hasWelcomed) {
+        setHasWelcomed(true);
+        setMessages([createMessage("assistant", buildWelcomeMessage(enrichContext()))]);
+      }
+      respond(trimmed);
+    },
+    [enrichContext, hasWelcomed, openNova, recordNovaOpen, respond]
+  );
+
+  useEffect(() => {
+    registerNovaController({ openWithQuery });
+    return () => registerNovaController(null);
+  }, [registerNovaController, openWithQuery]);
 
   const handleToggle = () => {
     if (isMinimized) {
