@@ -1,12 +1,13 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import DesktopWindow from "@/components/DesktopWindow";
 import { AboutUs, Departments, Events, Projects, Team, Contact, CsiOfficial, CSITerminal } from "@/components/sections";
 import MacDock from "@/components/MacDock";
 import CursorEyes from "@/components/CursorEyes";
 import Launchpad from "@/components/Launchpad";
 import LoadingScreen from "@/components/LoadingScreen";
+import Spotlight from "@/components/Spotlight";
 
 type WindowId = "about" | "depts" | "events" | "projects" | "team" | "contact" | "csi" | "terminal";
 
@@ -15,6 +16,19 @@ export default function Desktop() {
   const [activeWindow, setActiveWindow] = useState<WindowId | null>(null);
   const [isLaunchpadOpen, setIsLaunchpadOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [isSpotlightOpen, setIsSpotlightOpen] = useState(false);
+
+  // Ctrl+K or Cmd+K opens Spotlight
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.ctrlKey || e.metaKey) && e.key === "k") {
+        e.preventDefault();
+        setIsSpotlightOpen(prev => !prev);
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, []);
 
   const toggleWindow = (id: string) => {
     if (id === "more") {
@@ -67,6 +81,7 @@ export default function Desktop() {
       case "contact": return "Contact";
       case "csi": return "CSI Official Site";
       case "terminal": return "CSI Terminal";
+      
       default: return "Window";
     }
   };
@@ -122,6 +137,9 @@ export default function Desktop() {
         onOpenApp={toggleWindow} 
         items={launchpadItems} 
       />
+
+      {/* Spotlight */}
+      <Spotlight isOpen={isSpotlightOpen} onClose={() => setIsSpotlightOpen(false)} onOpen={toggleWindow} />
 
       {/* Mac Dock Layer */}
       <MacDock onOpen={toggleWindow} />
