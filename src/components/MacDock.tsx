@@ -111,6 +111,7 @@ export default function MacDock({ onOpen }: { onOpen: (id: string) => void }) {
     { id: "events", label: "Events", iconSrc: "/icons/Calendar.png" },
     { id: "projects", label: "Projects", iconSrc: "/icons/Terminal.png" },
     { id: "more", label: "Launchpad", iconSrc: "/icons/launchpad.png" },
+    { id: "terminal", label: "CSI Terminal", iconSrc: "/icons/Terminal.png", bg: "#000000" },
   ];
 
   return (

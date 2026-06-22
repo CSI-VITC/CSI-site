@@ -5,3 +5,4 @@ export { Projects } from "./Projects";
 export { Team } from "./Team";
 export { Contact } from "./Contact";
 export { CsiOfficial } from "./CsiOfficial";
+export { CSITerminal } from "./CSITerminal";
