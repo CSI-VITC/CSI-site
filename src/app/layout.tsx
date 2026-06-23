@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Anton, Inter, Caveat } from "next/font/google";
 import "./globals.css";
+import MobileFallback from "@/components/MobileFallback";
 
 const anton = Anton({
   weight: "400",
@@ -30,7 +31,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={`${anton.variable} ${inter.variable} ${caveat.variable}`}>
-      <body style={{ margin: 0, overflow: "hidden", backgroundColor: "#0a0a0a" }}>{children}</body>
+      <body style={{ margin: 0, overflow: "hidden", backgroundColor: "#0a0a0a" }}>
+        <MobileFallback />
+        {children}
+      </body>
     </html>
   );
 }
