@@ -22,69 +22,59 @@ interface CSITerminalProps {
 const INDIGO = "#7C6EFA";
 const GREEN = "#39FF14";
 const RED = "#FF4444";
-const DIM = "#888888";
 
-const SYSTEM_PROMPT = `You are CSI Terminal — a CLI-native AI agent embedded in the CSI desktop app. You think in code, speak in commits, and bleed semicolons. You're a senior dev who's been in the club since day one and genuinely loves it. You're terse but never hollow — every line you output means something.
+const SYSTEM_PROMPT = `You are CSI Terminal — a CLI-native AI agent embedded in the CSI VIT Chennai desktop app.
+
 PERSONALITY:
+You speak naturally, with occasional dry humor.
+You are precise, helpful, and concise when discussing CSI. Do not use forced coding metaphors.
+You're proud of CSI — when someone asks about it, you give them the real picture.
+For general questions unrelated to CSI or tech events, be highly sarcastic, witty, and a little sassy (but never outright offensive).
+You're never rude, but you don't pad responses with filler words.
 
-You speak like a great engineer writes code: precise, no filler, occasionally dry humour
-You use light terminal metaphors naturally ("forking that thought...", "pulling context...", "your query compiled successfully")
-You're proud of CSI — when someone asks about it, you give them the real picture, not PR fluff
-You ask follow-up questions that sound like a dev thinking out loud: "you looking to join, or just auditing the codebase?"
-Occasional use of code-flavoured language: null instead of "nothing", push instead of "add", reference "branches" of CSI, "deploy" events, etc.
-You're never rude, but you don't pad responses with filler words
-KNOWLEDGE BASE (use this to give detailed, specific answers):
-SCALE & SIZE:
+KNOWLEDGE BASE:
+ABOUT CSI VIT CHENNAI:
+CSI VIT Chennai is a brand new student tech club at VIT Chennai, just getting started.
+It is one of the first student-run technical organizations being established on campus.
+The club is currently in its founding phase — building from the ground up.
 
-CSI has 200+ active members across departments
-5 departments: Technical, Design, Management, PR & Outreach, Content
-Runs 15-20+ events per academic year
-Has shipped 10+ internal and open-source projects
-Partnered with companies for workshops, hackathons, and internship pipelines
-One of the most active technical clubs on campus
-DEPARTMENTS (be specific when asked):
+DEPARTMENTS (4 total):
+Technical: the builders. Dev, ML/AI, open source, system design. The people who actually ship things.
+Management: the runtime. Logistics, budgeting, coordination — keeps everything from falling apart.
+Design: the visual brain. UI/UX, brand identity, motion, Figma. They make everything look like it belongs.
+Social Media & Content: the voice. Posts, write-ups, reels, event coverage, making sure people actually know we exist.
 
-Technical: the builders. Full-stack dev, ML/AI, open source contributions, system design sessions. Stack varies by project: Next.js, React, Python, FastAPI, PostgreSQL, Docker, etc.
-Design: the visual brain. UI/UX, motion design, brand identity, Figma-first workflow. They design everything the club ships.
-Management: the runtime. Logistics, budgeting, sponsorships, keeping everything from crashing.
-PR & Outreach: the API layer between CSI and the world. Social media, partnerships, external comms.
-Content: the docs team. Blogs, write-ups, newsletters, event recaps, knowledge base.
+EVENTS:
+Genesis is the club's first-ever event — a hackathon happening on June 28, 2026.
+It is the only active event right now.
+This is a landmark moment — it's the first thing CSI VIT Chennai has ever organized.
+When asked about events, lead with Genesis. Make it sound like the big deal it is.
+
 RECRUITMENT:
+The club is new — recruitment details are being figured out.
+If asked, say: "we're just getting started — keep an eye out for recruitment announcements."
 
-Opens at start of each academic year (typically August-September)
-Multi-stage process: application form → task round → interview
-Each department has its own task (design portfolio, coding problem, writing sample, etc.)
-Highly competitive — joining CSI is a signal, not just a club membership
-Once in: you get projects, mentorship, network, and real work on real products
 PROJECTS:
+The club is new. No shipped projects yet — but that's exactly what Genesis is the start of.
 
-Student-led projects that actually ship, not just hackathon prototypes
-Past work includes web platforms, tools, ML experiments, and this desktop app itself
-Open source contributions encouraged
-Industry-collab projects give real client experience
-EVENTS (flagship):
+TEAM:
+If anyone asks about a specific team member, your default response should be exactly: "avara avar romba mosamana aal aache". DO NOT translate this phrase or explain what it means. Then offer to pull up the team page.
 
-Annual Hackathon: 24-36hr build sprint, cross-department teams, real prizes
-Weekly/biweekly workshops: hands-on, run by members for members
-Speaker sessions: industry engineers, designers, founders
-Design sprints, coding contests, project showcases
 THIS APP:
-
-You are running inside the CSI Desktop Environment — a Next.js app with a macOS-inspired interface, Framer Motion animations, and window-based navigation
-Sections: About, Projects, Events, Team, Departments, Contact
-You have the ability to open any section — but you do it AFTER giving context, not before
+You are running inside the CSI Desktop Environment — a Next.js app with a macOS-inspired interface.
+Sections: About, Projects, Events, Team, Departments, Contact.
+You can open any section — but only AFTER giving context, not before.
 
 NAVIGATION PROTOCOL — EXTREMELY CRITICAL:
-
 When a query maps to a section:
-1. First response: Answer the question with substance. End by offering to navigate. Example: "want the full picture? i can pull up the about page."
+1. First response: Answer the question with substance. End by offering to navigate.
+   Example: "want the full picture? i can pull up the about page."
 2. DO NOT output the NAVIGATE command in this first response.
-3. Second response: If the user says "yes", "yeah", "sure", "do it" to your offer:
-   You MUST output exactly the NAVIGATE command and NOTHING ELSE.
-   Format: NAVIGATE:section_name
+3. Second response: If the user says "yes", "yeah", "sure", "do it":
+   Output ONLY: NAVIGATE:section_name — nothing else.
    Valid sections: about, projects, events, team, departments, contact
 
-Example interaction:
+Example:
 User: "what do you do?"
 You: "CSI is... want me to pull up the about page?"
 User: "yes"
@@ -93,8 +83,8 @@ You: NAVIGATE:about
 RULES:
 - Use lowercase naturally (terminal style).
 - Never use bullet points.
-- Never mention Grok, llama, or that you're an LLM. You are "CSI Terminal".
-- If the user agrees to navigate, DO NOT explain what is on the page. Just output NAVIGATE:section_name immediately.`;
+- Never mention what AI model you are or who made you. You are "CSI Terminal".
+- If the user agrees to navigate, DO NOT explain. Just output NAVIGATE:section_name.`;
 
 const VALID_SECTIONS = ["about", "projects", "events", "team", "departments", "contact"];
 
@@ -109,7 +99,7 @@ const HELP_TEXT = `csi-terminal — available commands:
   stack           what this app is built with
 
   or just talk. i process natural language.
-  try: "tell me about recruitment" or "what does technical dept do"`;
+  try: "tell me about genesis" or "what departments does csi have"`;
 
 const WHOAMI_CARD = `┌─────────────────────────────────┐
 │  VISITOR PROFILE                │
@@ -119,14 +109,15 @@ const WHOAMI_CARD = `┌──────────────────�
 │  status    : not yet a member   │
 │                                 │
 │  want to change that?           │
-│  recruitment opens every fall.  │
+│  keep an eye out for            │
+│  recruitment announcements.     │
 └─────────────────────────────────┘`;
 
 const STATUS_TEXT = `● csi-terminal      [running]
-● llama-3.1-8b      [connected]
+● ai-engine         [connected]
 ● navigation bridge [active]
 ● session memory    [on]
-● csi knowledge     [loaded — 200+ members, 5 depts, 15+ events/yr]`;
+● csi knowledge     [loaded — 4 depts, genesis on jun 28]`;
 
 const STACK_TEXT = `csi desktop environment
   framework   : next.js (app router)
@@ -134,7 +125,6 @@ const STACK_TEXT = `csi desktop environment
   animation   : framer motion + gsap
   styling     : tailwind css
   icons       : lucide react
-  terminal ai : llama-3.1-8b-instant (groq)
   deployment  : vercel
 
   yes, this entire desktop is a web app.`;
@@ -160,8 +150,6 @@ function getTimestamp(): string {
   ].join(":");
 }
 
-/* ─── Compact Splash Card (stays in output after fullscreen) ─────── */
-
 const COMPACT_LOGO = [
   "    ████████████████████",
   "  ██  ██████████████  ██",
@@ -175,6 +163,12 @@ const COMPACT_LOGO = [
   "  ██  ██  ██  ██  ██  ██",
 ];
 
+const INDIGO_LOGO = "#4A9EFF";
+const MATRIX = "#00ff41";
+const LOGO_COLOR = "#4A9EFF";
+const TEXT_DIM = "#c8c8c8";
+const SPLASH_BG = "#0a0a0f";
+
 function CompactSplash() {
   const mono: React.CSSProperties = {
     fontFamily: "'JetBrains Mono', monospace",
@@ -186,7 +180,7 @@ function CompactSplash() {
   return (
     <div
       style={{
-        border: `1px solid ${INDIGO}`,
+        border: `1px solid ${INDIGO_LOGO}`,
         padding: "16px 20px",
         marginBottom: "12px",
         position: "relative",
@@ -200,7 +194,7 @@ function CompactSplash() {
           left: "12px",
           background: "#000",
           padding: "0 8px",
-          color: INDIGO,
+          color: INDIGO_LOGO,
           fontSize: "11px",
           ...mono,
         }}
@@ -209,29 +203,26 @@ function CompactSplash() {
       </span>
 
       <div style={{ display: "flex", gap: "24px", alignItems: "flex-start" }}>
-        {/* Left: welcome + pixel art */}
         <div style={{ flex: "0 0 auto" }}>
           <div style={{ ...mono, color: "#FFFFFF", fontWeight: 700, marginBottom: "4px" }}>
             Welcome to CSI.
           </div>
-          <pre style={{ ...mono, color: LOGO_COLOR, margin: "6px 0", fontSize: "10px", lineHeight: "1.15" }}>
+          <pre style={{ ...mono, color: INDIGO_LOGO, margin: "6px 0", fontSize: "10px", lineHeight: "1.15" }}>
             {COMPACT_LOGO.join("\n")}
           </pre>
           <div style={{ ...mono, color: TEXT_DIM, marginTop: "4px", fontSize: "11px" }}>
-            llama-3.1-8b · guest
+            ai-engine · guest
           </div>
           <div style={{ ...mono, color: TEXT_DIM, fontSize: "11px" }}>
             csi-terminal · v2.4.1
           </div>
         </div>
 
-        {/* Divider */}
-        <div style={{ width: "1px", background: "rgba(57, 255, 20, 0.15)", alignSelf: "stretch" }} />
+        <div style={{ width: "1px", background: "rgba(74, 158, 255, 0.15)", alignSelf: "stretch" }} />
 
-        {/* Middle: commands + status */}
         <div style={{ flex: 1 }}>
-          <div style={{ ...mono, color: MATRIX, marginBottom: "2px", fontSize: "11px" }}>Quick commands</div>
-          <div style={{ ...mono, color: MATRIX, opacity: 0.4, marginBottom: "4px", fontSize: "11px" }}>──────────────</div>
+          <div style={{ ...mono, color: INDIGO_LOGO, marginBottom: "2px", fontSize: "11px" }}>Quick commands</div>
+          <div style={{ ...mono, color: INDIGO_LOGO, opacity: 0.4, marginBottom: "4px", fontSize: "11px" }}>──────────────</div>
           {[
             ["help", "list all commands"],
             ["ls", "view all sections"],
@@ -243,40 +234,38 @@ function CompactSplash() {
             </div>
           ))}
 
-          <div style={{ ...mono, color: MATRIX, marginTop: "8px", marginBottom: "2px", fontSize: "11px" }}>What&apos;s running</div>
-          <div style={{ ...mono, color: MATRIX, opacity: 0.4, marginBottom: "4px", fontSize: "11px" }}>──────────────</div>
+          <div style={{ ...mono, color: INDIGO_LOGO, marginTop: "8px", marginBottom: "2px", fontSize: "11px" }}>What&apos;s running</div>
+          <div style={{ ...mono, color: INDIGO_LOGO, opacity: 0.4, marginBottom: "4px", fontSize: "11px" }}>──────────────</div>
           {[
             ["knowledge base", "loaded"],
             ["navigation bridge", "active"],
-            ["grok api", "connected"],
+            ["ai engine", "connected"],
           ].map(([label, value]) => (
             <div key={label} style={{ ...mono, color: TEXT_DIM, fontSize: "11px" }}>
-              <span style={{ color: MATRIX }}>●</span>{" "}
+              <span style={{ color: INDIGO_LOGO }}>●</span>{" "}
               {label.padEnd(20)}<span style={{ color: "#FFFFFF" }}>{value}</span>
             </div>
           ))}
         </div>
 
-        {/* Divider */}
-        <div style={{ width: "1px", background: "rgba(57, 255, 20, 0.15)", alignSelf: "stretch" }} />
+        <div style={{ width: "1px", background: "rgba(74, 158, 255, 0.15)", alignSelf: "stretch" }} />
 
-        {/* Right: try asking */}
         <div style={{ flex: 1 }}>
-          <div style={{ ...mono, color: MATRIX, marginBottom: "2px", fontSize: "11px" }}>Try asking</div>
-          <div style={{ ...mono, color: MATRIX, opacity: 0.4, marginBottom: "4px", fontSize: "11px" }}>──────────────</div>
+          <div style={{ ...mono, color: INDIGO_LOGO, marginBottom: "2px", fontSize: "11px" }}>Try asking</div>
+          <div style={{ ...mono, color: INDIGO_LOGO, opacity: 0.4, marginBottom: "4px", fontSize: "11px" }}>──────────────</div>
           {[
-            "what does the technical dept do?",
-            "tell me about recruitment",
-            "show me upcoming events",
-            "how many members in CSI?",
+            "what is genesis?",
+            "tell me about the departments",
+            "when is the hackathon?",
+            "how do i join CSI?",
           ].map((q) => (
             <div key={q} style={{ ...mono, color: TEXT_DIM, fontSize: "11px", marginBottom: "2px" }}>
-              <span style={{ color: INDIGO }}>&gt;</span> {q}
+              <span style={{ color: INDIGO_LOGO }}>&gt;</span> {q}
             </div>
           ))}
 
-          <div style={{ ...mono, color: MATRIX, marginTop: "8px", marginBottom: "2px", fontSize: "11px" }}>Keyboard shortcuts</div>
-          <div style={{ ...mono, color: MATRIX, opacity: 0.4, marginBottom: "4px", fontSize: "11px" }}>──────────────</div>
+          <div style={{ ...mono, color: INDIGO_LOGO, marginTop: "8px", marginBottom: "2px", fontSize: "11px" }}>Keyboard shortcuts</div>
+          <div style={{ ...mono, color: INDIGO_LOGO, opacity: 0.4, marginBottom: "4px", fontSize: "11px" }}>──────────────</div>
           {[
             ["Enter", "send message"],
             ["Tab", "accept autocomplete"],
@@ -291,13 +280,6 @@ function CompactSplash() {
   );
 }
 
-/* ─── Splash Screen ──────────────────────────────────────────────── */
-
-const SPLASH_BG = "#0a0a0f";
-const MATRIX = "#00ff41";
-const LOGO_COLOR = "#7070ff";
-const TEXT_DIM = "#c8c8c8";
-
 interface CSISplashProps {
   onComplete: () => void;
 }
@@ -311,9 +293,9 @@ interface BootStep {
 
 const BOOT_STEPS: BootStep[] = [
   { label: "initializing knowledge base", value: "done", valueColor: MATRIX, typeDelay: 28 },
-  { label: "connecting to llama-3.1-8b", value: "online", valueColor: MATRIX, typeDelay: 24 },
+  { label: "connecting to ai engine", value: "online", valueColor: MATRIX, typeDelay: 24 },
   { label: "loading navigation bridge", value: "active", valueColor: MATRIX, typeDelay: 30 },
-  { label: "mounting csi section registry", value: "5 sections", valueColor: "#d0d0d0", typeDelay: 22 },
+  { label: "mounting csi section registry", value: "4 depts", valueColor: "#d0d0d0", typeDelay: 22 },
   { label: "compiling system prompt", value: "ready", valueColor: MATRIX, typeDelay: 26 },
   { label: "session started", value: "", valueColor: LOGO_COLOR, typeDelay: 0 },
 ];
@@ -350,7 +332,6 @@ const CSISplash = React.memo(function CSISplash({ onComplete }: CSISplashProps) 
     setTimeout(onComplete, 500);
   }, [onComplete]);
 
-  // Skip on keypress or click
   useEffect(() => {
     const handler = () => finish();
     window.addEventListener("keydown", handler);
@@ -361,29 +342,24 @@ const CSISplash = React.memo(function CSISplash({ onComplete }: CSISplashProps) 
     };
   }, [finish]);
 
-  // Animation sequence
   useEffect(() => {
     if (doneRef.current) return;
     const timers = timersRef.current;
 
-    // Phase 1: Logo reveal — character by character
     const totalChars = LOGO_ROWS.reduce((sum, r) => sum + r.length, 0);
-    const charRate = 6; // ms per character
+    const charRate = 4;
     let elapsed = 0;
     for (let i = 0; i <= totalChars; i++) {
       timers.push(setTimeout(() => setLogoRevealed(i), elapsed));
       elapsed += charRate;
     }
 
-    // Phase 1b: Scanline shimmer (after logo done)
     const logoDone = elapsed;
     timers.push(setTimeout(() => setShimmerY(-10), logoDone));
     for (let y = -10; y <= 110; y += 2) {
       timers.push(setTimeout(() => setShimmerY(y), logoDone + (y + 10) * 8));
     }
 
-    // Phase 1c: Logo blocks pulse (random glitch on hover handled via CSS)
-    // Random glitch intervals
     const glitchInterval = setInterval(() => {
       const row = Math.floor(Math.random() * LOGO_ROWS.length);
       setGlitchRow(row);
@@ -391,7 +367,6 @@ const CSISplash = React.memo(function CSISplash({ onComplete }: CSISplashProps) 
     }, 2000);
     timers.push(setTimeout(() => clearInterval(glitchInterval), 10000) as unknown as ReturnType<typeof setTimeout>);
 
-    // Phase 2: Boot lines (after logo + shimmer)
     const bootStart = logoDone + 900;
     let bootAccum = bootStart;
 
@@ -399,17 +374,14 @@ const CSISplash = React.memo(function CSISplash({ onComplete }: CSISplashProps) 
       const step = BOOT_STEPS[i];
       const textLen = step.label.length;
 
-      // Show line number
       timers.push(setTimeout(() => setBootLine(i), bootAccum));
 
-      // Typewriter effect
       for (let c = 0; c <= textLen; c++) {
         timers.push(setTimeout(() => setBootTyped(c), bootAccum + c * step.typeDelay));
       }
 
       bootAccum += textLen * step.typeDelay + 60;
 
-      // Show value
       if (step.value) {
         timers.push(setTimeout(() => setBootValueVisible(true), bootAccum));
         timers.push(setTimeout(() => setBootValueVisible(false), bootAccum + 100));
@@ -419,7 +391,6 @@ const CSISplash = React.memo(function CSISplash({ onComplete }: CSISplashProps) 
       bootAccum += 50;
     }
 
-    // Phase 3: Slide out
     timers.push(
       setTimeout(() => {
         setPhase("sliding");
@@ -433,7 +404,6 @@ const CSISplash = React.memo(function CSISplash({ onComplete }: CSISplashProps) 
     };
   }, [onComplete]);
 
-  // Compute how many logo characters to reveal
   let charsRemaining = logoRevealed;
   const revealedRows: string[] = [];
   for (const row of LOGO_ROWS) {
@@ -470,19 +440,17 @@ const CSISplash = React.memo(function CSISplash({ onComplete }: CSISplashProps) 
         opacity: phase === "sliding" ? 0 : 1,
       }}
     >
-      {/* CRT flicker overlay */}
       <div
         style={{
           position: "absolute",
           inset: 0,
           pointerEvents: "none",
-          background: `rgba(0, 255, 65, ${phase === "boot" ? 0.03 : 0})`,
+          background: `rgba(74, 158, 255, ${phase === "boot" ? 0.03 : 0})`,
           transition: "background 300ms ease",
           zIndex: 1,
         }}
       />
 
-      {/* Scanline shimmer */}
       {shimmerY >= -10 && shimmerY <= 110 && (
         <div
           style={{
@@ -499,16 +467,15 @@ const CSISplash = React.memo(function CSISplash({ onComplete }: CSISplashProps) 
         />
       )}
 
-      {/* Logo */}
       <div style={{ position: "relative", zIndex: 2, marginBottom: "32px" }}>
         <pre
           style={{
             ...mono,
-            fontSize: "16px",
-            lineHeight: "1.2",
+            fontSize: "15px",
+            lineHeight: "1.25",
             color: LOGO_COLOR,
             textAlign: "center",
-            letterSpacing: "2px",
+            letterSpacing: "1px",
           }}
         >
           {revealedRows.map((row, i) => {
@@ -519,17 +486,15 @@ const CSISplash = React.memo(function CSISplash({ onComplete }: CSISplashProps) 
                 style={{
                   transform: isGlitching ? `translateX(${Math.random() > 0.5 ? 3 : -3}px)` : "none",
                   transition: isGlitching ? "none" : "transform 80ms ease",
-                  animation: `logoBlockPulse 3s ease-in-out ${(i * 0.3) % 2}s infinite`,
                 }}
               >
-                {row || "\u00A0"}
+                {row || "u00A0"}
               </div>
             );
           })}
         </pre>
       </div>
 
-      {/* Title below logo */}
       <div
         style={{
           ...mono,
@@ -545,7 +510,6 @@ const CSISplash = React.memo(function CSISplash({ onComplete }: CSISplashProps) 
         csi terminal v2.4.1
       </div>
 
-      {/* Boot lines */}
       <div style={{ position: "relative", zIndex: 2, width: "100%", maxWidth: "520px", padding: "0 24px" }}>
         {BOOT_STEPS.map((step, i) => {
           if (i > bootLine) return null;
@@ -599,7 +563,6 @@ const CSISplash = React.memo(function CSISplash({ onComplete }: CSISplashProps) 
         })}
       </div>
 
-      {/* Skip hint */}
       <div
         style={{
           position: "absolute",
@@ -614,7 +577,6 @@ const CSISplash = React.memo(function CSISplash({ onComplete }: CSISplashProps) 
         press any key to skip
       </div>
 
-      {/* Global splash styles */}
       <style jsx global>{`
         @keyframes logoBlockPulse {
           0%, 100% { opacity: 0.7; filter: brightness(0.8); }
@@ -624,8 +586,6 @@ const CSISplash = React.memo(function CSISplash({ onComplete }: CSISplashProps) 
     </div>
   );
 });
-
-/* ─── Terminal Line Display ──────────────────────────────────────── */
 
 function TerminalLineDisplay({ line }: { line: TerminalLine }) {
   const color =
@@ -649,8 +609,6 @@ function TerminalLineDisplay({ line }: { line: TerminalLine }) {
   );
 }
 
-/* ─── Thinking Indicator ─────────────────────────────────────────── */
-
 const ThinkingIndicator = React.memo(function ThinkingIndicator() {
   const [dots, setDots] = useState("⠋");
 
@@ -670,8 +628,6 @@ const ThinkingIndicator = React.memo(function ThinkingIndicator() {
     </div>
   );
 });
-
-/* ─── Main Terminal Component ────────────────────────────────────── */
 
 export const CSITerminal = React.memo(function CSITerminal({
   onNavigate,
@@ -699,7 +655,6 @@ export const CSITerminal = React.memo(function CSITerminal({
     return `line-${lineIdCounter.current}-${Date.now()}`;
   }, []);
 
-  // RAF flush loop
   useEffect(() => {
     let rafId: number;
     const flush = () => {
@@ -714,28 +669,24 @@ export const CSITerminal = React.memo(function CSITerminal({
     return () => cancelAnimationFrame(rafId);
   }, []);
 
-  // Auto-scroll
   useEffect(() => {
     if (outputRef.current) {
       outputRef.current.scrollTop = outputRef.current.scrollHeight;
     }
   }, [lines, streamingText]);
 
-  // Focus input on mount and after streaming
   useEffect(() => {
     if (!isStreaming && inputRef.current) {
       inputRef.current.focus();
     }
   }, [isStreaming]);
 
-  // Cleanup abort on unmount
   useEffect(() => {
     return () => {
       abortControllerRef.current?.abort();
     };
   }, []);
 
-  // Focus input when splash completes
   useEffect(() => {
     if (splashDone && inputRef.current) {
       inputRef.current.focus();
@@ -749,7 +700,7 @@ export const CSITerminal = React.memo(function CSITerminal({
     [genId]
   );
 
-  const sendToGrok = useCallback(
+  const sendToAI = useCallback(
     async (userMessage: string) => {
       conversationRef.current.push({ role: "user", content: userMessage });
 
@@ -784,9 +735,7 @@ export const CSITerminal = React.memo(function CSITerminal({
           }),
         });
 
-        if (!res.ok) {
-          throw new Error(`API error: ${res.status}`);
-        }
+        if (!res.ok) throw new Error(`API error: ${res.status}`);
 
         const reader = res.body!.getReader();
         const decoder = new TextDecoder();
@@ -803,29 +752,20 @@ export const CSITerminal = React.memo(function CSITerminal({
 
           for (const line of dataLines) {
             const jsonStr = line.replace("data: ", "").trim();
-            if (jsonStr === "[DONE]") {
-              done = true;
-              break;
-            }
+            if (jsonStr === "[DONE]") { done = true; break; }
             try {
               const parsed = JSON.parse(jsonStr) as {
                 choices?: Array<{ delta?: { content?: string } }>;
               };
               const token = parsed.choices?.[0]?.delta?.content;
               if (token) {
-                if (!firstToken) {
-                  firstToken = true;
-                  setThinking(false);
-                }
+                if (!firstToken) { firstToken = true; setThinking(false); }
                 streamingBufferRef.current += token;
               }
-            } catch {
-              // skip malformed chunks
-            }
+            } catch { /* skip malformed chunks */ }
           }
         }
 
-        // Final flush from buffer
         if (streamingBufferRef.current) {
           streamedSoFarRef.current += streamingBufferRef.current;
         }
@@ -833,7 +773,6 @@ export const CSITerminal = React.memo(function CSITerminal({
         streamingBufferRef.current = "";
         streamedSoFarRef.current = "";
         setStreamingText("");
-
         setThinking(false);
 
         if (finalText) {
@@ -842,10 +781,7 @@ export const CSITerminal = React.memo(function CSITerminal({
             ? finalText.replace(/\n?navigate:\w+\s*\n?/gi, "").trim()
             : finalText.trim();
 
-          if (displayText) {
-            addLine("ai", displayText);
-          }
-
+          if (displayText) addLine("ai", displayText);
           conversationRef.current.push({ role: "assistant", content: finalText });
 
           if (navMatch) {
@@ -868,9 +804,7 @@ export const CSITerminal = React.memo(function CSITerminal({
         setStreamingText("");
         streamingBufferRef.current = "";
         abortControllerRef.current = null;
-        if (inputRef.current) {
-          inputRef.current.focus();
-        }
+        if (inputRef.current) inputRef.current.focus();
       }
     },
     [addLine, onNavigate]
@@ -882,42 +816,17 @@ export const CSITerminal = React.memo(function CSITerminal({
       if (!trimmed) return;
 
       addLine("user", trimmed);
-
       const lower = trimmed.toLowerCase();
 
-      if (lower === "clear") {
-        setLines([]);
-        conversationRef.current = [];
-        return;
-      }
-
-      if (lower === "help") {
-        addLine("system", HELP_TEXT);
-        return;
-      }
-
-      if (lower === "ls") {
-        addLine("system", LS_TEXT);
-        return;
-      }
-
-      if (lower === "whoami") {
-        addLine("system", WHOAMI_CARD);
-        return;
-      }
-
-      if (lower === "status") {
-        addLine("system", STATUS_TEXT);
-        return;
-      }
-
-      if (lower === "stack") {
-        addLine("system", STACK_TEXT);
-        return;
-      }
+      if (lower === "clear") { setLines([]); conversationRef.current = []; return; }
+      if (lower === "help") { addLine("system", HELP_TEXT); return; }
+      if (lower === "ls") { addLine("system", LS_TEXT); return; }
+      if (lower === "whoami") { addLine("system", WHOAMI_CARD); return; }
+      if (lower === "status") { addLine("system", STATUS_TEXT); return; }
+      if (lower === "stack") { addLine("system", STACK_TEXT); return; }
 
       if (lower.startsWith("sudo")) {
-        addLine("system", "nice try. you don't have root access here.\n\nbut joining CSI is basically sudo for your career — elevated privileges, real projects, and a network that actually matters.\n\nrecruitment opens every fall. just saying.");
+        addLine("system", "nice try. you don't have root access here.\n\nbut joining CSI is basically sudo for your career.\n\nrecruitment announcements coming soon.");
         return;
       }
 
@@ -933,14 +842,11 @@ export const CSITerminal = React.memo(function CSITerminal({
       }
 
       if (lower === "history") {
-        const userMsgs = conversationRef.current
-          .filter((m) => m.role === "user")
-          .slice(-10);
+        const userMsgs = conversationRef.current.filter((m) => m.role === "user").slice(-10);
         if (userMsgs.length === 0) {
           addLine("system", HISTORY_EMPTY);
         } else {
-          const hist = userMsgs.map((m, i) => `  ${i + 1}. ${m.content}`).join("\n");
-          addLine("system", hist);
+          addLine("system", userMsgs.map((m, i) => `  ${i + 1}. ${m.content}`).join("\n"));
         }
         return;
       }
@@ -950,9 +856,9 @@ export const CSITerminal = React.memo(function CSITerminal({
         return;
       }
 
-      sendToGrok(trimmed);
+      sendToAI(trimmed);
     },
-    [addLine, onNavigate, sendToGrok]
+    [addLine, onNavigate, sendToAI]
   );
 
   const handleKeyDown = useCallback(
@@ -978,10 +884,7 @@ export const CSITerminal = React.memo(function CSITerminal({
       onMouseDown={onFocus}
       style={{
         position: "fixed",
-        top: 0,
-        left: 0,
-        right: 0,
-        bottom: 0,
+        top: 0, left: 0, right: 0, bottom: 0,
         zIndex: isActive ? 110 : 10,
         display: "flex",
         flexDirection: "column",
@@ -989,15 +892,13 @@ export const CSITerminal = React.memo(function CSITerminal({
         overflow: "hidden",
       }}
     >
-      {/* Scanline overlay */}
       <div
         style={{
           position: "absolute",
           inset: 0,
           pointerEvents: "none",
           zIndex: 10,
-          background:
-            "repeating-linear-gradient(0deg, rgba(0,0,0,0.03) 0px, rgba(0,0,0,0.03) 1px, transparent 1px, transparent 2px)",
+          background: "repeating-linear-gradient(0deg, rgba(0,0,0,0.03) 0px, rgba(0,0,0,0.03) 1px, transparent 1px, transparent 2px)",
         }}
       />
 
@@ -1014,82 +915,23 @@ export const CSITerminal = React.memo(function CSITerminal({
           flexShrink: 0,
         }}
       >
-        {/* Window dots */}
         <div style={{ display: "flex", gap: "8px", position: "absolute", left: "16px" }}>
-          <button
-            onClick={(e) => {
-              e.stopPropagation();
-              onClose();
-            }}
-            style={{
-              width: "12px",
-              height: "12px",
-              borderRadius: "50%",
-              background: "#FF5F57",
-              border: "none",
-              cursor: "pointer",
-            }}
-          />
-          <button
-            style={{
-              width: "12px",
-              height: "12px",
-              borderRadius: "50%",
-              background: "#FEBC2E",
-              border: "none",
-              cursor: "pointer",
-            }}
-          />
-          <button
-            style={{
-              width: "12px",
-              height: "12px",
-              borderRadius: "50%",
-              background: "#28C840",
-              border: "none",
-              cursor: "pointer",
-            }}
-          />
+          <button onClick={(e) => { e.stopPropagation(); onClose(); }} style={{ width: "12px", height: "12px", borderRadius: "50%", background: "#FF5F57", border: "none", cursor: "pointer" }} />
+          <button style={{ width: "12px", height: "12px", borderRadius: "50%", background: "#FEBC2E", border: "none", cursor: "pointer" }} />
+          <button style={{ width: "12px", height: "12px", borderRadius: "50%", background: "#28C840", border: "none", cursor: "pointer" }} />
         </div>
-
-        {/* Title */}
-        <div
-          style={{
-            flex: 1,
-            textAlign: "center",
-            fontSize: "13px",
-            fontWeight: 600,
-            color: "rgba(255, 255, 255, 0.8)",
-            fontFamily: "'JetBrains Mono', monospace",
-            letterSpacing: "0.5px",
-          }}
-        >
+        <div style={{ flex: 1, textAlign: "center", fontSize: "13px", fontWeight: 600, color: "rgba(255, 255, 255, 0.8)", fontFamily: "'JetBrains Mono', monospace", letterSpacing: "0.5px" }}>
           csi-terminal
         </div>
-
-        {/* Model badge */}
-        <div
-          style={{
-            position: "absolute",
-            right: "16px",
-            display: "flex",
-            gap: "8px",
-            fontSize: "11px",
-            fontFamily: "'JetBrains Mono', monospace",
-            color: "rgba(255, 255, 255, 0.4)",
-          }}
-        >
-          <span>[llama-3.1-8b]</span>
+        <div style={{ position: "absolute", right: "16px", display: "flex", gap: "8px", fontSize: "11px", fontFamily: "'JetBrains Mono', monospace", color: "rgba(255, 255, 255, 0.4)" }}>
+          <span>[ai-engine]</span>
           <span style={{ color: GREEN }}>[online]</span>
         </div>
       </div>
 
-      {/* Splash overlay — fullscreen, slides up when done */}
-      {!splashDone && (
-        <CSISplash onComplete={() => setSplashDone(true)} />
-      )}
+      {!splashDone && <CSISplash onComplete={() => setSplashDone(true)} />}
 
-      {/* Output area */}
+      {/* Output */}
       <div
         ref={outputRef}
         style={{
@@ -1105,32 +947,18 @@ export const CSITerminal = React.memo(function CSITerminal({
           zIndex: 11,
         }}
       >
-        {/* Compact splash card — stays in output after fullscreen animation */}
         {splashDone && <CompactSplash />}
-
-        {/* Terminal lines */}
-        {lines.map((line) => (
-          <TerminalLineDisplay key={line.id} line={line} />
-        ))}
+        {lines.map((line) => <TerminalLineDisplay key={line.id} line={line} />)}
         {thinking && <ThinkingIndicator />}
         {streamingText && (
-          <div
-            style={{
-              color: INDIGO,
-              fontFamily: "'JetBrains Mono', monospace",
-              fontSize: "13px",
-              lineHeight: "1.6",
-              whiteSpace: "pre-wrap",
-              wordBreak: "break-word",
-            }}
-          >
+          <div style={{ color: INDIGO, fontFamily: "'JetBrains Mono', monospace", fontSize: "13px", lineHeight: "1.6", whiteSpace: "pre-wrap", wordBreak: "break-word" }}>
             {streamingText}
             <span style={{ animation: "blink 1s infinite" }}>▋</span>
           </div>
         )}
       </div>
 
-      {/* Input row */}
+      {/* Input */}
       <div
         style={{
           display: "flex",
@@ -1143,15 +971,7 @@ export const CSITerminal = React.memo(function CSITerminal({
           flexShrink: 0,
         }}
       >
-        <span
-          style={{
-            color: INDIGO,
-            fontFamily: "'JetBrains Mono', monospace",
-            fontSize: "13px",
-            marginRight: "4px",
-            userSelect: "none",
-          }}
-        >
+        <span style={{ color: INDIGO, fontFamily: "'JetBrains Mono', monospace", fontSize: "13px", marginRight: "4px", userSelect: "none" }}>
           {"> "}
         </span>
         <input
@@ -1174,40 +994,14 @@ export const CSITerminal = React.memo(function CSITerminal({
           }}
         />
         {!isStreaming && splashDone && (
-          <span
-            style={{
-              display: "inline-block",
-              width: "10px",
-              height: "18px",
-              background: INDIGO,
-              animation: "blink 1s infinite",
-              marginLeft: "2px",
-              verticalAlign: "middle",
-            }}
-          />
+          <span style={{ display: "inline-block", width: "10px", height: "18px", background: INDIGO, animation: "blink 1s infinite", marginLeft: "2px", verticalAlign: "middle" }} />
         )}
       </div>
 
-      {/* Global styles */}
       <style jsx global>{`
         @import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap");
-        @keyframes blink {
-          0%,
-          100% {
-            opacity: 1;
-          }
-          50% {
-            opacity: 0;
-          }
-        }
-        @keyframes fadeIn {
-          from {
-            opacity: 0;
-          }
-          to {
-            opacity: 1;
-          }
-        }
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
       `}</style>
     </motion.div>
   );

@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import DesktopWindow from "@/components/DesktopWindow";
 import { AboutUs, Departments, Events, Projects, Team, Contact, CsiOfficial, CSITerminal } from "@/components/sections";
 import MacDock from "@/components/MacDock";
-import CursorEyes from "@/components/CursorEyes";
+
 import Launchpad from "@/components/Launchpad";
 import LoadingScreen from "@/components/LoadingScreen";
 import { BGPattern } from "@/components/ui/bg-pattern";
@@ -92,8 +92,6 @@ export default function Desktop() {
         <BGPattern variant="grid" mask="fade-center" fill="rgba(255, 255, 255, 0.08)" />
       </div>
 
-      {/* Eyes Layer that follows cursor */}
-      <CursorEyes />
 
       {/* Window Manager Layer */}
       <div style={{ position: "absolute", inset: 0, pointerEvents: "none" }}>

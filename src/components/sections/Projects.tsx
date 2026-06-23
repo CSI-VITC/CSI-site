@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import VideoComponent from "https://framer.com/m/Video-Component-0Gti.js@rgRu2j7Rdo4wHbNub7OE";
-import CardSwap, { Card } from "../CardSwap";
+
 import { motion } from "framer-motion";
 
 export function Projects() {
